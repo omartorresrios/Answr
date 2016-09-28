@@ -21,19 +21,30 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
     @IBOutlet weak var commentContent: UITextView!
     @IBOutlet weak var numberOfCharLabelCom: UILabel!
     @IBOutlet weak var viewMain: UIView!
+    @IBOutlet weak var counterCommentsLabel: UILabel!
+    @IBOutlet weak var numberOfComLabel: UILabel!
     
     var databaseRef: FIRDatabaseReference!
     var storageRef: FIRStorageReference!
     
     var commentsArray = [Comment]()
     var selectedQuestion: Question!
-
+    var counter: Int = 0
+    var conditionalCounter: Int = 0
+    var otherConditional: Int = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        counter = selectedQuestion.counterComments
         
         self.tableView.estimatedRowHeight = 123
         self.tableView.rowHeight = UITableViewAutomaticDimension
         
+        numberOfComLabel.text = selectedQuestion.numberOfComments
+        counterCommentsLabel.text = "\(selectedQuestion.counterComments)"
+        
+        otherConditional = Int(selectedQuestion.numberOfComments)!
         
         configureQuestion()
         
@@ -95,6 +106,15 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
     }
     
     @IBAction func addCommentAction(sender: AnyObject) {
+        
+        conditionalCounter = counter
+        
+        if conditionalCounter < otherConditional {
+            counter += 1
+            selectedQuestion.ref.child("counterComments").setValue(counter)
+            counterCommentsLabel.text = "\(counter)"
+        }
+        
         var commentText: String!
         if let text: String = commentContent.text {
             commentText = text

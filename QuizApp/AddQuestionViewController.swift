@@ -13,6 +13,7 @@ import FirebaseAuth
 
 class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
+    @IBOutlet weak var numberOfComments: UITextField!
     @IBOutlet weak var questionTextView: UITextView!
     @IBOutlet weak var numberOfCharLabel: UILabel!
     @IBOutlet weak var isSwitched: UISwitch!
@@ -30,6 +31,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     }
     
     var currentUser: User!
+    var counter = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,6 +72,14 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
             questionText = ""
         }
         
+        var numberComments: String!
+        if let number: String = numberOfComments.text {
+            numberComments = number
+        } else {
+            numberComments = ""
+        }
+        
+        
         if isSwitched.on {
             let imageData = UIImageJPEGRepresentation(questionImageView.image!, 0.8)
             let metaData = FIRStorageMetadata()
@@ -82,7 +92,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
             imageRef.putData(imageData!, metadata: metaData, completion: { (newMetaData, error) in
                 if error == nil {
                     
-                    let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, isSwitched:true , questionImageURL: String(newMetaData!.downloadURL()!), questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName)
+                    let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, isSwitched:true, questionImageURL: String(newMetaData!.downloadURL()!), questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, counterComments: self.counter)
                     
                     let questionRef = self.databaseRef.child("Questions").childByAutoId()
                     questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in
@@ -95,7 +105,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 }
             })
         } else {
-            let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, isSwitched: false , questionImageURL: "", questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName)
+            let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, isSwitched: false , questionImageURL: "", questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, counterComments: self.counter)
             
             let questionRef = self.databaseRef.child("Questions").childByAutoId()
             questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in

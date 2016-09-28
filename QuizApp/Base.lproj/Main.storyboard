@@ -202,7 +202,7 @@
                                         <constraint firstAttribute="height" constant="27" id="yOO-qH-dgI"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no"/>
                                     <connections>
                                         <outlet property="delegate" destination="bZL-C2-Yni" id="P5h-Wh-d8Z"/>
                                     </connections>
@@ -241,6 +241,28 @@
                                     <constraints>
                                         <constraint firstAttribute="width" constant="35" id="Bfj-ag-aAK"/>
                                         <constraint firstAttribute="height" constant="21" id="bFu-I0-gmY"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TEb-3f-mZt">
+                                    <rect key="frame" x="13" y="238" width="150" height="21"/>
+                                    <color key="backgroundColor" red="0.2992852775" green="0.71097840310000004" blue="0.41733575070000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="150" id="xPW-5Z-PbP"/>
+                                        <constraint firstAttribute="height" constant="21" id="ziD-PE-8DQ"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yBz-Rm-Lcd">
+                                    <rect key="frame" x="171" y="238" width="50" height="21"/>
+                                    <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="50" id="6zL-LJ-MO5"/>
+                                        <constraint firstAttribute="height" constant="21" id="BMs-wh-3dg"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -325,8 +347,10 @@
                     <navigationItem key="navigationItem" id="sAH-KE-hrq"/>
                     <connections>
                         <outlet property="commentContent" destination="gHl-wM-lud" id="9FM-El-f97"/>
+                        <outlet property="counterCommentsLabel" destination="TEb-3f-mZt" id="YQZ-Lz-6X6"/>
                         <outlet property="firstName" destination="3L3-hE-Hva" id="CRp-n9-lRN"/>
                         <outlet property="numberOfCharLabelCom" destination="8Qy-Oj-vWq" id="qCe-HR-eAu"/>
+                        <outlet property="numberOfComLabel" destination="yBz-Rm-Lcd" id="rab-D3-9r2"/>
                         <outlet property="questionContent" destination="5kD-2D-A1X" id="WBk-1S-f3U"/>
                         <outlet property="questionImageView" destination="TO2-QI-sZm" id="9mG-ev-qmx"/>
                         <outlet property="userImageView" destination="jYP-MX-Wfc" id="La9-6z-Wem"/>
@@ -356,7 +380,7 @@
                                     <constraint firstAttribute="height" constant="167" id="Yl2-PP-Kks"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no"/>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="200" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ntD-54-G2K">
                                 <rect key="frame" x="265" y="196" width="39" height="21"/>
@@ -406,15 +430,26 @@
                                     <outletCollection property="gestureRecognizers" destination="Oxs-5s-NYW" appends="YES" id="t6w-2W-iod"/>
                                 </connections>
                             </imageView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="a9a-Xu-Y5w">
+                                <rect key="frame" x="12" y="192" width="52" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="txH-xa-5PH"/>
+                                    <constraint firstAttribute="width" constant="52" id="vaK-hy-Gov"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="OCk-fB-u4L" firstAttribute="trailing" secondItem="8p6-Wd-YpM" secondAttribute="trailingMargin" id="0yS-8r-LBG"/>
                             <constraint firstAttribute="trailing" secondItem="ntD-54-G2K" secondAttribute="trailing" constant="16" id="2Ly-0B-XQ6"/>
+                            <constraint firstItem="a9a-Xu-Y5w" firstAttribute="top" secondItem="OCk-fB-u4L" secondAttribute="bottom" constant="4" id="7OV-9F-rvm"/>
                             <constraint firstItem="6TE-dy-DQ5" firstAttribute="top" secondItem="OCk-fB-u4L" secondAttribute="bottom" constant="32" id="CXt-5a-ubT"/>
                             <constraint firstItem="Iby-ec-682" firstAttribute="centerX" secondItem="JJy-WV-ier" secondAttribute="centerX" id="D0N-qq-Thq"/>
                             <constraint firstItem="Iby-ec-682" firstAttribute="centerX" secondItem="OCk-fB-u4L" secondAttribute="centerX" id="RYD-it-iIP"/>
                             <constraint firstItem="OCk-fB-u4L" firstAttribute="leading" secondItem="8p6-Wd-YpM" secondAttribute="leadingMargin" id="Rhh-Sq-Efr"/>
+                            <constraint firstItem="a9a-Xu-Y5w" firstAttribute="leading" secondItem="8p6-Wd-YpM" secondAttribute="leadingMargin" constant="-4" id="UeY-WC-pdJ"/>
                             <constraint firstItem="OCk-fB-u4L" firstAttribute="top" secondItem="bCo-Iw-JhK" secondAttribute="bottom" constant="21" id="VMP-9d-dED"/>
                             <constraint firstItem="ntD-54-G2K" firstAttribute="top" secondItem="OCk-fB-u4L" secondAttribute="bottom" constant="8" id="dOc-CJ-ecL"/>
                             <constraint firstItem="Gy8-x7-lnA" firstAttribute="leading" secondItem="8p6-Wd-YpM" secondAttribute="leadingMargin" constant="47" id="dtQ-0A-MTr"/>
@@ -428,6 +463,7 @@
                     <connections>
                         <outlet property="isSwitched" destination="6TE-dy-DQ5" id="EZs-m8-fx0"/>
                         <outlet property="numberOfCharLabel" destination="ntD-54-G2K" id="wmP-Gu-iSx"/>
+                        <outlet property="numberOfComments" destination="a9a-Xu-Y5w" id="gbN-sd-IN5"/>
                         <outlet property="questionImageView" destination="Iby-ec-682" id="njn-P7-nzA"/>
                         <outlet property="questionTextView" destination="OCk-fB-u4L" id="yR0-t1-jLs"/>
                     </connections>
