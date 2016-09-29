@@ -23,6 +23,7 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
     @IBOutlet weak var viewMain: UIView!
     @IBOutlet weak var counterCommentsLabel: UILabel!
     @IBOutlet weak var numberOfComLabel: UILabel!
+    @IBOutlet weak var SendCommentBtn: UIButton!
     
     var databaseRef: FIRDatabaseReference!
     var storageRef: FIRStorageReference!
@@ -113,6 +114,12 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
             counter += 1
             selectedQuestion.ref.child("counterComments").setValue(counter)
             counterCommentsLabel.text = "\(counter)"
+            
+            if counter == otherConditional {
+                commentContent.userInteractionEnabled = false
+                SendCommentBtn.enabled = false
+            }
+            
         }
         
         var commentText: String!

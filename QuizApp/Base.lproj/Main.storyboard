@@ -346,6 +346,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="sAH-KE-hrq"/>
                     <connections>
+                        <outlet property="SendCommentBtn" destination="S0c-Dv-4dS" id="k3d-SI-31h"/>
                         <outlet property="commentContent" destination="gHl-wM-lud" id="9FM-El-f97"/>
                         <outlet property="counterCommentsLabel" destination="TEb-3f-mZt" id="YQZ-Lz-6X6"/>
                         <outlet property="firstName" destination="3L3-hE-Hva" id="CRp-n9-lRN"/>
