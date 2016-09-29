@@ -32,23 +32,27 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
     var selectedQuestion: Question!
     var counter: Int = 0
     var conditionalCounter: Int = 0
-    var otherConditional: Int = 0
+    var maxNumberComments: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        counter = selectedQuestion.counterComments
-        
         self.tableView.estimatedRowHeight = 123
         self.tableView.rowHeight = UITableViewAutomaticDimension
+        
+        // Movements to the limit of answers per question
+        counter = selectedQuestion.counterComments
         
         numberOfComLabel.text = selectedQuestion.numberOfComments
         counterCommentsLabel.text = "\(selectedQuestion.counterComments)"
         
-        otherConditional = Int(selectedQuestion.numberOfComments)!
+        maxNumberComments = Int(selectedQuestion.numberOfComments)!
+        
+        disabledComments()
         
         configureQuestion()
         
+        // Saving the comments
         let commentRef = self.selectedQuestion.ref.child("Comments")
         commentRef.observeEventType(.Value, withBlock: { (snapshot) in
             
@@ -106,20 +110,23 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
         }
     }
     
+    // Disabled commentContent and send button when comments counter is equal to number of commments
+    func disabledComments() {
+        if counter == maxNumberComments {
+            commentContent.userInteractionEnabled = false
+            SendCommentBtn.enabled = false
+        }
+    }
+    
     @IBAction func addCommentAction(sender: AnyObject) {
         
         conditionalCounter = counter
         
-        if conditionalCounter < otherConditional {
+        if conditionalCounter < maxNumberComments {
             counter += 1
             selectedQuestion.ref.child("counterComments").setValue(counter)
             counterCommentsLabel.text = "\(counter)"
-            
-            if counter == otherConditional {
-                commentContent.userInteractionEnabled = false
-                SendCommentBtn.enabled = false
-            }
-            
+            disabledComments()
         }
         
         var commentText: String!
