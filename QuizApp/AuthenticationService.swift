@@ -26,9 +26,9 @@ struct AuthenticationService {
     }
     
     // 3 - We save the user info in the Database
-    private func saveInfo(user: FIRUser!, username: String,firstName: String, password: String){
+    private func saveInfo(user: FIRUser!, username: String, firstName: String, password: String){
         
-        let userInfo = ["firstName": firstName,"email": user.email!, "username": username, "uid": user.uid, "photoURL": String(user.photoURL!)]
+        let userInfo = ["firstName": firstName, "email": user.email!, "username": username, "uid": user.uid, "photoURL": String(user.photoURL!)]
         
         let userRef = databaseRef.child("Users").child(user.uid)
         
@@ -61,12 +61,12 @@ struct AuthenticationService {
     }
     
     // 1 - We create firstly a New User
-    func signUp(email: String,firstName:String, username: String, password: String, data: NSData!){
+    func signUp(email: String, firstName:String, username: String, password: String, data: NSData!){
         
         FIRAuth.auth()?.createUserWithEmail(email, password: password, completion: { (user, error) in
             if error == nil {
                 self.setUserInfo(user, username: username, firstName: firstName, password: password, data: data)
-            }else {
+            } else {
                 let alertView =  SCLAlertView()
                 alertView.showError("😁OOPS😁", subTitle: error!.localizedDescription)
             }
@@ -78,17 +78,13 @@ struct AuthenticationService {
         
         FIRAuth.auth()?.sendPasswordResetWithEmail(email, completion: { (error) in
             if error == nil {
-                
                 dispatch_async(dispatch_get_main_queue(), {
                     let alertView =  SCLAlertView()
                     
                     alertView.showSuccess("Resetting Password", subTitle: "An email containing the different information on how to reset your password has been sent to \(email)")
                 })
                 
-                
-                
             }else {
-                
                 let alertView =  SCLAlertView()
                 alertView.showError("😁OOPS😁", subTitle: error!.localizedDescription)
             }
@@ -100,7 +96,7 @@ struct AuthenticationService {
     private func setUserInfo(user: FIRUser!, username: String, firstName: String, password: String, data: NSData!){
         
         let imagePath = "profileImage\(user.uid)/userPic.jpg"
-        
+       
         let imageRef = storageRef.child(imagePath)
         
         let metadata = FIRStorageMetadata()

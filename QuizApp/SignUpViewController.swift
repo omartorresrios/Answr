@@ -57,7 +57,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
                 let alertView = SCLAlertView()
                 alertView.showError("OOPS", subTitle: "Hey, it seems like you did not fill correctly the information")
             })
-        }else {
+        } else {
             authService.signUp(finalEmail, firstName: firstNameTextField.text!, username: username, password: password, data: imgData!)
         }
     }

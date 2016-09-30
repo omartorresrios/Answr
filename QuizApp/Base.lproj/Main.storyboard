@@ -440,6 +440,9 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="e4t-yd-12X">
+                                <rect key="frame" x="136" y="416" width="51" height="31"/>
+                            </switch>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -462,6 +465,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Pregunta algo" id="aMs-gw-aqf"/>
                     <connections>
+                        <outlet property="isAnonymous" destination="e4t-yd-12X" id="0zm-Jb-kvE"/>
                         <outlet property="isSwitched" destination="6TE-dy-DQ5" id="EZs-m8-fx0"/>
                         <outlet property="numberOfCharLabel" destination="ntD-54-G2K" id="wmP-Gu-iSx"/>
                         <outlet property="numberOfComments" destination="a9a-Xu-Y5w" id="gbN-sd-IN5"/>
