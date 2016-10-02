@@ -33,14 +33,20 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
     var counter: Int = 0
     var conditionalCounter: Int = 0
     var maxNumberComments: Int = 0
+    let anonymous: String = "Anonymous" // Anonymous users name
+    var anonymousImage: UIImageView! // Anonymous users image
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Set the anonymous image to bgImage
+        let image: UIImage = UIImage(named: "anonymous.jpg")!
+        anonymousImage = UIImageView(image: image)
+        
         self.tableView.estimatedRowHeight = 123
         self.tableView.rowHeight = UITableViewAutomaticDimension
         
-        // Movements to the limit of answers per question
+        // Movements for the limit of answers per question
         counter = selectedQuestion.counterComments
         
         numberOfComLabel.text = selectedQuestion.numberOfComments
@@ -110,7 +116,7 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
         }
     }
     
-    // Disabled commentContent and send button when comments counter is equal to number of commments
+    // Disabled commentContent and sendButton when comments counter is equal to number of commments
     func disabledComments() {
         if counter == maxNumberComments {
             commentContent.userInteractionEnabled = false
@@ -120,6 +126,7 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
     
     @IBAction func addCommentAction(sender: AnyObject) {
         
+        // Process counter
         conditionalCounter = counter
         
         if conditionalCounter < maxNumberComments {

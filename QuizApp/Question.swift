@@ -3,7 +3,7 @@
 //  QuizApp
 //
 //  Created by Omar Torres on 9/17/16.
-//  Copyright © 2016 OmarTorres. All rights reserved.
+//  Copyright © 2016 Omar Torres. All rights reserved.
 //
 
 import Foundation

@@ -33,9 +33,15 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     
     var currentUser: User!
     var counter = 0
-    let anonymous: String = "Anonymous"
+    let anonymous: String = "Anonymous" // Anonymous users name
+    var anonymousImage: UIImageView! // Anonymous users image
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Set the anonymous image to bgImage
+        let image: UIImage = UIImage(named: "anonymous.jpg")!
+        anonymousImage = UIImageView(image: image)
         
         self.questionTextView.layer.cornerRadius = 5
         self.questionTextView.layer.borderWidth = 2
@@ -58,11 +64,11 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     }
     
     @IBAction func showPictureAction(sender: AnyObject) {
-        if isSwitched.on {
+        /*if isSwitched.on {
             questionImageView.alpha = 1.0
         } else {
             questionImageView.alpha = 0.0
-        }
+        }*/
     }
 
     @IBAction func saveQuestionAction(sender: AnyObject) {
@@ -81,29 +87,42 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         }
         
         if isSwitched.on {
+            // Reference for the Question Image
             let imageData = UIImageJPEGRepresentation(questionImageView.image!, 0.8)
             let metaData = FIRStorageMetadata()
             metaData.contentType = "image/jpeg"
-            
             let imagePath = "questionImage\(FIRAuth.auth()!.currentUser!.uid)/questionPic.jpg"
-            
             let imageRef = storageRef.reference().child(imagePath)
             
-            imageRef.putData(imageData!, metadata: metaData, completion: { (newMetaData, error) in
+            // Reference for the Anonymous Image
+            let anonymousImg = anonymousImage.image
+            let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.8)
+            let anonymousImagePath = "questionImage\(FIRAuth.auth()!.currentUser!.uid)/anonymousQuestionerPic.jpg"
+            let anonymousImageRef = storageRef.reference().child(anonymousImagePath)
+            anonymousImageRef.putData(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
                 if error == nil {
-                    
-                    let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, isSwitched:true, questionImageURL: String(newMetaData!.downloadURL()!), questionerImageURL: self.currentUser.photoURL, firstName: /*self.currentUser.firstName*/self.anonymous, numberOfComments: numberComments, counterComments: self.counter)
-                    
-                    let questionRef = self.databaseRef.child("Questions").childByAutoId()
-                    questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in
+                    metadata!.downloadURL()
+            
+                    imageRef.putData(imageData!, metadata: metaData, completion: { (newMetaData, error) in
                         if error == nil {
-                            self.navigationController?.popToRootViewControllerAnimated(true)
+                            
+                            let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, isSwitched:true, questionImageURL: String(newMetaData!.downloadURL()!), questionerImageURL: String(metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, counterComments: self.counter)
+                            
+                            let questionRef = self.databaseRef.child("Questions").childByAutoId()
+                            questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in
+                                if error == nil {
+                                    self.navigationController?.popToRootViewControllerAnimated(true)
+                                }
+                            })
+                        } else {
+                            print(error!.localizedDescription)
                         }
                     })
                 } else {
                     print(error!.localizedDescription)
                 }
             })
+            
         } else {
             let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, isSwitched: false , questionImageURL: "", questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, counterComments: self.counter)
             

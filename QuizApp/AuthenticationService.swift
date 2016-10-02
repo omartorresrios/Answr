@@ -2,8 +2,8 @@
 //  AuthenticationService.swift
 //  WhatsAppClone
 //
-//  Created by Frezy Stone Mboumba on 7/20/16.
-//  Copyright © 2016 Frezy Stone Mboumba. All rights reserved.
+//  Created by Omar Torres on 7/20/16.
+//  Copyright © 2016 Omar Torres. All rights reserved.
 //
 
 import Foundation
