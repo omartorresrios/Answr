@@ -268,6 +268,9 @@
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
+                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Rcc-Ls-xoe">
+                                    <rect key="frame" x="255" y="210" width="51" height="31"/>
+                                </switch>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
@@ -280,6 +283,7 @@
                                 <constraint firstItem="jYP-MX-Wfc" firstAttribute="leading" secondItem="Y2e-97-lNS" secondAttribute="leading" constant="8" id="F5K-nH-OuY"/>
                                 <constraint firstItem="3L3-hE-Hva" firstAttribute="top" secondItem="TO2-QI-sZm" secondAttribute="bottom" constant="8" id="LKQ-Tv-Axw"/>
                                 <constraint firstItem="TO2-QI-sZm" firstAttribute="trailing" secondItem="Y2e-97-lNS" secondAttribute="trailingMargin" id="NYd-e1-voT"/>
+                                <constraint firstAttribute="trailing" secondItem="S0c-Dv-4dS" secondAttribute="trailing" constant="16" id="PBg-9p-JTP"/>
                                 <constraint firstItem="jYP-MX-Wfc" firstAttribute="top" secondItem="TO2-QI-sZm" secondAttribute="bottom" constant="8" id="VUS-oe-jFN"/>
                                 <constraint firstAttribute="trailing" secondItem="5kD-2D-A1X" secondAttribute="trailing" constant="8" id="XAC-Gs-G1O"/>
                                 <constraint firstItem="gHl-wM-lud" firstAttribute="bottom" secondItem="Y2e-97-lNS" secondAttribute="bottomMargin" constant="-12" id="Yh6-0W-Ssu"/>
@@ -350,6 +354,7 @@
                         <outlet property="commentContent" destination="gHl-wM-lud" id="9FM-El-f97"/>
                         <outlet property="counterCommentsLabel" destination="TEb-3f-mZt" id="YQZ-Lz-6X6"/>
                         <outlet property="firstName" destination="3L3-hE-Hva" id="CRp-n9-lRN"/>
+                        <outlet property="isSwitched" destination="Rcc-Ls-xoe" id="3St-BG-r5d"/>
                         <outlet property="numberOfCharLabelCom" destination="8Qy-Oj-vWq" id="qCe-HR-eAu"/>
                         <outlet property="numberOfComLabel" destination="yBz-Rm-Lcd" id="rab-D3-9r2"/>
                         <outlet property="questionContent" destination="5kD-2D-A1X" id="WBk-1S-f3U"/>

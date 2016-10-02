@@ -24,6 +24,7 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
     @IBOutlet weak var counterCommentsLabel: UILabel!
     @IBOutlet weak var numberOfComLabel: UILabel!
     @IBOutlet weak var SendCommentBtn: UIButton!
+    @IBOutlet weak var isSwitched: UISwitch!
     
     var databaseRef: FIRDatabaseReference!
     var storageRef: FIRStorageReference!
@@ -35,6 +36,10 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
     var maxNumberComments: Int = 0
     let anonymous: String = "Anonymous" // Anonymous users name
     var anonymousImage: UIImageView! // Anonymous users image
+    
+    var storageRef2: FIRStorage!{
+        return FIRStorage.storage()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -143,11 +148,36 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
             commentText = ""
         }
         
-        let newComment = Comment(questionId: self.selectedQuestion.questionId, commentText: commentText, commenterImageURL: String(FIRAuth.auth()!.currentUser!.photoURL!), firstName: FIRAuth.auth()!.currentUser!.displayName!)
-        
-        let commentRef = self.selectedQuestion.ref.child("Comments").childByAutoId()
-        
-        commentRef.setValue(newComment.toAnyObject())
+        // Its anonymous or not
+        if isSwitched.on {
+            
+            // Reference for the Anonymous Image
+            let anonymousImg = anonymousImage.image
+            let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.8)
+            let anonymousImagePath = "responserImage\(FIRAuth.auth()!.currentUser!.uid)/anonymousResponserPic.jpg"
+            let metaData = FIRStorageMetadata()
+            metaData.contentType = "image/jpeg"
+            let anonymousImageRef = storageRef2.reference().child(anonymousImagePath)
+            anonymousImageRef.putData(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
+                if error == nil {
+                    // Create the comment whit the user as anonymous
+                    let newComment = Comment(questionId: self.selectedQuestion.questionId, commentText: commentText, commenterImageURL: String(metadata!.downloadURL()!), firstName: self.anonymous)
+            
+                    let commentRef = self.selectedQuestion.ref.child("Comments").childByAutoId()
+            
+                    commentRef.setValue(newComment.toAnyObject())
+                } else {
+                    print(error!.localizedDescription)
+                }
+            })
+        } else {
+            // Create the comment whit the users data
+            let newComment = Comment(questionId: self.selectedQuestion.questionId, commentText: commentText, commenterImageURL: String(FIRAuth.auth()!.currentUser!.photoURL!), firstName: FIRAuth.auth()!.currentUser!.displayName!)
+            
+            let commentRef = self.selectedQuestion.ref.child("Comments").childByAutoId()
+            
+            commentRef.setValue(newComment.toAnyObject())
+        }
         
     }
 
