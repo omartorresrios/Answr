@@ -415,8 +415,8 @@
                                     <action selector="showPictureAction:" destination="nCX-9j-ZNf" eventType="valueChanged" id="bp4-0w-6Pm"/>
                                 </connections>
                             </switch>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Imagen?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gy8-x7-lnA">
-                                <rect key="frame" x="63" y="225" width="65" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Anónimo?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gy8-x7-lnA">
+                                <rect key="frame" x="52" y="225" width="76" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="65" id="igb-wk-ghn"/>
                                     <constraint firstAttribute="height" constant="21" id="wy8-v7-qrq"/>
@@ -445,9 +445,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="e4t-yd-12X">
-                                <rect key="frame" x="136" y="416" width="51" height="31"/>
-                            </switch>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -470,7 +467,6 @@
                     </view>
                     <navigationItem key="navigationItem" title="Pregunta algo" id="aMs-gw-aqf"/>
                     <connections>
-                        <outlet property="isAnonymous" destination="e4t-yd-12X" id="0zm-Jb-kvE"/>
                         <outlet property="isSwitched" destination="6TE-dy-DQ5" id="EZs-m8-fx0"/>
                         <outlet property="numberOfCharLabel" destination="ntD-54-G2K" id="wmP-Gu-iSx"/>
                         <outlet property="numberOfComments" destination="a9a-Xu-Y5w" id="gbN-sd-IN5"/>

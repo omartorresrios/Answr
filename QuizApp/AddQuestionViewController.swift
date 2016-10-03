@@ -17,7 +17,6 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     @IBOutlet weak var questionTextView: UITextView!
     @IBOutlet weak var numberOfCharLabel: UILabel!
     @IBOutlet weak var isSwitched: UISwitch!
-    @IBOutlet weak var isAnonymous: UISwitch!
     @IBOutlet weak var questionImageView: UIImageView! {
         didSet {
             questionImageView.layer.cornerRadius = 5
@@ -35,6 +34,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     var counter = 0
     let anonymous: String = "Anonymous" // Anonymous users name
     var anonymousImage: UIImageView! // Anonymous users image
+    let camera = UIImage(named: "Camera.png")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,11 +64,11 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     }
     
     @IBAction func showPictureAction(sender: AnyObject) {
-        /*if isSwitched.on {
+        if isSwitched.on {
             questionImageView.alpha = 1.0
         } else {
             questionImageView.alpha = 0.0
-        }*/
+        }
     }
 
     @IBAction func saveQuestionAction(sender: AnyObject) {
@@ -86,52 +86,112 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
             numberComments = ""
         }
         
-        if isSwitched.on {
-            // Reference for the Question Image
-            let imageData = UIImageJPEGRepresentation(questionImageView.image!, 0.8)
-            let metaData = FIRStorageMetadata()
-            metaData.contentType = "image/jpeg"
-            let imagePath = "questionImage\(FIRAuth.auth()!.currentUser!.uid)/questionPic.jpg"
-            let imageRef = storageRef.reference().child(imagePath)
+        if isSwitched.on { // Its anonymous
             
-            // Reference for the Anonymous Image
-            let anonymousImg = anonymousImage.image
-            let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.8)
-            let anonymousImagePath = "questionImage\(FIRAuth.auth()!.currentUser!.uid)/anonymousQuestionerPic.jpg"
-            let anonymousImageRef = storageRef.reference().child(anonymousImagePath)
-            anonymousImageRef.putData(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
-                if error == nil {
-                    metadata!.downloadURL()
+            if questionImageView.image!.isEqual(camera) { // Anonymous. Question without image
+                
+                // Reference for the Anonymous Image
+                let anonymousImg = anonymousImage.image
+                let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.8)
+                let metaData = FIRStorageMetadata()
+                metaData.contentType = "image/jpeg"
+                let anonymousImagePath = "questionImage\(FIRAuth.auth()!.currentUser!.uid)/anonymousQuestionerPic.jpg"
+                let anonymousImageRef = storageRef.reference().child(anonymousImagePath)
+                anonymousImageRef.putData(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
+                    if error == nil {
+                        metadata!.downloadURL()
+                        
+                        let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, questionImageURL: "", questionerImageURL: String(metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, counterComments: self.counter)
+                                
+                        let questionRef = self.databaseRef.child("Questions").childByAutoId()
+                        questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in
+                            if error == nil {
+                                self.navigationController?.popToRootViewControllerAnimated(true)
+                            }
+                        })
+                    } else {
+                        print(error!.localizedDescription)
+                    }
+                })
+                
+            } else {  // Anonymous. Question with image
+                
+                // Reference for the Question Image
+                let imageData = UIImageJPEGRepresentation(questionImageView.image!, 0.8)
+                let metaData = FIRStorageMetadata()
+                metaData.contentType = "image/jpeg"
+                let imagePath = "anonymousQuestionImage\(FIRAuth.auth()!.currentUser!.uid)/questionPic.jpg"
+                let imageRef = storageRef.reference().child(imagePath)
+                
+                // Reference for the Anonymous Image
+                let anonymousImg = anonymousImage.image
+                let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.8)
+                let anonymousImagePath = "questionImage\(FIRAuth.auth()!.currentUser!.uid)/anonymousQuestionerPic.jpg"
+                let anonymousImageRef = storageRef.reference().child(anonymousImagePath)
+                anonymousImageRef.putData(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
+                    if error == nil {
+                        metadata!.downloadURL()
+                        
+                        imageRef.putData(imageData!, metadata: metaData, completion: { (newMetaData, error) in
+                            if error == nil {
+                                
+                                let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, questionImageURL: String(newMetaData!.downloadURL()!), questionerImageURL: String(metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, counterComments: self.counter)
+                                
+                                let questionRef = self.databaseRef.child("Questions").childByAutoId()
+                                questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in
+                                    if error == nil {
+                                        self.navigationController?.popToRootViewControllerAnimated(true)
+                                    }
+                                })
+                            } else {
+                                print(error!.localizedDescription)
+                            }
+                        })
+                    } else {
+                        print(error!.localizedDescription)
+                    }
+                })
+            }
             
-                    imageRef.putData(imageData!, metadata: metaData, completion: { (newMetaData, error) in
-                        if error == nil {
-                            
-                            let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, isSwitched:true, questionImageURL: String(newMetaData!.downloadURL()!), questionerImageURL: String(metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, counterComments: self.counter)
-                            
-                            let questionRef = self.databaseRef.child("Questions").childByAutoId()
-                            questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in
-                                if error == nil {
-                                    self.navigationController?.popToRootViewControllerAnimated(true)
-                                }
-                            })
-                        } else {
-                            print(error!.localizedDescription)
-                        }
-                    })
-                } else {
-                    print(error!.localizedDescription)
-                }
-            })
             
-        } else {
-            let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, isSwitched: false , questionImageURL: "", questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, counterComments: self.counter)
+        } else { // Its not anonymous
             
-            let questionRef = self.databaseRef.child("Questions").childByAutoId()
-            questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in
-                if error == nil {
-                    self.navigationController?.popToRootViewControllerAnimated(true)
-                }
-            })
+            if questionImageView.image!.isEqual(camera) { // Its not anonymous. Question without image
+                
+                let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, questionImageURL: "", questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, counterComments: self.counter)
+                
+                let questionRef = self.databaseRef.child("Questions").childByAutoId()
+                questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in
+                    if error == nil {
+                        self.navigationController?.popToRootViewControllerAnimated(true)
+                    }
+                })
+                
+            } else { // Its not anonymous. Question with image
+                
+                // Reference for the Question Image
+                let imageData = UIImageJPEGRepresentation(questionImageView.image!, 0.8)
+                let metaData = FIRStorageMetadata()
+                metaData.contentType = "image/jpeg"
+                let imagePath = "questionImage\(FIRAuth.auth()!.currentUser!.uid)/questionPic.jpg"
+                let imageRef = storageRef.reference().child(imagePath)
+                
+                imageRef.putData(imageData!, metadata: metaData, completion: { (newMetaData, error) in
+                    if error == nil {
+                        
+                        let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, questionImageURL: String(newMetaData!.downloadURL()!), questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, counterComments: self.counter)
+                        
+                        let questionRef = self.databaseRef.child("Questions").childByAutoId()
+                        questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in
+                            if error == nil {
+                                self.navigationController?.popToRootViewControllerAnimated(true)
+                            }
+                        })
+                    } else {
+                        print(error!.localizedDescription)
+                    }
+                })
+            }
         }
     }
     

@@ -56,7 +56,28 @@ class QuestionsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if questionsArray[indexPath.row].isSwitched == true {
+        if questionsArray[indexPath.row].questionImageURL.isEmpty {
+            let cell = tableView.dequeueReusableCellWithIdentifier("questionWithText", forIndexPath: indexPath) as! TextQuestionTableViewCell
+            
+            cell.firstNameLabel.text = questionsArray[indexPath.row].firstName
+            cell.usernameLabel.text = questionsArray[indexPath.row].username
+            cell.questionTextLabel.text = questionsArray[indexPath.row].questionText
+            
+            storageRef.referenceForURL(questionsArray[indexPath.row].questionerImageURL).dataWithMaxSize(1 * 1024 * 1024, completion: { (data, error) in
+                if error == nil {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        if let data = data {
+                            cell.userImageView.image = UIImage(data: data)
+                        }
+                    })
+                }else {
+                    print(error!.localizedDescription)
+                }
+            })
+            return cell
+            
+        } else {
+        
             let cell = tableView.dequeueReusableCellWithIdentifier("questionWithImage", forIndexPath: indexPath) as! ImageQuestionTableViewCell
             cell.firstNameLabel.text = questionsArray[indexPath.row].firstName
             cell.usernameLabel.text = questionsArray[indexPath.row].username
@@ -82,25 +103,6 @@ class QuestionsTableViewController: UITableViewController {
                         }
                     })
                 } else {
-                    print(error!.localizedDescription)
-                }
-            })
-            return cell
-        } else {
-            let cell = tableView.dequeueReusableCellWithIdentifier("questionWithText", forIndexPath: indexPath) as! TextQuestionTableViewCell
-            
-            cell.firstNameLabel.text = questionsArray[indexPath.row].firstName
-            cell.usernameLabel.text = questionsArray[indexPath.row].username
-            cell.questionTextLabel.text = questionsArray[indexPath.row].questionText
-            
-            storageRef.referenceForURL(questionsArray[indexPath.row].questionerImageURL).dataWithMaxSize(1 * 1024 * 1024, completion: { (data, error) in
-                if error == nil {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        if let data = data {
-                            cell.userImageView.image = UIImage(data: data)
-                        }
-                    })
-                }else {
                     print(error!.localizedDescription)
                 }
             })
