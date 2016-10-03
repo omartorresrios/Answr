@@ -60,7 +60,6 @@ class QuestionsTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCellWithIdentifier("questionWithText", forIndexPath: indexPath) as! TextQuestionTableViewCell
             
             cell.firstNameLabel.text = questionsArray[indexPath.row].firstName
-            cell.usernameLabel.text = questionsArray[indexPath.row].username
             cell.questionTextLabel.text = questionsArray[indexPath.row].questionText
             
             storageRef.referenceForURL(questionsArray[indexPath.row].questionerImageURL).dataWithMaxSize(1 * 1024 * 1024, completion: { (data, error) in
@@ -80,7 +79,6 @@ class QuestionsTableViewController: UITableViewController {
         
             let cell = tableView.dequeueReusableCellWithIdentifier("questionWithImage", forIndexPath: indexPath) as! ImageQuestionTableViewCell
             cell.firstNameLabel.text = questionsArray[indexPath.row].firstName
-            cell.usernameLabel.text = questionsArray[indexPath.row].username
             cell.questionTextLabel.text = questionsArray[indexPath.row].questionText
             
             storageRef.referenceForURL(questionsArray[indexPath.row].questionerImageURL).dataWithMaxSize(1 * 1024 * 1024, completion: { (data, error) in

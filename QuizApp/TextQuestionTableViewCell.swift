@@ -11,7 +11,6 @@ import UIKit
 class TextQuestionTableViewCell: UITableViewCell {
 
     @IBOutlet weak var questionTextLabel: UILabel!
-    @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var firstNameLabel: UILabel!
     @IBOutlet weak var userImageView: UIImageView!
     
