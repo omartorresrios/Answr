@@ -95,7 +95,7 @@ struct AuthenticationService {
     // 2 - We set the User Info
     private func setUserInfo(user: FIRUser!, username: String, firstName: String, password: String, data: NSData!){
         
-        let imagePath = "profileImage\(user.uid)/userPic.jpg"
+        let imagePath = "profileImages/\(user.uid)/userPic.jpg"
        
         let imageRef = storageRef.child(imagePath)
         

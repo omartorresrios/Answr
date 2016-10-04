@@ -154,7 +154,7 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
             // Reference for the Anonymous Image
             let anonymousImg = anonymousImage.image
             let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.8)
-            let anonymousImagePath = "responserImage\(FIRAuth.auth()!.currentUser!.uid)/anonymousResponserPic.jpg"
+            let anonymousImagePath = "anonymousResponses/\(FIRAuth.auth()!.currentUser!.uid)/anonymousResponserPic.jpg"
             let metaData = FIRStorageMetadata()
             metaData.contentType = "image/jpeg"
             let anonymousImageRef = storageRef2.reference().child(anonymousImagePath)
