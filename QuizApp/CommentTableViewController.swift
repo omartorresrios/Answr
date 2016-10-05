@@ -54,13 +54,21 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
         // Movements for the limit of answers per question
         counter = selectedQuestion.counterComments
         
-        numberOfComLabel.text = selectedQuestion.numberOfComments
-        counterCommentsLabel.text = "\(selectedQuestion.counterComments)"
-        
-        maxNumberComments = Int(selectedQuestion.numberOfComments)!
-        
-        disabledComments()
-        
+        // Allow numberOfComments is optional
+        if selectedQuestion.numberOfComments.isEmpty {
+            
+            counterCommentsLabel.removeFromSuperview()
+            numberOfComLabel.removeFromSuperview()
+            
+        } else {
+            numberOfComLabel.text = selectedQuestion.numberOfComments
+            counterCommentsLabel.text = "\(selectedQuestion.counterComments)"
+            
+            maxNumberComments = Int(selectedQuestion.numberOfComments)!
+            
+            disabledComments()
+        }
+    
         configureQuestion()
         
         // Saving the comments

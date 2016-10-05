@@ -14,16 +14,18 @@ import FirebaseDatabase
 
 class MyProfileViewController: UIViewController {
 
+    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var usernameLabel: UILabel!
-    @IBOutlet weak var userEmailLabel: UILabel!
     @IBOutlet weak var userImageView: UIImageView!
     
     var user: User!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        userImageView.layer.cornerRadius = userImageView.layer.frame.width/2
+        userImageView.layer.cornerRadius = 20
+        userImageView.layer.borderWidth = 2
+
+        //userImageView.layer.cornerRadius = userImageView.layer.frame.width/2
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -37,8 +39,8 @@ class MyProfileViewController: UIViewController {
             }
             if let user = self.user {
                 
-                self.userEmailLabel.text = user.email
                 self.usernameLabel.text = user.username
+                self.nameLabel.text = user.firstName
                 
                 FIRStorage.storage().referenceForURL(user.photoURL).dataWithMaxSize(1 * 1024 * 1024, completion: { (imgData, error) in
                     if let error = error {
@@ -63,32 +65,5 @@ class MyProfileViewController: UIViewController {
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
-    }
-    
-    @IBAction func logOutAction(sender: AnyObject) {
-        /*do {
-            try FIRAuth.auth()?.signOut()
-            if FIRAuth.auth()?.currentUser == nil {
-                let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("start") as! StartViewController
-                presentViewController(vc, animated: true, completion: nil)
-            }
-        } catch let error as NSError {
-            let alertView = SCLAlertView()
-            alertView.showError("OOPS", subTitle: error.localizedDescription)
-        }*/
-
-        if FIRAuth.auth()!.currentUser != nil {
-            do { // Podríamos obviar esta sentencia do. Averiguar y profundizar bien en esto
-                try FIRAuth.auth()?.signOut()
-                
-                let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("start") // Podríamos eliminar el StartViewController que se creó
-                presentViewController(vc, animated: true, completion: nil)
-                
-            } catch let error as NSError {
-                
-                let alertView = SCLAlertView()
-                alertView.showError("😁OOPS😁", subTitle: error.localizedDescription)
-            }
-        }
     }
 }

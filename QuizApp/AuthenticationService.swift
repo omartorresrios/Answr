@@ -67,8 +67,10 @@ struct AuthenticationService {
             if error == nil {
                 self.setUserInfo(user, username: username, firstName: firstName, password: password, data: data)
             } else {
-                let alertView =  SCLAlertView()
-                alertView.showError("😁OOPS😁", subTitle: error!.localizedDescription)
+                dispatch_async(dispatch_get_main_queue(), {
+                    let alertView =  SCLAlertView()
+                    alertView.showError("😁OOPS😁", subTitle: error!.localizedDescription)
+                })
             }
         })
         
