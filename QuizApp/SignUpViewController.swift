@@ -21,13 +21,15 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        firstNameTextField.becomeFirstResponder()
+        
         userImageView.layer.cornerRadius = userImageView.layer.frame.height / 2
         
         usernameTextField.delegate = self
         passwordTextField.delegate = self
         emailTextField.delegate = self
         firstNameTextField.delegate = self
-        
+        /*
         // Creating Tap Gesture to dismiss Keyboard
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(SignUpViewController.dismissKeyboard(_:)))
         tapGesture.numberOfTapsRequired = 1
@@ -36,18 +38,15 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
         // Creating Swipe Gesture to dismiss Keyboard
         let swipDown = UISwipeGestureRecognizer(target: self, action: #selector(SignUpViewController.dismissKeyboard(_:)))
         swipDown.direction = .Down
-        view.addGestureRecognizer(swipDown)
+        view.addGestureRecognizer(swipDown)*/
     }
 
-    @IBAction func didTapCancel(sender: AnyObject) {
-        dismissViewControllerAnimated(true, completion: nil)
-    }
-    
     //Signin Up the user
     @IBAction func signUpAction(sender: AnyObject) {
         self.view.endEditing(true)
         let email = emailTextField.text!.lowercaseString
         let finalEmail = email.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        let firstName = firstNameTextField.text!
         let password = passwordTextField.text!
         let username = usernameTextField.text!
         let userPicture = userImageView.image
@@ -60,7 +59,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
                 alertView.showError("OOPS", subTitle: "Hey, it seems like you did not fill correctly the information")
             })
         } else {
-            authService.signUp(finalEmail, firstName: firstNameTextField.text!, username: username, password: password, data: imgData!)
+            authService.signUp(finalEmail, firstName: firstName, username: username, password: password, data: imgData!)
         }
     }
     
@@ -103,12 +102,12 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
         self.dismissViewControllerAnimated(true, completion: nil)
         self.userImageView.image = image
     }
-    
+    /*
     // Dismissing all editing actions when User Tap or Swipe down on the Main View
     func dismissKeyboard(gesture: UIGestureRecognizer){
         self.view.endEditing(true)
-    }
-    
+    }*/
+    /*
     // Dismissing the Keyboard with the Return Keyboard Button
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         usernameTextField.resignFirstResponder()
@@ -116,17 +115,17 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
         emailTextField.resignFirstResponder()
         firstNameTextField.resignFirstResponder()
         return true
-    }
-    
+    }*/
+    /*
     // Moving the View up after the Keyboard appears
     func textFieldDidBeginEditing(textField: UITextField) {
         animateView(true, moveValue: 80)
-    }
-    
+    }*/
+    /*
     // Moving the View down after the Keyboard disappears
     func textFieldDidEndEditing(textField: UITextField) {
         animateView(false, moveValue: 80)
-    }
+    }*/
     
     // Move the View Up & Down when the Keyboard appears
     func animateView(up: Bool, moveValue: CGFloat){

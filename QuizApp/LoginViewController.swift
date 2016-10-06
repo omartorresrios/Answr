@@ -18,6 +18,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        emailTextField.becomeFirstResponder()
+        
         //Setting the delegates for the Textfields
         
         emailTextField.delegate = self
@@ -27,28 +29,28 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     // Unwind Segue Action
     @IBAction func unwindToLogin(storyboard: UIStoryboardSegue){}
     
-    
+    /*
     // Dismissing the Keyboard with the Return Keyboard Button
     func dismissKeyboard(gesture: UIGestureRecognizer){
         self.view.endEditing(true)
-    }
-    
+    }*/
+    /*
     // Dismissing the Keyboard with the Return Keyboard Button
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         emailTextField.resignFirstResponder()
         passwordTextField.resignFirstResponder()
         return true
-    }
-    
+    }*/
+    /*
     // Moving the View down after the Keyboard appears
     func textFieldDidBeginEditing(textField: UITextField) {
         animateView(true, moveValue: 80)
-    }
-    
+    }*/
+    /*
     // Moving the View down after the Keyboard disappears
     func textFieldDidEndEditing(textField: UITextField) {
         animateView(false, moveValue: 80)
-    }
+    }*/
     
     
     // Move the View Up & Down when the Keyboard appears
@@ -65,10 +67,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
-    }
-
-    @IBAction func didTapCancel(sender: AnyObject) {
-        dismissViewControllerAnimated(true, completion: nil)
     }
     
     @IBAction func loginAction(sender: AnyObject) {

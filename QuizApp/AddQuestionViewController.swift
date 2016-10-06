@@ -39,6 +39,8 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        questionTextView.becomeFirstResponder()
+        
         // Set the anonymous image to bgImage
         let image: UIImage = UIImage(named: "anonymous.jpg")!
         anonymousImage = UIImageView(image: image)
@@ -247,5 +249,4 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         }
         return (newLength > 200) ? false : true
     }
-    
 }
