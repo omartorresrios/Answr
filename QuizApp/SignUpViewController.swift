@@ -141,4 +141,9 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
     }
+    
+    @IBAction func comeBackAction(sender: AnyObject) {
+        self.navigationController?.popToRootViewControllerAnimated(true)
+    }
+    
 }

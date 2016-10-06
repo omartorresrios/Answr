@@ -86,4 +86,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             authService.signIn(finalEmail, password: password)
         }
     }
+    
+    @IBAction func comeBackAction(sender: AnyObject) {
+        self.navigationController?.popToRootViewControllerAnimated(true)
+    }
+    
 }
