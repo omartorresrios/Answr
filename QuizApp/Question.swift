@@ -20,9 +20,10 @@ struct Question {
     var questionerImageURL: String!
     var numberOfComments: String!
     var counterComments: Int!
+    var timestamp: NSNumber!
     
-    
-    init(username: String, questionId: String, questionText: String, questionImageURL: String, questionerImageURL: String, firstName: String, numberOfComments: String, counterComments: Int = 0, key: String = ""){
+
+    init(username: String, questionId: String, questionText: String, questionImageURL: String, questionerImageURL: String, firstName: String, numberOfComments: String, timestamp: NSNumber, counterComments: Int = 0, key: String = ""){
         
         self.username = username
         self.firstName = firstName
@@ -32,6 +33,7 @@ struct Question {
         self.questionerImageURL = questionerImageURL
         self.numberOfComments = numberOfComments
         self.counterComments = counterComments
+        self.timestamp = timestamp
         
     }
     
@@ -45,6 +47,7 @@ struct Question {
         self.questionId = snapshot.value!["questionId"] as! String
         self.numberOfComments = snapshot.value!["numberOfComments"] as! String
         self.counterComments = snapshot.value!["counterComments"] as! Int
+        self.timestamp = snapshot.value!["timestamp"] as! NSNumber
         self.ref = snapshot.ref
         self.key = snapshot.key
         
@@ -53,7 +56,7 @@ struct Question {
     
     func toAnyObject() -> [String: AnyObject]{
         
-        return ["firstName":firstName, "username":username, "questionText":questionText,"questionId":questionId,"questionerImageURL":questionerImageURL,"questionImageURL":questionImageURL, "numberOfComments":numberOfComments,"counterComments":counterComments]
+        return ["firstName":firstName, "username":username, "questionText":questionText,"questionId":questionId,"questionerImageURL":questionerImageURL,"questionImageURL":questionImageURL, "numberOfComments":numberOfComments,"counterComments":counterComments,"timestamp":timestamp]
     }
 
 }

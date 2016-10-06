@@ -101,7 +101,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                     if error == nil {
                         metadata!.downloadURL()
                         
-                        let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, questionImageURL: "", questionerImageURL: String(metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, counterComments: self.counter)
+                        let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, questionImageURL: "", questionerImageURL: String(metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, timestamp: NSDate().timeIntervalSince1970, counterComments: self.counter)
                                 
                         let questionRef = self.databaseRef.child("Questions").childByAutoId()
                         questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in
@@ -135,7 +135,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                         imageRef.putData(imageData!, metadata: metaData, completion: { (newMetaData, error) in
                             if error == nil {
                                 
-                                let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, questionImageURL: String(newMetaData!.downloadURL()!), questionerImageURL: String(metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, counterComments: self.counter)
+                                let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, questionImageURL: String(newMetaData!.downloadURL()!), questionerImageURL: String(metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, timestamp: NSDate().timeIntervalSince1970, counterComments: self.counter)
                                 
                                 let questionRef = self.databaseRef.child("Questions").childByAutoId()
                                 questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in
@@ -158,7 +158,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
             
             if questionImageView.image!.isEqual(camera) { // Its not anonymous. Question without image
                 
-                let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, questionImageURL: "", questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, counterComments: self.counter)
+                let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, questionImageURL: "", questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSDate().timeIntervalSince1970, counterComments: self.counter)
                 
                 let questionRef = self.databaseRef.child("Questions").childByAutoId()
                 questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in
@@ -179,7 +179,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 imageRef.putData(imageData!, metadata: metaData, completion: { (newMetaData, error) in
                     if error == nil {
                         
-                        let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, questionImageURL: String(newMetaData!.downloadURL()!), questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, counterComments: self.counter)
+                        let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, questionImageURL: String(newMetaData!.downloadURL()!), questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSDate().timeIntervalSince1970, counterComments: self.counter)
                         
                         let questionRef = self.databaseRef.child("Questions").childByAutoId()
                         questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in

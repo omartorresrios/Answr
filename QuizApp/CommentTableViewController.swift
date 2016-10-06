@@ -169,7 +169,7 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
             anonymousImageRef.putData(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
                 if error == nil {
                     // Create the comment whit the user as anonymous
-                    let newComment = Comment(questionId: self.selectedQuestion.questionId, commentText: commentText, commenterImageURL: String(metadata!.downloadURL()!), firstName: self.anonymous)
+                    let newComment = Comment(questionId: self.selectedQuestion.questionId, commentText: commentText, commenterImageURL: String(metadata!.downloadURL()!), firstName: self.anonymous, timestamp: NSDate().timeIntervalSince1970)
             
                     let commentRef = self.selectedQuestion.ref.child("Comments").childByAutoId()
             
@@ -180,7 +180,7 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
             })
         } else {
             // Create the comment whit the users data
-            let newComment = Comment(questionId: self.selectedQuestion.questionId, commentText: commentText, commenterImageURL: String(FIRAuth.auth()!.currentUser!.photoURL!), firstName: FIRAuth.auth()!.currentUser!.displayName!)
+            let newComment = Comment(questionId: self.selectedQuestion.questionId, commentText: commentText, commenterImageURL: String(FIRAuth.auth()!.currentUser!.photoURL!), firstName: FIRAuth.auth()!.currentUser!.displayName!, timestamp: NSDate().timeIntervalSince1970)
             
             let commentRef = self.selectedQuestion.ref.child("Comments").childByAutoId()
             

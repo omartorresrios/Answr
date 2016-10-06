@@ -21,6 +21,8 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        userImageView.layer.cornerRadius = userImageView.layer.frame.height / 2
+        
         usernameTextField.delegate = self
         passwordTextField.delegate = self
         emailTextField.delegate = self

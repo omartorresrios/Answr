@@ -16,13 +16,15 @@ struct Comment {
     var questionId: String!
     var commentText: String!
     var commenterImageURL: String!
+    var timestamp: NSNumber!
     
-    init(questionId: String, commentText: String, commenterImageURL: String, firstName: String, key: String = ""){
+    init(questionId: String, commentText: String, commenterImageURL: String, firstName: String, timestamp: NSNumber, key: String = ""){
         
         self.firstName = firstName
         self.questionId = questionId
         self.commentText = commentText
         self.commenterImageURL = commenterImageURL
+        self.timestamp = timestamp
     }
     
     init(snapshot: FIRDataSnapshot){
@@ -31,6 +33,7 @@ struct Comment {
         self.commenterImageURL = snapshot.value!["commenterImageURL"] as! String
         self.commentText = snapshot.value!["commentText"] as! String
         self.questionId = snapshot.value!["questionId"] as! String
+        self.timestamp = snapshot.value!["timestamp"] as! NSNumber
         self.ref = snapshot.ref
         self.key = snapshot.key
     }
@@ -38,7 +41,7 @@ struct Comment {
     
     func toAnyObject() -> [String: AnyObject]{
         
-        return ["firstName":firstName, "commentText":commentText,"questionId":questionId,"commenterImageURL":commenterImageURL]
+        return ["firstName":firstName, "commentText":commentText,"questionId":questionId,"commenterImageURL":commenterImageURL,"timestamp":timestamp]
     }
     
 }
