@@ -17,6 +17,6 @@ class TextQuestionTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        userImageView.layer.cornerRadius = 6
+        userImageView.layer.cornerRadius = userImageView.layer.frame.height / 2
     }
 }

@@ -10,7 +10,11 @@ import UIKit
 
 class ImageQuestionTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var questionImageView: UIImageView!
+    @IBOutlet weak var questionImageView: UIImageView! {
+        didSet {
+            questionImageView.layer.cornerRadius = 5
+        }
+    }
     @IBOutlet weak var questionTextLabel: UILabel!
     @IBOutlet weak var firstNameLabel: UILabel!
     @IBOutlet weak var userImageView: UIImageView!
@@ -19,7 +23,7 @@ class ImageQuestionTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         
-        userImageView.layer.cornerRadius = 6
-        questionImageView.layer.cornerRadius = 6
+        userImageView.layer.cornerRadius = userImageView.layer.frame.height / 2
+        //questionImageView.layer.cornerRadius = 6
     }
 }

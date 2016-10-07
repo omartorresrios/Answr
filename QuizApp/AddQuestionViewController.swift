@@ -97,7 +97,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.8)
                 let metaData = FIRStorageMetadata()
                 metaData.contentType = "image/jpeg"
-                let anonymousImagePath = "anonymousQuestionsWithoutImage/\(FIRAuth.auth()!.currentUser!.uid)/anonymousQuestionerPic.jpg"
+                let anonymousImagePath = "anonymousQuestionsWithoutImage/\(FIRAuth.auth()!.currentUser!.uid)/\(NSUUID().UUIDString)/anonymousQuestionerPic.jpg"
                 let anonymousImageRef = storageRef.reference().child(anonymousImagePath)
                 anonymousImageRef.putData(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
                     if error == nil {
@@ -122,13 +122,13 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 let imageData = UIImageJPEGRepresentation(questionImageView.image!, 0.8)
                 let metaData = FIRStorageMetadata()
                 metaData.contentType = "image/jpeg"
-                let imagePath = "anonymousQuestionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/questionPic.jpg"
+                let imagePath = "anonymousQuestionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/\(NSUUID().UUIDString)/questionPic.jpg"
                 let imageRef = storageRef.reference().child(imagePath)
                 
                 // Reference for the Anonymous Image
                 let anonymousImg = anonymousImage.image
                 let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.8)
-                let anonymousImagePath = "anonymousQuestionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/anonymousQuestionerPic.jpg"
+                let anonymousImagePath = "anonymousQuestionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/\(NSUUID().UUIDString)/anonymousQuestionerPic.jpg"
                 let anonymousImageRef = storageRef.reference().child(anonymousImagePath)
                 anonymousImageRef.putData(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
                     if error == nil {
@@ -175,7 +175,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 let imageData = UIImageJPEGRepresentation(questionImageView.image!, 0.8)
                 let metaData = FIRStorageMetadata()
                 metaData.contentType = "image/jpeg"
-                let imagePath = "questionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/questionPic.jpg"
+                let imagePath = "questionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/\(NSUUID().UUIDString)/questionPic.jpg"
                 let imageRef = storageRef.reference().child(imagePath)
                 
                 imageRef.putData(imageData!, metadata: metaData, completion: { (newMetaData, error) in
