@@ -187,12 +187,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A0E0F7A81D8D979100F87EC8 /* Build configuration list for PBXNativeTarget "QuizApp" */;
 			buildPhases = (
-				9238A11C3E5E0B4A1E67C2F5 /* 📦 Check Pods Manifest.lock */,
+				9238A11C3E5E0B4A1E67C2F5 /* [CP] Check Pods Manifest.lock */,
 				A0E0F78F1D8D979100F87EC8 /* Sources */,
 				A0E0F7901D8D979100F87EC8 /* Frameworks */,
 				A0E0F7911D8D979100F87EC8 /* Resources */,
-				604D6307A3EF8D15A9859D11 /* 📦 Embed Pods Frameworks */,
-				53619BDD8EFF6328012DDA34 /* 📦 Copy Pods Resources */,
+				604D6307A3EF8D15A9859D11 /* [CP] Embed Pods Frameworks */,
+				53619BDD8EFF6328012DDA34 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -209,6 +209,7 @@
 		A0E0F78B1D8D979100F87EC8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 0730;
 				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = OmarTorres;
@@ -254,14 +255,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		53619BDD8EFF6328012DDA34 /* 📦 Copy Pods Resources */ = {
+		53619BDD8EFF6328012DDA34 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -269,14 +270,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-QuizApp/Pods-QuizApp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		604D6307A3EF8D15A9859D11 /* 📦 Embed Pods Frameworks */ = {
+		604D6307A3EF8D15A9859D11 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -284,14 +285,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-QuizApp/Pods-QuizApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		9238A11C3E5E0B4A1E67C2F5 /* 📦 Check Pods Manifest.lock */ = {
+		9238A11C3E5E0B4A1E67C2F5 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;

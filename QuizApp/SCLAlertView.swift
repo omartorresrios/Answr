@@ -37,6 +37,10 @@ public class SCLButton: UIButton {
     override public init(frame:CGRect) {
         super.init(frame:frame)
     }
+
+    required public init?(aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 
 // Allow alerts to be closed/renamed in a chainable manner
@@ -156,6 +160,10 @@ public class SCLAlertView: UIViewController {
 
     override public init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName:nibNameOrNil, bundle:nibBundleOrNil)
+    }
+
+    required public init(aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override public func viewWillLayoutSubviews() {
@@ -286,7 +294,7 @@ public class SCLAlertView: UIViewController {
             ctrl.sendAction(btn.selector, to:btn.target, forEvent:nil)
             return
         } else {
-            print("Unknow action type for button")
+            print("Unknow action type for button", terminator: "")
         }
         hideView()
     }
