@@ -24,8 +24,6 @@ class MyProfileViewController: UIViewController {
         super.viewDidLoad()
         userImageView.layer.cornerRadius = 20
         userImageView.layer.borderWidth = 2
-
-        //userImageView.layer.cornerRadius = userImageView.layer.frame.width/2
     }
     
     override func viewWillAppear(animated: Bool) {

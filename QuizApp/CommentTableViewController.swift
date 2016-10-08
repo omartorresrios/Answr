@@ -44,6 +44,8 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        userImageView.layer.cornerRadius = userImageView.layer.frame.height / 2
+        
         // Set the anonymous image to bgImage
         let image: UIImage = UIImage(named: "anonymous.jpg")!
         anonymousImage = UIImageView(image: image)

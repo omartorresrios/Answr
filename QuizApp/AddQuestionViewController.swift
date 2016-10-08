@@ -45,9 +45,12 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         let image: UIImage = UIImage(named: "anonymous.jpg")!
         anonymousImage = UIImageView(image: image)
         
-        self.questionTextView.layer.cornerRadius = 5
+        self.numberOfComments.layer.cornerRadius = 5
+        self.numberOfComments.layer.borderWidth = 1
+ 
+        /*self.questionTextView.layer.cornerRadius = 5
         self.questionTextView.layer.borderWidth = 2
-        self.questionTextView.layer.borderColor = UIColor(red: 16/255.0, green: 171/255.0, blue: 235/255.0, alpha: 1.0).CGColor
+        self.questionTextView.layer.borderColor = UIColor(red: 16/255.0, green: 171/255.0, blue: 235/255.0, alpha: 1.0).CGColor*/
         questionTextView.delegate = self
         self.automaticallyAdjustsScrollViewInsets = true
     }
