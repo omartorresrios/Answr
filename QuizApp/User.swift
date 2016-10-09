@@ -25,13 +25,13 @@ struct User {
         
         key = snapshot.key
         ref = snapshot.ref
-        firstName = snapshot.value!["firstName"] as! String
-        username = snapshot.value!["username"] as! String
-        email = snapshot.value!["email"] as? String
-        country = snapshot.value!["country"] as? String
-        biography = snapshot.value!["biography"] as? String
-        photoURL = snapshot.value!["photoURL"] as! String
-        uid = snapshot.value!["uid"] as? String
+        firstName = (snapshot.value! as! NSDictionary)["firstName"] as! String
+        username = (snapshot.value! as! NSDictionary)["username"] as! String
+        email = (snapshot.value! as! NSDictionary)["email"] as? String
+        country = (snapshot.value! as! NSDictionary)["country"] as? String
+        biography = (snapshot.value! as! NSDictionary)["biography"] as? String
+        photoURL = (snapshot.value! as! NSDictionary)["photoURL"] as! String
+        uid = (snapshot.value! as! NSDictionary)["uid"] as? String
         
     }
     

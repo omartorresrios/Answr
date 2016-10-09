@@ -26,9 +26,9 @@ struct AuthenticationService {
     }
     
     // 3 - We save the user info in the Database
-    private func saveInfo(user: FIRUser!, username: String, firstName: String, password: String){
+    private func saveInfo(_ user: FIRUser!, username: String, firstName: String, password: String){
         
-        let userInfo = ["firstName": firstName, "email": user.email!, "username": username, "uid": user.uid, "photoURL": String(user.photoURL!)]
+        let userInfo = ["firstName": firstName, "email": user.email!, "username": username, "uid": user.uid, "photoURL": String(describing: user.photoURL!)]
         
         let userRef = databaseRef.child("Users").child(user.uid)
         
@@ -38,15 +38,15 @@ struct AuthenticationService {
     }
     
     // 4 - We sign in the User
-    func signIn(email: String, password: String){
-        FIRAuth.auth()?.signInWithEmail(email, password: password, completion: { (user, error) in
+    func signIn(_ email: String, password: String){
+        FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
             if error == nil {
                 
                 if let user = user {
                     
                     print("\(user.displayName!) has signed in successfuly")
                     
-                    let appDel: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                    let appDel: AppDelegate = UIApplication.shared.delegate as! AppDelegate
                     appDel.logUser()
                 }
                 
@@ -61,13 +61,13 @@ struct AuthenticationService {
     }
     
     // 1 - We create firstly a New User
-    func signUp(email: String, firstName:String, username: String, password: String, data: NSData!){
+    func signUp(_ email: String, firstName:String, username: String, password: String, data: Data!){
         
-        FIRAuth.auth()?.createUserWithEmail(email, password: password, completion: { (user, error) in
+        FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
             if error == nil {
                 self.setUserInfo(user, username: username, firstName: firstName, password: password, data: data)
             } else {
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     let alertView =  SCLAlertView()
                     alertView.showError("😁OOPS😁", subTitle: error!.localizedDescription)
                 })
@@ -76,11 +76,11 @@ struct AuthenticationService {
         
     }
     
-    func resetPassword(email: String){
+    func resetPassword(_ email: String){
         
-        FIRAuth.auth()?.sendPasswordResetWithEmail(email, completion: { (error) in
+        FIRAuth.auth()?.sendPasswordReset(withEmail: email, completion: { (error) in
             if error == nil {
-                dispatch_async(dispatch_get_main_queue(), {
+                DispatchQueue.main.async(execute: {
                     let alertView =  SCLAlertView()
                     
                     alertView.showSuccess("Resetting Password", subTitle: "An email containing the different information on how to reset your password has been sent to \(email)")
@@ -95,7 +95,7 @@ struct AuthenticationService {
     }
     
     // 2 - We set the User Info
-    private func setUserInfo(user: FIRUser!, username: String, firstName: String, password: String, data: NSData!){
+    fileprivate func setUserInfo(_ user: FIRUser!, username: String, firstName: String, password: String, data: Data!){
         
         let imagePath = "profileImages/\(user.uid)/userPic.jpg"
        
@@ -104,7 +104,7 @@ struct AuthenticationService {
         let metadata = FIRStorageMetadata()
         metadata.contentType = "image/jpeg"
         
-        imageRef.putData(data, metadata: metadata) { (metadata, error) in
+        imageRef.put(data, metadata: metadata) { (metadata, error) in
             if error == nil {
                 
                 let changeRequest = user.profileChangeRequest()
@@ -114,7 +114,7 @@ struct AuthenticationService {
                     changeRequest.photoURL = photoURL
                 }
                 
-                changeRequest.commitChangesWithCompletion({ (error) in
+                changeRequest.commitChanges(completion: { (error) in
                     if error == nil {
                         
                         self.saveInfo(user, username: username, firstName: firstName, password: password)

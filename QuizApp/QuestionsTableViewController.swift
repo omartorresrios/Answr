@@ -31,17 +31,17 @@ class QuestionsTableViewController: UITableViewController {
         self.tableView.estimatedRowHeight = 213
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         fetchQuestions()
     }
     
-    private func fetchQuestions(){
-        databaseRef.child("Questions").observeEventType(.Value, withBlock: { (questions) in
+    fileprivate func fetchQuestions(){
+        databaseRef.child("Questions").observe(.value, with: { (questions) in
             var newQuestionsArray = [Question]()
             for question in questions.children {
                 let newQuestion = Question(snapshot: question as! FIRDataSnapshot)
-                newQuestionsArray.insert(newQuestion, atIndex: 0)
+                newQuestionsArray.insert(newQuestion, at: 0)
             }
             self.questionsArray = newQuestionsArray
             self.tableView.reloadData()
@@ -51,20 +51,20 @@ class QuestionsTableViewController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return questionsArray.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if questionsArray[indexPath.row].questionImageURL.isEmpty {
-            let cell = tableView.dequeueReusableCellWithIdentifier("questionWithText", forIndexPath: indexPath) as! TextQuestionTableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if questionsArray[(indexPath as NSIndexPath).row].questionImageURL.isEmpty {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "questionWithText", for: indexPath) as! TextQuestionTableViewCell
             
-            cell.firstNameLabel.text = questionsArray[indexPath.row].firstName
-            cell.questionTextLabel.text = questionsArray[indexPath.row].questionText
+            cell.firstNameLabel.text = questionsArray[(indexPath as NSIndexPath).row].firstName
+            cell.questionTextLabel.text = questionsArray[(indexPath as NSIndexPath).row].questionText
             
-            storageRef.referenceForURL(questionsArray[indexPath.row].questionerImageURL).dataWithMaxSize(1 * 1024 * 1024, completion: { (data, error) in
+            storageRef.reference(forURL: questionsArray[(indexPath as NSIndexPath).row].questionerImageURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (data, error) in
                 if error == nil {
-                    dispatch_async(dispatch_get_main_queue(), {
+                    DispatchQueue.main.async(execute: {
                         if let data = data {
                             cell.userImageView.image = UIImage(data: data)
                         }
@@ -77,13 +77,13 @@ class QuestionsTableViewController: UITableViewController {
             
         } else {
         
-            let cell = tableView.dequeueReusableCellWithIdentifier("questionWithImage", forIndexPath: indexPath) as! ImageQuestionTableViewCell
-            cell.firstNameLabel.text = questionsArray[indexPath.row].firstName
-            cell.questionTextLabel.text = questionsArray[indexPath.row].questionText
+            let cell = tableView.dequeueReusableCell(withIdentifier: "questionWithImage", for: indexPath) as! ImageQuestionTableViewCell
+            cell.firstNameLabel.text = questionsArray[(indexPath as NSIndexPath).row].firstName
+            cell.questionTextLabel.text = questionsArray[(indexPath as NSIndexPath).row].questionText
             
-            storageRef.referenceForURL(questionsArray[indexPath.row].questionerImageURL).dataWithMaxSize(1 * 1024 * 1024, completion: { (data, error) in
+            storageRef.reference(forURL: questionsArray[(indexPath as NSIndexPath).row].questionerImageURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (data, error) in
                 if error == nil {
-                    dispatch_async(dispatch_get_main_queue(), {
+                    DispatchQueue.main.async(execute: {
                         if let data = data {
                             cell.userImageView.image = UIImage(data: data)
                         }
@@ -93,9 +93,9 @@ class QuestionsTableViewController: UITableViewController {
                 }
             })
             
-            storageRef.referenceForURL(questionsArray[indexPath.row].questionImageURL).dataWithMaxSize(1 * 1024 * 1024, completion: { (data, error) in
+            storageRef.reference(forURL: questionsArray[(indexPath as NSIndexPath).row].questionImageURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (data, error) in
                 if error == nil {
-                    dispatch_async(dispatch_get_main_queue(), {
+                    DispatchQueue.main.async(execute: {
                         if let data = data {
                             cell.questionImageView.image = UIImage(data: data)
                         }
@@ -108,16 +108,16 @@ class QuestionsTableViewController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        performSegueWithIdentifier("addComment", sender: self)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "addComment", sender: self)
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "addComment" {
-            let vc = segue.destinationViewController as! CommentTableViewController
+            let vc = segue.destination as! CommentTableViewController
             let indexPath = tableView.indexPathForSelectedRow!
             
-            vc.selectedQuestion = questionsArray[indexPath.row]
+            vc.selectedQuestion = questionsArray[(indexPath as NSIndexPath).row]
         }
     }
 }

@@ -38,25 +38,25 @@ struct Question {
     }
     
     init(snapshot: FIRDataSnapshot){
-        
-        self.firstName = snapshot.value!["firstName"] as! String
-        self.questionerImageURL = snapshot.value!["questionerImageURL"] as! String
-        self.questionText = snapshot.value!["questionText"] as! String
-        self.questionImageURL = snapshot.value!["questionImageURL"] as! String
-        self.username = snapshot.value!["username"] as! String
-        self.questionId = snapshot.value!["questionId"] as! String
-        self.numberOfComments = snapshot.value!["numberOfComments"] as! String
-        self.counterComments = snapshot.value!["counterComments"] as! Int
-        self.timestamp = snapshot.value!["timestamp"] as! NSNumber
-        self.ref = snapshot.ref
-        self.key = snapshot.key
+                
+        firstName = (snapshot.value! as! NSDictionary)["firstName"] as! String
+        questionerImageURL = (snapshot.value! as! NSDictionary)["questionerImageURL"] as! String
+        questionText = (snapshot.value! as! NSDictionary)["questionText"] as! String
+        questionImageURL = (snapshot.value! as! NSDictionary)["questionImageURL"] as! String
+        username = (snapshot.value! as! NSDictionary)["username"] as! String
+        questionId = (snapshot.value! as! NSDictionary)["questionId"] as! String
+        numberOfComments = (snapshot.value! as! NSDictionary)["numberOfComments"] as! String
+        counterComments = (snapshot.value! as! NSDictionary)["counterComments"] as! Int
+        timestamp = (snapshot.value! as! NSDictionary)["timestamp"] as! NSNumber
+        ref = snapshot.ref
+        key = snapshot.key
         
     }
     
     
     func toAnyObject() -> [String: AnyObject]{
         
-        return ["firstName":firstName, "username":username, "questionText":questionText,"questionId":questionId,"questionerImageURL":questionerImageURL,"questionImageURL":questionImageURL, "numberOfComments":numberOfComments,"counterComments":counterComments,"timestamp":timestamp]
+        return ["firstName":firstName as AnyObject, "username":username as AnyObject, "questionText":questionText as AnyObject,"questionId":questionId as AnyObject,"questionerImageURL":questionerImageURL as AnyObject,"questionImageURL":questionImageURL as AnyObject, "numberOfComments":numberOfComments as AnyObject,"counterComments":counterComments as AnyObject,"timestamp":timestamp]
     }
 
 }

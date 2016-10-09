@@ -27,7 +27,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     // Unwind Segue Action
-    @IBAction func unwindToLogin(storyboard: UIStoryboardSegue){}
+    @IBAction func unwindToLogin(_ storyboard: UIStoryboardSegue){}
     
     /*
     // Dismissing the Keyboard with the Return Keyboard Button
@@ -54,31 +54,31 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     
     // Move the View Up & Down when the Keyboard appears
-    func animateView(up: Bool, moveValue: CGFloat){
+    func animateView(_ up: Bool, moveValue: CGFloat){
         
-        let movementDuration: NSTimeInterval = 0.3
+        let movementDuration: TimeInterval = 0.3
         let movement: CGFloat = (up ? -moveValue : moveValue)
         UIView.beginAnimations("animateView", context: nil)
         UIView.setAnimationBeginsFromCurrentState(true)
         UIView.setAnimationDuration(movementDuration)
-        self.view.frame = CGRectOffset(self.view.frame, 0, movement)
+        self.view.frame = self.view.frame.offsetBy(dx: 0, dy: movement)
         UIView.commitAnimations()
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return .lightContent
     }
     
-    @IBAction func loginAction(sender: AnyObject) {
+    @IBAction func loginAction(_ sender: AnyObject) {
         self.view.endEditing(true)
-        let email = emailTextField.text!.lowercaseString
-        let finalEmail = email.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        let email = emailTextField.text!.lowercased()
+        let finalEmail = email.trimmingCharacters(in: CharacterSet.whitespaces)
         let password = passwordTextField.text!
         
         if finalEmail.isEmpty || password.isEmpty || finalEmail.characters.count < 8 {
             //Present an alertView to your user
             
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 let alertView =  SCLAlertView()
                 alertView.showError("OOPS", subTitle: "Hey, it seems like you did not fill correctly the information")
             })
@@ -87,8 +87,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    @IBAction func comeBackAction(sender: AnyObject) {
-        self.navigationController?.popToRootViewControllerAnimated(true)
+    @IBAction func comeBackAction(_ sender: AnyObject) {
+        self.navigationController?.popToRootViewController(animated: true)
     }
     
 }

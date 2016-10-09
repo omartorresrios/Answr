@@ -42,10 +42,10 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
     }
 
     //Signin Up the user
-    @IBAction func signUpAction(sender: AnyObject) {
+    @IBAction func signUpAction(_ sender: AnyObject) {
         self.view.endEditing(true)
-        let email = emailTextField.text!.lowercaseString
-        let finalEmail = email.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        let email = emailTextField.text!.lowercased()
+        let finalEmail = email.trimmingCharacters(in: CharacterSet.whitespaces)
         let firstName = firstNameTextField.text!
         let password = passwordTextField.text!
         let username = usernameTextField.text!
@@ -54,7 +54,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
         let imgData = UIImageJPEGRepresentation(userPicture!, 0.8)
         
         if finalEmail.isEmpty || finalEmail.characters.count < 8 || password.isEmpty || username.isEmpty {
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 let alertView = SCLAlertView()
                 alertView.showError("OOPS", subTitle: "Hey, it seems like you did not fill correctly the information")
             })
@@ -63,43 +63,43 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
         }
     }
     
-    @IBAction func choosePictureAction(sender: AnyObject) {
+    @IBAction func choosePictureAction(_ sender: AnyObject) {
         let pickerController = UIImagePickerController()
         pickerController.delegate = self
         pickerController.allowsEditing = true
         
-        let alertController = UIAlertController(title: "Add a Picture", message: "Choose From", preferredStyle: .ActionSheet)
+        let alertController = UIAlertController(title: "Add a Picture", message: "Choose From", preferredStyle: .actionSheet)
         
-        let cameraAction = UIAlertAction(title: "Camera", style: .Default) { (action) in
-            pickerController.sourceType = .Camera
-            self.presentViewController(pickerController, animated: true, completion: nil)
+        let cameraAction = UIAlertAction(title: "Camera", style: .default) { (action) in
+            pickerController.sourceType = .camera
+            self.present(pickerController, animated: true, completion: nil)
             
         }
-        let photosLibraryAction = UIAlertAction(title: "Photos Library", style: .Default) { (action) in
-            pickerController.sourceType = .PhotoLibrary
-            self.presentViewController(pickerController, animated: true, completion: nil)
-            
-        }
-        
-        let savedPhotosAction = UIAlertAction(title: "Saved Photos Album", style: .Default) { (action) in
-            pickerController.sourceType = .SavedPhotosAlbum
-            self.presentViewController(pickerController, animated: true, completion: nil)
+        let photosLibraryAction = UIAlertAction(title: "Photos Library", style: .default) { (action) in
+            pickerController.sourceType = .photoLibrary
+            self.present(pickerController, animated: true, completion: nil)
             
         }
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Destructive, handler: nil)
+        let savedPhotosAction = UIAlertAction(title: "Saved Photos Album", style: .default) { (action) in
+            pickerController.sourceType = .savedPhotosAlbum
+            self.present(pickerController, animated: true, completion: nil)
+            
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
         
         alertController.addAction(cameraAction)
         alertController.addAction(photosLibraryAction)
         alertController.addAction(savedPhotosAction)
         alertController.addAction(cancelAction)
         
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
     
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+        self.dismiss(animated: true, completion: nil)
         self.userImageView.image = image
     }
     /*
@@ -128,22 +128,22 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
     }*/
     
     // Move the View Up & Down when the Keyboard appears
-    func animateView(up: Bool, moveValue: CGFloat){
+    func animateView(_ up: Bool, moveValue: CGFloat){
         
-        let movementDuration: NSTimeInterval = 0.3
+        let movementDuration: TimeInterval = 0.3
         let movement: CGFloat = (up ? -moveValue : moveValue)
         UIView.beginAnimations("animateView", context: nil)
         UIView.setAnimationBeginsFromCurrentState(true)
         UIView.setAnimationDuration(movementDuration)
-        self.view.frame = CGRectOffset(self.view.frame, 0, movement)
+        self.view.frame = self.view.frame.offsetBy(dx: 0, dy: movement)
         UIView.commitAnimations()
     }
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return .lightContent
     }
     
-    @IBAction func comeBackAction(sender: AnyObject) {
-        self.navigationController?.popToRootViewControllerAnimated(true)
+    @IBAction func comeBackAction(_ sender: AnyObject) {
+        self.navigationController?.popToRootViewController(animated: true)
     }
     
 }

@@ -26,12 +26,12 @@ class MyProfileViewController: UIViewController {
         userImageView.layer.borderWidth = 2
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        let userRef = FIRDatabase.database().reference().child("Users").queryOrderedByChild("uid").queryEqualToValue(FIRAuth.auth()!.currentUser!.uid)
+        let userRef = FIRDatabase.database().reference().child("Users").queryOrdered(byChild: "uid").queryEqual(toValue: FIRAuth.auth()!.currentUser!.uid)
         
-        userRef.observeEventType(.Value, withBlock: { (snapshot) in
+        userRef.observe(.value, with: { (snapshot) in
             for userInfo in snapshot.children {
                 self.user = User(snapshot: userInfo as! FIRDataSnapshot)
             }
@@ -40,14 +40,14 @@ class MyProfileViewController: UIViewController {
                 self.usernameLabel.text = user.username
                 self.nameLabel.text = user.firstName
                 
-                FIRStorage.storage().referenceForURL(user.photoURL).dataWithMaxSize(1 * 1024 * 1024, completion: { (imgData, error) in
+                FIRStorage.storage().reference(forURL: user.photoURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
                     if let error = error {
                         let alertView = SCLAlertView()
                         alertView.showError("OOPS", subTitle: error.localizedDescription)
                         
                     }else{
                         
-                        dispatch_async(dispatch_get_main_queue(), {
+                        DispatchQueue.main.async(execute: {
                             if let data = imgData {
                                 self.userImageView.image = UIImage(data: data)
                             }
@@ -61,7 +61,7 @@ class MyProfileViewController: UIViewController {
         }
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return .lightContent
     }
 }

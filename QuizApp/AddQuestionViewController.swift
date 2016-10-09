@@ -55,10 +55,10 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         self.automaticallyAdjustsScrollViewInsets = true
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        let userRef = FIRDatabase.database().reference().child("Users").queryOrderedByChild("uid").queryEqualToValue(FIRAuth.auth()!.currentUser!.uid)
-        userRef.observeEventType(.Value, withBlock: { (snapshot) in
+        let userRef = FIRDatabase.database().reference().child("Users").queryOrdered(byChild: "uid").queryEqual(toValue: FIRAuth.auth()!.currentUser!.uid)
+        userRef.observe(.value, with: { (snapshot) in
             for userInfo in snapshot.children {
                 self.currentUser = User(snapshot: userInfo as! FIRDataSnapshot)
             }
@@ -68,15 +68,15 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         }
     }
     
-    @IBAction func showPictureAction(sender: AnyObject) {
-        if isSwitched.on {
+    @IBAction func showPictureAction(_ sender: AnyObject) {
+        if isSwitched.isOn {
             questionImageView.alpha = 1.0
         } else {
             questionImageView.alpha = 0.0
         }
     }
 
-    @IBAction func saveQuestionAction(sender: AnyObject) {
+    @IBAction func saveQuestionAction(_ sender: AnyObject) {
         var questionText: String!
         if let text: String = questionTextView.text {
             questionText = text
@@ -91,7 +91,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
             numberComments = ""
         }
         
-        if isSwitched.on { // Its anonymous
+        if isSwitched.isOn { // Its anonymous
             
             if questionImageView.image!.isEqual(camera) { // Anonymous. Question without image
                 
@@ -100,18 +100,18 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.8)
                 let metaData = FIRStorageMetadata()
                 metaData.contentType = "image/jpeg"
-                let anonymousImagePath = "anonymousQuestionsWithoutImage/\(FIRAuth.auth()!.currentUser!.uid)/\(NSUUID().UUIDString)/anonymousQuestionerPic.jpg"
+                let anonymousImagePath = "anonymousQuestionsWithoutImage/\(FIRAuth.auth()!.currentUser!.uid)/\(UUID().uuidString)/anonymousQuestionerPic.jpg"
                 let anonymousImageRef = storageRef.reference().child(anonymousImagePath)
-                anonymousImageRef.putData(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
+                anonymousImageRef.put(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
                     if error == nil {
                         metadata!.downloadURL()
                         
-                        let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, questionImageURL: "", questionerImageURL: String(metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, timestamp: NSDate().timeIntervalSince1970, counterComments: self.counter)
+                        let newQuestion = Question(username: self.currentUser.username, questionId: UUID().uuidString, questionText: questionText, questionImageURL: "", questionerImageURL: String(describing: metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter)
                                 
                         let questionRef = self.databaseRef.child("Questions").childByAutoId()
                         questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in
                             if error == nil {
-                                self.navigationController?.popToRootViewControllerAnimated(true)
+                                self.navigationController?.popToRootViewController(animated: true)
                             }
                         })
                     } else {
@@ -125,27 +125,27 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 let imageData = UIImageJPEGRepresentation(questionImageView.image!, 0.8)
                 let metaData = FIRStorageMetadata()
                 metaData.contentType = "image/jpeg"
-                let imagePath = "anonymousQuestionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/\(NSUUID().UUIDString)/questionPic.jpg"
+                let imagePath = "anonymousQuestionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/\(UUID().uuidString)/questionPic.jpg"
                 let imageRef = storageRef.reference().child(imagePath)
                 
                 // Reference for the Anonymous Image
                 let anonymousImg = anonymousImage.image
                 let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.8)
-                let anonymousImagePath = "anonymousQuestionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/\(NSUUID().UUIDString)/anonymousQuestionerPic.jpg"
+                let anonymousImagePath = "anonymousQuestionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/\(UUID().uuidString)/anonymousQuestionerPic.jpg"
                 let anonymousImageRef = storageRef.reference().child(anonymousImagePath)
-                anonymousImageRef.putData(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
+                anonymousImageRef.put(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
                     if error == nil {
                         metadata!.downloadURL()
                         
-                        imageRef.putData(imageData!, metadata: metaData, completion: { (newMetaData, error) in
+                        imageRef.put(imageData!, metadata: metaData, completion: { (newMetaData, error) in
                             if error == nil {
                                 
-                                let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, questionImageURL: String(newMetaData!.downloadURL()!), questionerImageURL: String(metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, timestamp: NSDate().timeIntervalSince1970, counterComments: self.counter)
+                                let newQuestion = Question(username: self.currentUser.username, questionId: UUID().uuidString, questionText: questionText, questionImageURL: String(describing: newMetaData!.downloadURL()!), questionerImageURL: String(describing: metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter)
                                 
                                 let questionRef = self.databaseRef.child("Questions").childByAutoId()
                                 questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in
                                     if error == nil {
-                                        self.navigationController?.popToRootViewControllerAnimated(true)
+                                        self.navigationController?.popToRootViewController(animated: true)
                                     }
                                 })
                             } else {
@@ -163,12 +163,12 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
             
             if questionImageView.image!.isEqual(camera) { // Its not anonymous. Question without image
                 
-                let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, questionImageURL: "", questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSDate().timeIntervalSince1970, counterComments: self.counter)
+                let newQuestion = Question(username: self.currentUser.username, questionId: UUID().uuidString, questionText: questionText, questionImageURL: "", questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter)
                 
                 let questionRef = self.databaseRef.child("Questions").childByAutoId()
                 questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in
                     if error == nil {
-                        self.navigationController?.popToRootViewControllerAnimated(true)
+                        self.navigationController?.popToRootViewController(animated: true)
                     }
                 })
                 
@@ -178,18 +178,18 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 let imageData = UIImageJPEGRepresentation(questionImageView.image!, 0.8)
                 let metaData = FIRStorageMetadata()
                 metaData.contentType = "image/jpeg"
-                let imagePath = "questionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/\(NSUUID().UUIDString)/questionPic.jpg"
+                let imagePath = "questionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/\(UUID().uuidString)/questionPic.jpg"
                 let imageRef = storageRef.reference().child(imagePath)
                 
-                imageRef.putData(imageData!, metadata: metaData, completion: { (newMetaData, error) in
+                imageRef.put(imageData!, metadata: metaData, completion: { (newMetaData, error) in
                     if error == nil {
                         
-                        let newQuestion = Question(username: self.currentUser.username, questionId: NSUUID().UUIDString, questionText: questionText, questionImageURL: String(newMetaData!.downloadURL()!), questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSDate().timeIntervalSince1970, counterComments: self.counter)
+                        let newQuestion = Question(username: self.currentUser.username, questionId: UUID().uuidString, questionText: questionText, questionImageURL: String(describing: newMetaData!.downloadURL()!), questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter)
                         
                         let questionRef = self.databaseRef.child("Questions").childByAutoId()
                         questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in
                             if error == nil {
-                                self.navigationController?.popToRootViewControllerAnimated(true)
+                                self.navigationController?.popToRootViewController(animated: true)
                             }
                         })
                     } else {
@@ -200,54 +200,54 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         }
     }
     
-    @IBAction func choosePictureAction(sender: AnyObject) {
+    @IBAction func choosePictureAction(_ sender: AnyObject) {
         let pickerController = UIImagePickerController()
         pickerController.delegate = self
         pickerController.allowsEditing = true
         
-        let alertController = UIAlertController(title: "Add a Picture", message: "Choose From", preferredStyle: .ActionSheet)
+        let alertController = UIAlertController(title: "Add a Picture", message: "Choose From", preferredStyle: .actionSheet)
         
-        let cameraAction = UIAlertAction(title: "Camera", style: .Default) { (action) in
-            pickerController.sourceType = .Camera
-            self.presentViewController(pickerController, animated: true, completion: nil)
+        let cameraAction = UIAlertAction(title: "Camera", style: .default) { (action) in
+            pickerController.sourceType = .camera
+            self.present(pickerController, animated: true, completion: nil)
         }
-        let photosLibraryAction = UIAlertAction(title: "Photos Library", style: .Default) { (action) in
-            pickerController.sourceType = .PhotoLibrary
-            self.presentViewController(pickerController, animated: true, completion: nil)
-        }
-        
-        let savedPhotosAction = UIAlertAction(title: "Saved Photos Album", style: .Default) { (action) in
-            pickerController.sourceType = .SavedPhotosAlbum
-            self.presentViewController(pickerController, animated: true, completion: nil)
+        let photosLibraryAction = UIAlertAction(title: "Photos Library", style: .default) { (action) in
+            pickerController.sourceType = .photoLibrary
+            self.present(pickerController, animated: true, completion: nil)
         }
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Destructive, handler: nil)
+        let savedPhotosAction = UIAlertAction(title: "Saved Photos Album", style: .default) { (action) in
+            pickerController.sourceType = .savedPhotosAlbum
+            self.present(pickerController, animated: true, completion: nil)
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
         
         alertController.addAction(cameraAction)
         alertController.addAction(photosLibraryAction)
         alertController.addAction(savedPhotosAction)
         alertController.addAction(cancelAction)
         
-        presentViewController(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
     
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+        self.dismiss(animated: true, completion: nil)
         self.questionImageView.image = image
     }
 
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newLength:Int = (textView.text as NSString).length + (text as NSString).length - range.length
         let remainChar:Int = 200 - newLength
         
         numberOfCharLabel.text = "\(remainChar)"
         if remainChar == -1 {
             numberOfCharLabel.text = "0"
-            numberOfCharLabel.textColor = UIColor.redColor()
+            numberOfCharLabel.textColor = UIColor.red
         } else {
-            numberOfCharLabel.textColor = UIColor.blackColor()
+            numberOfCharLabel.textColor = UIColor.black
             numberOfCharLabel.text = "\(remainChar)"
         }
         return (newLength > 200) ? false : true

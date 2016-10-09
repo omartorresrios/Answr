@@ -29,19 +29,19 @@ struct Comment {
     
     init(snapshot: FIRDataSnapshot){
         
-        self.firstName = snapshot.value!["firstName"] as! String
-        self.commenterImageURL = snapshot.value!["commenterImageURL"] as! String
-        self.commentText = snapshot.value!["commentText"] as! String
-        self.questionId = snapshot.value!["questionId"] as! String
-        self.timestamp = snapshot.value!["timestamp"] as! NSNumber
-        self.ref = snapshot.ref
-        self.key = snapshot.key
+        firstName = (snapshot.value! as! NSDictionary)["firstName"] as! String
+        commenterImageURL = (snapshot.value! as! NSDictionary)["commenterImageURL"] as! String
+        commentText = (snapshot.value! as! NSDictionary)["commentText"] as! String
+        questionId = (snapshot.value! as! NSDictionary)["questionId"] as! String
+        timestamp = (snapshot.value! as! NSDictionary)["timestamp"] as! NSNumber
+        ref = snapshot.ref
+        key = snapshot.key
     }
     
     
     func toAnyObject() -> [String: AnyObject]{
         
-        return ["firstName":firstName, "commentText":commentText,"questionId":questionId,"commenterImageURL":commenterImageURL,"timestamp":timestamp]
+        return ["firstName":firstName as AnyObject, "commentText":commentText as AnyObject,"questionId":questionId as AnyObject,"commenterImageURL":commenterImageURL as AnyObject,"timestamp":timestamp]
     }
     
 }

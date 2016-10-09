@@ -10,6 +10,7 @@
 		A00308691D9D8F4B00797A4E /* anonymous.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A00308681D9D8F4B00797A4E /* anonymous.jpg */; };
 		A003086C1DA1FBA000797A4E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A003086A1DA1FBA000797A4E /* Main.storyboard */; };
 		A003086E1DA4385400797A4E /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A003086D1DA4385400797A4E /* SettingsTableViewController.swift */; };
+		A00308751DA9B3DD00797A4E /* FollowUsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00308741DA9B3DD00797A4E /* FollowUsersTableViewController.swift */; };
 		A0E0F7971D8D979100F87EC8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E0F7961D8D979100F87EC8 /* AppDelegate.swift */; };
 		A0E0F7991D8D979100F87EC8 /* QuestionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E0F7981D8D979100F87EC8 /* QuestionsTableViewController.swift */; };
 		A0E0F7A11D8D979100F87EC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0E0F7A01D8D979100F87EC8 /* Assets.xcassets */; };
@@ -41,6 +42,7 @@
 		A00308681D9D8F4B00797A4E /* anonymous.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = anonymous.jpg; sourceTree = "<group>"; };
 		A003086B1DA1FBA000797A4E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A003086D1DA4385400797A4E /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
+		A00308741DA9B3DD00797A4E /* FollowUsersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowUsersTableViewController.swift; sourceTree = "<group>"; };
 		A0E0F7931D8D979100F87EC8 /* QuizApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuizApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0E0F7961D8D979100F87EC8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A0E0F7981D8D979100F87EC8 /* QuestionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsTableViewController.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 		A0E0F7BF1D8E0F0C00F87EC8 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				A00308741DA9B3DD00797A4E /* FollowUsersTableViewController.swift */,
 				A003086D1DA4385400797A4E /* SettingsTableViewController.swift */,
 				A0E0F7961D8D979100F87EC8 /* AppDelegate.swift */,
 				A0E0F7981D8D979100F87EC8 /* QuestionsTableViewController.swift */,
@@ -211,11 +214,17 @@
 			attributes = {
 				LastSwiftMigration = 0730;
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = OmarTorres;
 				TargetAttributes = {
 					A0E0F7921D8D979100F87EC8 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -319,6 +328,7 @@
 				A0EF07411D95DF6F00395413 /* CommentTableViewCell.swift in Sources */,
 				A0E0F7B21D8DB25400F87EC8 /* ImageQuestionTableViewCell.swift in Sources */,
 				A0E0F7971D8D979100F87EC8 /* AppDelegate.swift in Sources */,
+				A00308751DA9B3DD00797A4E /* FollowUsersTableViewController.swift in Sources */,
 				A0EF07431D95E0A600395413 /* CommentTableViewController.swift in Sources */,
 				A0EF071F1D8EE71400395413 /* AddQuestionViewController.swift in Sources */,
 				A0E0F7C51D8E315400F87EC8 /* Question.swift in Sources */,
@@ -364,8 +374,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -409,8 +421,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -429,6 +443,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -442,6 +457,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.OmarTorres.QuizApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -454,6 +470,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.OmarTorres.QuizApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
