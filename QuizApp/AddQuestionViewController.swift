@@ -13,6 +13,7 @@ import FirebaseAuth
 
 class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
+    @IBOutlet weak var userImgAnonymous: UIImageView!
     @IBOutlet weak var numberOfComments: UITextField!
     @IBOutlet weak var questionTextView: UITextView!
     @IBOutlet weak var numberOfCharLabel: UILabel!
@@ -39,6 +40,12 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Display the user image
+        userImgDefault()
+        
+        // Change size of UISwitch
+        isSwitched.transform = CGAffineTransform(scaleX: 0.60, y: 0.60)
+        
         questionTextView.becomeFirstResponder()
         
         // Set the anonymous image to bgImage
@@ -57,6 +64,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+
         let userRef = FIRDatabase.database().reference().child("Users").queryOrdered(byChild: "uid").queryEqual(toValue: FIRAuth.auth()!.currentUser!.uid)
         userRef.observe(.value, with: { (snapshot) in
             for userInfo in snapshot.children {
@@ -68,11 +76,47 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         }
     }
     
-    @IBAction func showPictureAction(_ sender: AnyObject) {
+    // Configure the currentUser image
+    func userImgDefault() {
+        let userRef = databaseRef.child("Users").queryOrdered(byChild: "uid").queryEqual(toValue: FIRAuth.auth()!.currentUser!.uid)
+        userRef.observe(.value, with: { (snapshot) in
+            for userInfo in snapshot.children {
+                self.currentUser = User(snapshot: userInfo as! FIRDataSnapshot)
+            }
+            if let user = self.currentUser {
+                FIRStorage.storage().reference(forURL: user.photoURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
+                    if let error = error {
+                        let alertView = SCLAlertView()
+                        alertView.showError("OOPS", subTitle: error.localizedDescription)
+                    } else{
+                        DispatchQueue.main.async(execute: {
+                            if let data = imgData {
+                                self.userImgAnonymous.image = UIImage(data: data)
+                            }
+                        })
+                    }
+                })
+            }
+        }) { (error) in
+            let alertView = SCLAlertView()
+            alertView.showError("OOPS", subTitle: error.localizedDescription)
+        }
+    }
+    
+    // Option (UISwitch) for the user to choose if is anonymous or not
+    @IBAction func anonymousUser(_ sender: AnyObject) {
         if isSwitched.isOn {
-            questionImageView.alpha = 1.0
+            userImgAnonymous.image = UIImage(named: "anonymous.jpg")
         } else {
-            questionImageView.alpha = 0.0
+            
+            let url = URL(string: currentUser.photoURL)
+            
+            DispatchQueue.global().async {
+                let data = try? Data(contentsOf: url!)
+                DispatchQueue.main.async {
+                    self.userImgAnonymous.image = UIImage(data: data!)
+                }
+            }
         }
     }
 
@@ -236,7 +280,6 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         self.dismiss(animated: true, completion: nil)
         self.questionImageView.image = image
     }
-
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newLength:Int = (textView.text as NSString).length + (text as NSString).length - range.length
@@ -252,4 +295,11 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         }
         return (newLength > 200) ? false : true
     }
+
+    @IBAction func comeBackAction(_ sender: AnyObject) {
+        self.navigationController?.popToRootViewController(animated: true)
+    }
 }
+
+
+
