@@ -26,15 +26,12 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
         
-        databaseRef.child("users").queryOrdered(byChild: "username").observe(.childAdded, with: { (snapshot) in
+        databaseRef.child("Users").queryOrdered(byChild: "firstName").observe(.childAdded, with: { (snapshot) in
             
             self.usersArray.append(snapshot.value as? NSDictionary)
             
             // Insert the rows
-            //self.followUsersTableView.insertRowsAtIndexPaths([IndexPath(rowsection
-                
-                //row: self.usersArray.count - 1, section: 0)], withRowAnimation: .Automatic)
-            
+            self.followUsersTableView.insertRows(at: [IndexPath(row: self.usersArray.count - 1, section: 0)], with: UITableViewRowAnimation.automatic)
             
             }) { (error) in
                 print(error.localizedDescription)
@@ -51,23 +48,35 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        if searchController.isActive && searchController.searchBar.text != "" {
+            return filteredUsers.count
+        } else {
+            return self.usersArray.count
+        }
     }
-
-    /*
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
-
-        // Configure the cell...
-
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "usersCell", for: indexPath as IndexPath)
+        
+        let user: NSDictionary?
+        
+        if searchController.isActive && searchController.searchBar.text != "" {
+            user = filteredUsers[indexPath.row]
+        } else {
+            user = self.usersArray[indexPath.row]
+        }
+        
+        cell.textLabel?.text = user?["firstName"] as? String
+        cell.detailTextLabel?.text = user?["username"] as? String
+        
         return cell
+
     }
-    */
 
     /*
     // Override to support conditional editing of the table view.
@@ -113,13 +122,23 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
         // Pass the selected object to the new view controller.
     }
     */
-    
-    func updateSearchResults(for searchController: UISearchController) {
-        
-        // Update the search results
-    }
 
     @IBAction func comeBackAction(_ sender: AnyObject) {
         dismiss(animated: true, completion: nil)
+    }
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        
+        filterContent(searchText: self.searchController.searchBar.text!)
+    }
+    
+    func filterContent(searchText: String) {
+        self.filteredUsers = self.usersArray.filter{ user in
+            let name = user!["firstName"] as? String
+            
+            return(name?.lowercased().contains(searchText.lowercased()))!
+        }
+        
+        tableView.reloadData()
     }
 }
