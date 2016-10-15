@@ -14,17 +14,21 @@ import Firebase
 
 class CommentTableViewController: UITableViewController, UITextViewDelegate {
     
-    @IBOutlet weak var questionImageView: UIImageView!
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var firstName: UILabel!
+    @IBOutlet weak var questionImage: UIImageView!
     @IBOutlet weak var questionContent: UILabel!
-    @IBOutlet weak var commentContent: UITextView!
-    @IBOutlet weak var numberOfCharLabelCom: UILabel!
-    @IBOutlet weak var viewMain: UIView!
     @IBOutlet weak var counterCommentsLabel: UILabel!
     @IBOutlet weak var numberOfComLabel: UILabel!
+    @IBOutlet weak var viewMain: UIView!
+    @IBOutlet weak var commentContent: UITextView!
+    @IBOutlet weak var numberOfCharLabelCom: UILabel!
+    @IBOutlet weak var isSwitched: UISwitch! {
+        didSet {
+            isSwitched.transform = CGAffineTransform(scaleX: 0.60, y: 0.60)
+        }
+    }
     @IBOutlet weak var SendCommentBtn: UIButton!
-    @IBOutlet weak var isSwitched: UISwitch!
     
     var databaseRef: FIRDatabaseReference!
     var storageRef: FIRStorageReference!
@@ -41,16 +45,21 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
         return FIRStorage.storage()
     }
     
+    override func viewDidLayoutSubviews() {
+        userImageView.layer.cornerRadius = userImageView.frame.size.height / 2
+        userImageView.clipsToBounds = true
+    }
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        userImageView.layer.cornerRadius = userImageView.layer.frame.height / 2
+        // Change size of UISwitch
         
         // Set the anonymous image to bgImage
         let image: UIImage = UIImage(named: "anonymous.jpg")!
         anonymousImage = UIImageView(image: image)
         
-        self.tableView.estimatedRowHeight = 123
+        self.tableView.estimatedRowHeight = 74
         self.tableView.rowHeight = UITableViewAutomaticDimension
         
         // Movements for the limit of answers per question
@@ -64,7 +73,7 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
             
         } else {
             numberOfComLabel.text = selectedQuestion.numberOfComments
-            counterCommentsLabel.text = "\(selectedQuestion.counterComments)"
+            counterCommentsLabel.text = "\(selectedQuestion.counterComments!)"
             
             maxNumberComments = Int(selectedQuestion.numberOfComments)!
             
@@ -109,11 +118,11 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
         })
         
         if (self.selectedQuestion.questionImageURL.isEmpty){
-            self.questionImageView.removeFromSuperview()
-            // Add constraints for the name and question
-            let constraintDataPlayWidth = NSLayoutConstraint (item: firstName, attribute: .top, relatedBy: .equal, toItem: viewMain,
-                                                                attribute: .top, multiplier: 1.0, constant: 0)
-            self.view.addConstraint(constraintDataPlayWidth)
+            self.questionImage.removeFromSuperview()
+            // Add Top constraint for the questionContent to the userImage
+            let questionContentTop = NSLayoutConstraint (item: questionContent, attribute: .top, relatedBy: .equal, toItem: userImageView,
+                                                              attribute: .bottom, multiplier: 1.0, constant: 8)
+            self.view.addConstraint(questionContentTop)
             
         } else {
             let storageRef2 = FIRStorage.storage().reference(forURL: selectedQuestion.questionImageURL)
@@ -121,7 +130,7 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
                 if error  == nil {
                     DispatchQueue.main.async(execute: {
                         if let data = data {
-                            self.questionImageView.image = UIImage(data: data)
+                            self.questionImage.image = UIImage(data: data)
                         }
                     })
                 } else {
@@ -141,6 +150,9 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
     
     @IBAction func addCommentAction(_ sender: AnyObject) {
         
+        // Clean commentContent after send a comment
+        commentContent.text = ""
+        
         // Process counter
         conditionalCounter = counter
         
@@ -157,11 +169,11 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
         } else {
             commentText = ""
         }
-        
+		
         // Its anonymous or not
         if isSwitched.isOn {
             
-            // Reference for the Anonymous Image
+			// Reference for the Anonymous Image
             let anonymousImg = anonymousImage.image
             let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.8)
             let anonymousImagePath = "anonymousResponses/\(FIRAuth.auth()!.currentUser!.uid)/anonymousResponserPic.jpg"
@@ -172,9 +184,9 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
                 if error == nil {
                     // Create the comment whit the user as anonymous
                     let newComment = Comment(questionId: self.selectedQuestion.questionId, commentText: commentText, commenterImageURL: String(describing: metadata!.downloadURL()!), firstName: self.anonymous, timestamp: NSNumber(value: Date().timeIntervalSince1970))
-            
+                    
                     let commentRef = self.selectedQuestion.ref.child("Comments").childByAutoId()
-            
+                    
                     commentRef.setValue(newComment.toAnyObject())
                 } else {
                     print(error!.localizedDescription)
@@ -188,7 +200,6 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
             
             commentRef.setValue(newComment.toAnyObject())
         }
-        
     }
 
     // MARK: - Table view data source
@@ -198,14 +209,14 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "commentCell", for: indexPath) as! CommentTableViewCell
 
-        
         // Configure the cell...
         
         cell.firstNameLabel.text = commentsArray[(indexPath as NSIndexPath).row].firstName
         cell.commentContent.text = commentsArray[(indexPath as NSIndexPath).row].commentText
-        
+
         storageRef = FIRStorage.storage().reference(forURL: commentsArray[(indexPath as NSIndexPath).row].commenterImageURL)
         storageRef.data(withMaxSize: 1 * 1024 * 1024, completion: { (data, error) in
             if error  == nil {

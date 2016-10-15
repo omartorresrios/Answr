@@ -22,6 +22,10 @@ class ImageQuestionTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        userImageView.layer.cornerRadius = userImageView.layer.frame.height / 2
+    }
+
+    override func layoutSubviews() {
+        userImageView.layer.cornerRadius = userImageView.frame.size.height / 2
+        userImageView.clipsToBounds = true
     }
 }

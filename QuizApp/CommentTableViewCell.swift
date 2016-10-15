@@ -18,13 +18,17 @@ class CommentTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        commenterImageView.layer.cornerRadius = commenterImageView.layer.frame.height / 2
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    override func layoutSubviews() {
+        commenterImageView.layer.cornerRadius = commenterImageView.frame.size.height / 2
+        commenterImageView.clipsToBounds = true
     }
 
 }

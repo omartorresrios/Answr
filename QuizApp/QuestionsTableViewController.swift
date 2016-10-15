@@ -59,6 +59,8 @@ class QuestionsTableViewController: UITableViewController {
         if questionsArray[(indexPath as NSIndexPath).row].questionImageURL.isEmpty {
             let cell = tableView.dequeueReusableCell(withIdentifier: "questionWithText", for: indexPath) as! TextQuestionTableViewCell
             
+            //cell.layer.cornerRadius = 10
+            
             cell.firstNameLabel.text = questionsArray[(indexPath as NSIndexPath).row].firstName
             cell.questionTextLabel.text = questionsArray[(indexPath as NSIndexPath).row].questionText
             

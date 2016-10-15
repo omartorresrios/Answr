@@ -40,6 +40,8 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        userImgAnonymous.layer.cornerRadius = 5
+        
         // Display the user image
         userImgDefault()
         
@@ -283,7 +285,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newLength:Int = (textView.text as NSString).length + (text as NSString).length - range.length
-        let remainChar:Int = 200 - newLength
+        let remainChar:Int = 300 - newLength
         
         numberOfCharLabel.text = "\(remainChar)"
         if remainChar == -1 {
@@ -293,7 +295,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
             numberOfCharLabel.textColor = UIColor.black
             numberOfCharLabel.text = "\(remainChar)"
         }
-        return (newLength > 200) ? false : true
+        return (newLength > 300) ? false : true
     }
 
     @IBAction func comeBackAction(_ sender: AnyObject) {

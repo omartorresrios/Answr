@@ -65,7 +65,7 @@
 		A0EF07331D8F603D00395413 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		A0EF073E1D933E2D00395413 /* StartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		A0EF07401D95DF6E00395413 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
-		A0EF07421D95E0A600395413 /* CommentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentTableViewController.swift; sourceTree = "<group>"; };
+		A0EF07421D95E0A600395413 /* CommentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentTableViewController.swift; sourceTree = "<group>"; usesTabs = 1; };
 		A0EF07441D95E3BF00395413 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		AAF7867F8D2D6C249DBD8291 /* Pods-QuizApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuizApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-QuizApp/Pods-QuizApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
