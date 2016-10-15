@@ -18,6 +18,11 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
     
     var authService = AuthenticationService()
     
+    override func viewDidLayoutSubviews() {
+        userImageView.layer.cornerRadius = userImageView.frame.size.height / 2
+        userImageView.clipsToBounds = true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

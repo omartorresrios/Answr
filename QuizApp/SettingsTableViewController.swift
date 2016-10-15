@@ -29,6 +29,11 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
         return FIRStorage.storage().reference()
     }
     
+    override func viewDidLayoutSubviews() {
+        userImageView.layer.cornerRadius = userImageView.frame.size.height / 2
+        userImageView.clipsToBounds = true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -80,7 +85,7 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
                 self.usernameLabel.text = user.username
                 self.emailTextField.text = user.email
                 
-                FIRStorage.storage().reference(forURL: user.photoURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
+                /*FIRStorage.storage().reference(forURL: user.photoURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
                     if let error = error {
                         let alertView = SCLAlertView()
                         alertView.showError("OOPS", subTitle: error.localizedDescription)
@@ -93,7 +98,7 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
                             }
                         })
                     }
-                })
+                })*/
             }
         }) { (error) in
             let alertView = SCLAlertView()
@@ -102,6 +107,7 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
     }
     
     @IBAction func updateAction(_ sender: AnyObject) {
+        
         let name = nameTextField.text!
         let email = emailTextField.text!.lowercased()
         let finalEmail = email.trimmingCharacters(in: CharacterSet.whitespaces)

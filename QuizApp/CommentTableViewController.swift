@@ -70,7 +70,15 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
             
             counterCommentsLabel.removeFromSuperview()
             numberOfComLabel.removeFromSuperview()
-            
+			
+			// Add Leading constraint for the commentContent to the questionContent
+			let commentContentLeading = NSLayoutConstraint (item: commentContent, attribute: .leading, relatedBy: .equal, toItem: questionContent, attribute: .leading, multiplier: 1.0, constant: 0)
+			self.view.addConstraint(commentContentLeading)
+			
+			// Add Top constraint for the commentContent to the questionContent
+			let commentContentTop = NSLayoutConstraint (item: commentContent, attribute: .top, relatedBy: .equal, toItem: questionContent, attribute: .bottom, multiplier: 1.0, constant: 8)
+			self.view.addConstraint(commentContentTop)
+			
         } else {
             numberOfComLabel.text = selectedQuestion.numberOfComments
             counterCommentsLabel.text = "\(selectedQuestion.counterComments!)"
@@ -150,9 +158,6 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
     
     @IBAction func addCommentAction(_ sender: AnyObject) {
         
-        // Clean commentContent after send a comment
-        commentContent.text = ""
-        
         // Process counter
         conditionalCounter = counter
         
@@ -200,6 +205,9 @@ class CommentTableViewController: UITableViewController, UITextViewDelegate {
             
             commentRef.setValue(newComment.toAnyObject())
         }
+		
+		// Clean commentContent after send a comment
+		commentContent.text = ""
     }
 
     // MARK: - Table view data source
