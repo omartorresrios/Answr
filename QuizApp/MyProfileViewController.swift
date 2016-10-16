@@ -22,8 +22,27 @@ class MyProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Disable the back button
+        self.navigationItem.setHidesBackButton(true, animated: false)
+
+        // Create a button for back to Questions
+        let backQuesBtn =  UIButton(type: .custom)
+        backQuesBtn.frame = CGRect(x: 0, y: 0, width: 40, height: 40) as CGRect
+        backQuesBtn.tintColor = UIColor(red: 255/255.0, green: 219/255.0, blue: 81/255.0, alpha: 1.0)
+        let img : UIImage = UIImage(named: "Collapse Arrow")!
+        backQuesBtn.setImage(img, for: UIControlState.normal)
+        backQuesBtn.addTarget(self, action: #selector(comeBackToQuestions), for: .touchUpInside)
+        self.navigationItem.titleView = backQuesBtn
+        
+        // Modifying the user layer
         userImageView.layer.cornerRadius = 20
         userImageView.layer.borderWidth = 2
+    }
+    
+    // Action for the backToQuestions button
+    func comeBackToQuestions(sender:UIButton!) {
+        performSegue(withIdentifier: "backToQuestions", sender: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {

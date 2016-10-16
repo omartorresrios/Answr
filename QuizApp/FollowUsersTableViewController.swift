@@ -21,6 +21,9 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Disable the back button
+        self.navigationItem.setHidesBackButton(true, animated: false)
+        
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
@@ -123,10 +126,6 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
     }
     */
 
-    @IBAction func comeBackAction(_ sender: AnyObject) {
-        dismiss(animated: true, completion: nil)
-    }
-    
     func updateSearchResults(for searchController: UISearchController) {
         
         filterContent(searchText: self.searchController.searchBar.text!)

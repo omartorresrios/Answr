@@ -263,7 +263,21 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
     }
     
     @IBAction func comeBackAction(_ sender: AnyObject) {
-        self.navigationController?.popToRootViewController(animated: true)
+        
+        //let viewControllers: UIViewController = self.navigationController!.viewControllers as! UIViewController
+
+        
+        for controller in self.navigationController!.viewControllers as Array {
+            if controller is MyProfileViewController {
+                self.navigationController!.popToViewController(controller as UIViewController, animated: true)
+                break
+            }
+        }
+        
+        
+        //navigationController!.popViewController(animated: true)
+        //navigationController!.popToViewController(navigationController!.viewControllers[1], animated: true)
+        
     }
     
 

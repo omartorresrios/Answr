@@ -11,6 +11,10 @@
 		A003086C1DA1FBA000797A4E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A003086A1DA1FBA000797A4E /* Main.storyboard */; };
 		A003086E1DA4385400797A4E /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A003086D1DA4385400797A4E /* SettingsTableViewController.swift */; };
 		A00308751DA9B3DD00797A4E /* FollowUsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00308741DA9B3DD00797A4E /* FollowUsersTableViewController.swift */; };
+		A0318B661DB2F4EF00DFD35C /* SegueFromLeft.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B651DB2F4EF00DFD35C /* SegueFromLeft.swift */; };
+		A0318B681DB3141200DFD35C /* SegueFromRight.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B671DB3141200DFD35C /* SegueFromRight.swift */; };
+		A0318B6A1DB323F500DFD35C /* SegueFromTop.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B691DB323F500DFD35C /* SegueFromTop.swift */; };
+		A0318B6C1DB33FA400DFD35C /* SegueFromBottom.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B6B1DB33FA400DFD35C /* SegueFromBottom.swift */; };
 		A0E0F7971D8D979100F87EC8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E0F7961D8D979100F87EC8 /* AppDelegate.swift */; };
 		A0E0F7991D8D979100F87EC8 /* QuestionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E0F7981D8D979100F87EC8 /* QuestionsTableViewController.swift */; };
 		A0E0F7A11D8D979100F87EC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0E0F7A01D8D979100F87EC8 /* Assets.xcassets */; };
@@ -43,6 +47,10 @@
 		A003086B1DA1FBA000797A4E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A003086D1DA4385400797A4E /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		A00308741DA9B3DD00797A4E /* FollowUsersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowUsersTableViewController.swift; sourceTree = "<group>"; };
+		A0318B651DB2F4EF00DFD35C /* SegueFromLeft.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueFromLeft.swift; sourceTree = "<group>"; };
+		A0318B671DB3141200DFD35C /* SegueFromRight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueFromRight.swift; sourceTree = "<group>"; };
+		A0318B691DB323F500DFD35C /* SegueFromTop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueFromTop.swift; sourceTree = "<group>"; };
+		A0318B6B1DB33FA400DFD35C /* SegueFromBottom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueFromBottom.swift; sourceTree = "<group>"; };
 		A0E0F7931D8D979100F87EC8 /* QuizApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuizApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0E0F7961D8D979100F87EC8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A0E0F7981D8D979100F87EC8 /* QuestionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsTableViewController.swift; sourceTree = "<group>"; };
@@ -91,6 +99,35 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		A0318B6D1DB4233400DFD35C /* User Profile */ = {
+			isa = PBXGroup;
+			children = (
+				A003086D1DA4385400797A4E /* SettingsTableViewController.swift */,
+				A0E0F7C21D8E2F4700F87EC8 /* MyProfileViewController.swift */,
+			);
+			name = "User Profile";
+			sourceTree = "<group>";
+		};
+		A0318B6E1DB4234E00DFD35C /* Login/Signup */ = {
+			isa = PBXGroup;
+			children = (
+				A0E0F7B51D8DFE6700F87EC8 /* LoginViewController.swift */,
+				A0E0F7B71D8DFE8000F87EC8 /* SignUpViewController.swift */,
+			);
+			name = Login/Signup;
+			sourceTree = "<group>";
+		};
+		A0318B6F1DB4236400DFD35C /* Custom Segues */ = {
+			isa = PBXGroup;
+			children = (
+				A0318B651DB2F4EF00DFD35C /* SegueFromLeft.swift */,
+				A0318B671DB3141200DFD35C /* SegueFromRight.swift */,
+				A0318B691DB323F500DFD35C /* SegueFromTop.swift */,
+				A0318B6B1DB33FA400DFD35C /* SegueFromBottom.swift */,
+			);
+			name = "Custom Segues";
+			sourceTree = "<group>";
+		};
 		A0E0F78A1D8D979100F87EC8 = {
 			isa = PBXGroup;
 			children = (
@@ -124,14 +161,12 @@
 			isa = PBXGroup;
 			children = (
 				A00308741DA9B3DD00797A4E /* FollowUsersTableViewController.swift */,
-				A003086D1DA4385400797A4E /* SettingsTableViewController.swift */,
+				A0318B6D1DB4233400DFD35C /* User Profile */,
 				A0E0F7961D8D979100F87EC8 /* AppDelegate.swift */,
 				A0E0F7981D8D979100F87EC8 /* QuestionsTableViewController.swift */,
-				A0E0F7B51D8DFE6700F87EC8 /* LoginViewController.swift */,
-				A0E0F7B71D8DFE8000F87EC8 /* SignUpViewController.swift */,
+				A0318B6E1DB4234E00DFD35C /* Login/Signup */,
 				A0E0F7B11D8DB25400F87EC8 /* ImageQuestionTableViewCell.swift */,
 				A0E0F7B31D8DB27C00F87EC8 /* TextQuestionTableViewCell.swift */,
-				A0E0F7C21D8E2F4700F87EC8 /* MyProfileViewController.swift */,
 				A0EF071E1D8EE71400395413 /* AddQuestionViewController.swift */,
 				A0EF07401D95DF6E00395413 /* CommentTableViewCell.swift */,
 				A0EF07421D95E0A600395413 /* CommentTableViewController.swift */,
@@ -148,6 +183,7 @@
 				A0E0F7A21D8D979100F87EC8 /* LaunchScreen.storyboard */,
 				A0E0F7A51D8D979100F87EC8 /* Info.plist */,
 				A0E0F7AD1D8DA34F00F87EC8 /* GoogleService-Info.plist */,
+				A0318B6F1DB4236400DFD35C /* Custom Segues */,
 			);
 			name = "Supporting files";
 			sourceTree = "<group>";
@@ -319,11 +355,14 @@
 				A0E0F7B61D8DFE6700F87EC8 /* LoginViewController.swift in Sources */,
 				A0EF073F1D933E2D00395413 /* StartViewController.swift in Sources */,
 				A0E0F7B81D8DFE8000F87EC8 /* SignUpViewController.swift in Sources */,
+				A0318B6A1DB323F500DFD35C /* SegueFromTop.swift in Sources */,
 				A0E0F7B41D8DB27C00F87EC8 /* TextQuestionTableViewCell.swift in Sources */,
 				A0E0F7991D8D979100F87EC8 /* QuestionsTableViewController.swift in Sources */,
 				A0EF07451D95E3BF00395413 /* Comment.swift in Sources */,
 				A0E0F7C31D8E2F4700F87EC8 /* MyProfileViewController.swift in Sources */,
 				A0E0F7BD1D8E0EDE00F87EC8 /* SCLAlertView.swift in Sources */,
+				A0318B6C1DB33FA400DFD35C /* SegueFromBottom.swift in Sources */,
+				A0318B661DB2F4EF00DFD35C /* SegueFromLeft.swift in Sources */,
 				A003086E1DA4385400797A4E /* SettingsTableViewController.swift in Sources */,
 				A0EF07411D95DF6F00395413 /* CommentTableViewCell.swift in Sources */,
 				A0E0F7B21D8DB25400F87EC8 /* ImageQuestionTableViewCell.swift in Sources */,
@@ -334,6 +373,7 @@
 				A0E0F7C51D8E315400F87EC8 /* Question.swift in Sources */,
 				A0E0F7BE1D8E0EDE00F87EC8 /* User.swift in Sources */,
 				A0EF07341D8F603D00395413 /* Model.xcdatamodeld in Sources */,
+				A0318B681DB3141200DFD35C /* SegueFromRight.swift in Sources */,
 				A0E0F7BA1D8E0EA600F87EC8 /* AuthenticationService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
