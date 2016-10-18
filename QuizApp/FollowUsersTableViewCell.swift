@@ -34,7 +34,7 @@ class FollowUsersTableViewCell: UITableViewCell {
         userImage.clipsToBounds = true
     }
     
-    /*func configureCell(user: User) {
+    func configureCell(user: User) {
         
         let imageURL = user.photoURL!
         
@@ -51,6 +51,6 @@ class FollowUsersTableViewCell: UITableViewCell {
         }
         self.firstName.text = user.firstName!
         self.username.text = user.username!
-    }*/
+    }
 
 }

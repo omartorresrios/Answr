@@ -22,6 +22,10 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
     
     var databaseRef = FIRDatabase.database().reference()
     
+    var storageRef: FIRStorage {
+        return FIRStorage.storage()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -44,19 +48,19 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
             print(error.localizedDescription)
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-
+        
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if searchController.isActive && searchController.searchBar.text != "" {
@@ -68,7 +72,7 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "usersCell", for: indexPath) as! FollowUsersTableViewCell
-
+        
         let user: NSDictionary?
         
         if searchController.isActive && searchController.searchBar.text != "" {
@@ -77,14 +81,27 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
             user = self.usersArray[indexPath.row]
         }
         
+        let userImgURL = user?["photoURL"] as? String
+        storageRef.reference(forURL: userImgURL!).data(withMaxSize: 1 * 1024 * 1024) { (imgData, error) in
+            if error == nil {
+                DispatchQueue.main.async {
+                    if let data = imgData {
+                        cell.userImage.image = UIImage(data: data)
+                    }
+                }
+            } else {
+                print(error!.localizedDescription)
+            }
+        }
+        
         cell.firstName.text = user?["firstName"] as? String
         cell.username.text = user?["username"] as? String
         
         
         return cell
-
+        
     }
-
+    
     func updateSearchResults(for searchController: UISearchController) {
         
         filterContent(searchText: self.searchController.searchBar.text!)
