@@ -116,10 +116,11 @@ class QuestionsTableViewController: UITableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "addComment" {
-            let vc = segue.destination as! CommentTableViewController
+            let vc = segue.destination as! CommentViewController
             let indexPath = tableView.indexPathForSelectedRow!
             
-            vc.selectedQuestion = questionsArray[(indexPath as NSIndexPath).row]
+        
+            vc.selectedQuestion = questionsArray[(indexPath.row)]
         }
     }
 }
