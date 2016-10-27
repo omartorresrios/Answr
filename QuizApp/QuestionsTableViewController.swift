@@ -34,9 +34,13 @@ class QuestionsTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         fetchQuestions()
+        
+        // Show the bottom toolbar
+        navigationController?.isToolbarHidden = false
     }
     
     fileprivate func fetchQuestions(){
+        
         databaseRef.child("Questions").observe(.value, with: { (questions) in
             var newQuestionsArray = [Question]()
             for question in questions.children {

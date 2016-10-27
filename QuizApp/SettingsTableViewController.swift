@@ -20,15 +20,14 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
     @IBOutlet weak var passwordField: UILabel!
     
     var user: User!
+    var selectedQuestion: Question!
     
     var databaseRef: FIRDatabaseReference! {
         return FIRDatabase.database().reference()
     }
-    
     var storageRef: FIRStorageReference! {
         return FIRStorage.storage().reference()
     }
-    
     override func viewDidLayoutSubviews() {
         userImageView.layer.cornerRadius = userImageView.frame.size.height / 2
         userImageView.clipsToBounds = true
@@ -55,21 +54,17 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
         tapGesture.numberOfTapsRequired = 1
         view.addGestureRecognizer(tapGesture)
 
-        
         // Creating Swipe Gesture to dismiss Keyboard
         let swipDown = UISwipeGestureRecognizer(target: self, action: #selector(SettingsTableViewController.dismissKeyboard(_:)))
         swipDown.direction = .down
         view.addGestureRecognizer(swipDown)
+        
+        fetchCurrentUserInfo()
     }
-
-    /*override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-
-    }*/
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        fetchCurrentUserInfo()
+        
     }
     
     func fetchCurrentUserInfo() {
@@ -85,7 +80,7 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
                 self.usernameLabel.text = user.username
                 self.emailTextField.text = user.email
                 
-                /*FIRStorage.storage().reference(forURL: user.photoURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
+                FIRStorage.storage().reference(forURL: user.photoURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
                     if let error = error {
                         let alertView = SCLAlertView()
                         alertView.showError("OOPS", subTitle: error.localizedDescription)
@@ -98,7 +93,7 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
                             }
                         })
                     }
-                })*/
+                })
             }
         }) { (error) in
             let alertView = SCLAlertView()
@@ -150,20 +145,38 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
                     changeRequest.commitChanges(completion: { (error) in
                         if error == nil {
                             let user = FIRAuth.auth()!.currentUser!
-                            let userInfo = ["firstName": name, "email": user.email, "username": self.user.username, "uid": user.uid, "photoURL": String(describing: user.photoURL!)]
+                            let userInfo: Dictionary<String, Any>? = ["firstName": name, "email": String(describing: user.email!), "username": self.user.username, "uid": user.uid, "photoURL": String(describing: user.photoURL!)]
                             
                             let userRef = self.databaseRef.child("Users").child(self.user.uid)
                             
                             userRef.setValue(userInfo, withCompletionBlock: { (error, ref) in
                                 if error == nil {
-                                    self.navigationController?.popToRootViewController(animated: true)
+                                    // Update the new values in questions and comments nodes
+                                    self.databaseRef.child("Questions").observe(.value, with: { (questions) in
+                                        for question in questions.children {
+                                            let quest = Question(snapshot: question as! FIRDataSnapshot)
+                                            if quest.username == self.user.username {
+                                                quest.ref.child("firstName").setValue(name)
+                                                quest.ref.child("questionerImageURL").setValue(String(describing: user.photoURL!))
+                                            }
+                                        }
+                                    }) { (error) in
+                                        print(error.localizedDescription)
+                                    }
+                                    
+                                    // Once updated, return to MyProfileViewController
+                                    for controller in self.navigationController!.viewControllers as Array {
+                                        if controller is MyProfileViewController {
+                                            self.navigationController!.popToViewController(controller as UIViewController, animated: true)
+                                            break
+                                        }
+                                    }
                                 } else {
                                     let alertView =  SCLAlertView()
                                     alertView.showError("😁OOPS😁", subTitle: error!.localizedDescription)
                                 }
                             })
-                        }
-                        else {
+                        } else {
                             let alertView =  SCLAlertView()
                             alertView.showError("😁OOPS😁", subTitle: error!.localizedDescription)
                         }
@@ -193,19 +206,16 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
         let cameraAction = UIAlertAction(title: "Camera", style: .default) { (action) in
             pickerController.sourceType = .camera
             self.present(pickerController, animated: true, completion: nil)
-            
         }
         
         let photosLibraryAction = UIAlertAction(title: "Photos Library", style: .default) { (action) in
             pickerController.sourceType = .photoLibrary
             self.present(pickerController, animated: true, completion: nil)
-            
         }
         
         let savedPhotosAction = UIAlertAction(title: "Saved Photos Album", style: .default) { (action) in
             pickerController.sourceType = .savedPhotosAlbum
             self.present(pickerController, animated: true, completion: nil)
-            
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
