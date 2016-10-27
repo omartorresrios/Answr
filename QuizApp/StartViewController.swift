@@ -14,6 +14,11 @@ class StartViewController: UIViewController {
         super.viewDidLoad()
 
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController!.navigationBar.barTintColor = UIColor(red: 255/255.0, green: 219/255.0, blue: 81/255.0, alpha: 1.0)
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

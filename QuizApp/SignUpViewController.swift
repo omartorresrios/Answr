@@ -45,6 +45,12 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
         swipDown.direction = .Down
         view.addGestureRecognizer(swipDown)*/
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController!.navigationBar.barTintColor = UIColor.white
+    }
 
     //Signin Up the user
     @IBAction func signUpAction(_ sender: AnyObject) {

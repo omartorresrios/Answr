@@ -35,6 +35,8 @@ class QuestionsTableViewController: UITableViewController {
         super.viewWillAppear(true)
         fetchQuestions()
         
+        self.navigationController!.navigationBar.barTintColor = UIColor.white
+        
         // Show the bottom toolbar
         navigationController?.isToolbarHidden = false
     }

@@ -26,6 +26,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         passwordTextField.delegate = self
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController!.navigationBar.barTintColor = UIColor.white
+    }
+    
     // Unwind Segue Action
     @IBAction func unwindToLogin(_ storyboard: UIStoryboardSegue){}
     

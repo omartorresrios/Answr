@@ -38,7 +38,6 @@
 		A0EF07341D8F603D00395413 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A0EF07321D8F603D00395413 /* Model.xcdatamodeld */; };
 		A0EF073F1D933E2D00395413 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EF073E1D933E2D00395413 /* StartViewController.swift */; };
 		A0EF07411D95DF6F00395413 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EF07401D95DF6E00395413 /* CommentTableViewCell.swift */; };
-		A0EF07431D95E0A600395413 /* CommentTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EF07421D95E0A600395413 /* CommentTableViewController.swift */; };
 		A0EF07451D95E3BF00395413 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EF07441D95E3BF00395413 /* Comment.swift */; };
 		D2EFE65E1F51E1DB682CCBBE /* Pods_QuizApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E092A622EE6E60D51C4651D /* Pods_QuizApp.framework */; };
 /* End PBXBuildFile section */
@@ -79,7 +78,6 @@
 		A0EF07331D8F603D00395413 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		A0EF073E1D933E2D00395413 /* StartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		A0EF07401D95DF6E00395413 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
-		A0EF07421D95E0A600395413 /* CommentTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentTableViewController.swift; sourceTree = "<group>"; usesTabs = 1; };
 		A0EF07441D95E3BF00395413 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		AAF7867F8D2D6C249DBD8291 /* Pods-QuizApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuizApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-QuizApp/Pods-QuizApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -155,7 +153,6 @@
 		A0E0F7951D8D979100F87EC8 /* QuizApp */ = {
 			isa = PBXGroup;
 			children = (
-				A00308681D9D8F4B00797A4E /* anonymous.jpg */,
 				A0E0F7BF1D8E0F0C00F87EC8 /* Controllers */,
 				A0E0F7C01D8E0F3B00F87EC8 /* Supporting files */,
 				A0E0F7C11D8E0F7200F87EC8 /* Model */,
@@ -166,20 +163,13 @@
 		A0E0F7BF1D8E0F0C00F87EC8 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				A005CC421DB9B1180081C548 /* QuestionTableViewCell.swift */,
+				A0ED41E31DC2A44D00C2A1B5 /* TableViewCells */,
+				A0318B6D1DB4233400DFD35C /* User Profile */,
+				A0318B6E1DB4234E00DFD35C /* Login/Signup */,
+				A0EF071E1D8EE71400395413 /* AddQuestionViewController.swift */,
+				A0E0F7981D8D979100F87EC8 /* QuestionsTableViewController.swift */,
 				A005CC401DB9ACBD0081C548 /* CommentViewController.swift */,
 				A00308741DA9B3DD00797A4E /* FollowUsersTableViewController.swift */,
-				A0318B6D1DB4233400DFD35C /* User Profile */,
-				A0E0F7961D8D979100F87EC8 /* AppDelegate.swift */,
-				A0E0F7981D8D979100F87EC8 /* QuestionsTableViewController.swift */,
-				A0318B6E1DB4234E00DFD35C /* Login/Signup */,
-				A0E0F7B11D8DB25400F87EC8 /* ImageQuestionTableViewCell.swift */,
-				A0E0F7B31D8DB27C00F87EC8 /* TextQuestionTableViewCell.swift */,
-				A0EF071E1D8EE71400395413 /* AddQuestionViewController.swift */,
-				A0EF07401D95DF6E00395413 /* CommentTableViewCell.swift */,
-				A0EF07421D95E0A600395413 /* CommentTableViewController.swift */,
-				A0EF073E1D933E2D00395413 /* StartViewController.swift */,
-				A0318B701DB425FC00DFD35C /* FollowUsersTableViewCell.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -187,9 +177,12 @@
 		A0E0F7C01D8E0F3B00F87EC8 /* Supporting files */ = {
 			isa = PBXGroup;
 			children = (
+				A0ED41E41DC2A50A00C2A1B5 /* Resources */,
 				A0E0F7A01D8D979100F87EC8 /* Assets.xcassets */,
+				A0E0F7961D8D979100F87EC8 /* AppDelegate.swift */,
 				A003086A1DA1FBA000797A4E /* Main.storyboard */,
 				A0E0F7A21D8D979100F87EC8 /* LaunchScreen.storyboard */,
+				A0EF073E1D933E2D00395413 /* StartViewController.swift */,
 				A0E0F7A51D8D979100F87EC8 /* Info.plist */,
 				A0E0F7AD1D8DA34F00F87EC8 /* GoogleService-Info.plist */,
 				A0318B6F1DB4236400DFD35C /* Custom Segues */,
@@ -200,16 +193,36 @@
 		A0E0F7C11D8E0F7200F87EC8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				A0EF073D1D8F64AC00395413 /* Model */,
 				A0E0F7BB1D8E0EDE00F87EC8 /* SCLAlertView.swift */,
 				A0E0F7BC1D8E0EDE00F87EC8 /* User.swift */,
-				A0EF073D1D8F64AC00395413 /* Model */,
-				A0E0F7AB1D8D9A6D00F87EC8 /* emojilengua.png */,
-				A0E0F7AF1D8DB1EC00F87EC8 /* user-placeholder.png */,
 				A0E0F7B91D8E0EA600F87EC8 /* AuthenticationService.swift */,
 				A0E0F7C41D8E315400F87EC8 /* Question.swift */,
 				A0EF07441D95E3BF00395413 /* Comment.swift */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		A0ED41E31DC2A44D00C2A1B5 /* TableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				A005CC421DB9B1180081C548 /* QuestionTableViewCell.swift */,
+				A0E0F7B11D8DB25400F87EC8 /* ImageQuestionTableViewCell.swift */,
+				A0E0F7B31D8DB27C00F87EC8 /* TextQuestionTableViewCell.swift */,
+				A0EF07401D95DF6E00395413 /* CommentTableViewCell.swift */,
+				A0318B701DB425FC00DFD35C /* FollowUsersTableViewCell.swift */,
+			);
+			name = TableViewCells;
+			sourceTree = "<group>";
+		};
+		A0ED41E41DC2A50A00C2A1B5 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A00308681D9D8F4B00797A4E /* anonymous.jpg */,
+				A0E0F7AB1D8D9A6D00F87EC8 /* emojilengua.png */,
+				A0E0F7AF1D8DB1EC00F87EC8 /* user-placeholder.png */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		A0EF073D1D8F64AC00395413 /* Model */ = {
@@ -380,7 +393,6 @@
 				A0E0F7B21D8DB25400F87EC8 /* ImageQuestionTableViewCell.swift in Sources */,
 				A0E0F7971D8D979100F87EC8 /* AppDelegate.swift in Sources */,
 				A00308751DA9B3DD00797A4E /* FollowUsersTableViewController.swift in Sources */,
-				A0EF07431D95E0A600395413 /* CommentTableViewController.swift in Sources */,
 				A0EF071F1D8EE71400395413 /* AddQuestionViewController.swift in Sources */,
 				A0E0F7C51D8E315400F87EC8 /* Question.swift in Sources */,
 				A0E0F7BE1D8E0EDE00F87EC8 /* User.swift in Sources */,
