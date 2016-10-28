@@ -29,6 +29,10 @@ class QuestionsTableViewController: UITableViewController {
         self.tableView.backgroundColor = UIColor.white
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 213
+        
+        // Movements for UIToolbar transparency
+        let bgImageColor = UIColor.white.withAlphaComponent(0.7)
+        navigationController?.toolbar.setBackgroundImage(onePixelImageWithColor(color: bgImageColor), forToolbarPosition: UIBarPosition.bottom, barMetrics: UIBarMetrics.default)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -128,6 +132,17 @@ class QuestionsTableViewController: UITableViewController {
         
             vc.selectedQuestion = questionsArray[(indexPath.row)]
         }
+    }
+    
+    // Make UIToolbar Transparency
+    func onePixelImageWithColor(color : UIColor) -> UIImage {
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
+        let context = CGContext(data: nil, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 0, space: colorSpace, bitmapInfo: bitmapInfo.rawValue)
+        context!.setFillColor(color.cgColor)
+        context!.fill(CGRect(x: 0, y: 0, width: 1, height: 1))
+        let image = UIImage(cgImage: context!.makeImage()!)
+        return image
     }
 }
 
