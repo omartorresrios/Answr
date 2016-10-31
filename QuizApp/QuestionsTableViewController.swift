@@ -56,27 +56,26 @@ class QuestionsTableViewController: UITableViewController {
         
         self.currentUser = FIRAuth.auth()?.currentUser
         
-        self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").observe(.value, with: { (questions) in
-            
+        self.databaseRef.child("Questions").observe(.value, with: { (questions) in
+            var newQuestionsArray = [Question]()
             for question in questions.children {
-                let questionSnap = Question(snapshot: question as! FIRDataSnapshot)
+                let newQuestion = Question(snapshot: question as! FIRDataSnapshot)
                 
-                self.databaseRef.child("Questions").queryOrdered(byChild: "questionId").queryEqual(toValue: questionSnap.questionId).observe(.childAdded, with: { (snapshot) in
-                    
-                    var newQuestionsArray = [Question]()
-                    for question in questions.children {
-                        let newQuestion = Question(snapshot: question as! FIRDataSnapshot)
-                        newQuestionsArray.insert(newQuestion, at: 0)
+                self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").observe(.value, with: { (questionsFeed) in
+                    for questionFeed in questionsFeed.children {
+                        if newQuestion.questionId == (questionFeed as AnyObject).value {
+                            newQuestionsArray.insert(newQuestion, at: 0)
+                        }
                     }
                     self.questionsArray = newQuestionsArray
                     self.tableView.reloadData()
-                    
-                }) { (error) in
-                    print(error.localizedDescription)
-                }
+                })
             }
-        })
-    
+            
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+        
         // Questions worldwide (PUEDE QUE SE IMPLEMENTE MÁS ADELANTE) P.E: 2 OPC.(PREG. DEL MUNDO y PREG. DE GENTE QUE SIGO)
         /*databaseRef.child("Questions").observe(.value, with: { (questions) in
             var newQuestionsArray = [Question]()

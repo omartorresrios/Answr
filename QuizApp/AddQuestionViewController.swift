@@ -161,10 +161,10 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                         self.saveQuestionInQuestionsNode(question: newQuestion.toAnyObject() as AnyObject)
                         
                         // Saving the question in currentUser feed
-                        self.saveMyOwnQuestionInMyFeed(question: newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                        self.saveMyOwnQuestionInMyFeed(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                         
                         // Saving the question in the Feed node of all the followers of the currentUser
-                        self.saveQuestionInFeeds(question: newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                        self.saveQuestionInFeeds(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                         
                     } else {
                         print(error!.localizedDescription)
@@ -199,10 +199,10 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                                 self.saveQuestionInQuestionsNode(question: newQuestion.toAnyObject() as AnyObject)
                                 
                                 // Saving the question in currentUser feed
-                                self.saveMyOwnQuestionInMyFeed(question: newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                                self.saveMyOwnQuestionInMyFeed(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                                 
                                 // Saving the question in the Feed node of all the followers of the currentUser
-                                self.saveQuestionInFeeds(question: newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                                self.saveQuestionInFeeds(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                                 
                             } else {
                                 print(error!.localizedDescription)
@@ -225,10 +225,10 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 self.saveQuestionInQuestionsNode(question: newQuestion.toAnyObject() as AnyObject)
                 
                 // Saving the question in currentUser feed
-                self.saveMyOwnQuestionInMyFeed(question: newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                self.saveMyOwnQuestionInMyFeed(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                 
                 // Saving the question in the Feed node of all the followers of the currentUser
-                self.saveQuestionInFeeds(question: newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                self.saveQuestionInFeeds(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                 
             } else { // Its not anonymous. Question with image
                 
@@ -249,10 +249,10 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                         self.saveQuestionInQuestionsNode(question: newQuestion.toAnyObject() as AnyObject)
                         
                         // Saving the question in currentUser feed
-                        self.saveMyOwnQuestionInMyFeed(question: newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                        self.saveMyOwnQuestionInMyFeed(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                         
                         // Saving the question in the Feed node of all the followers of the currentUser
-                        self.saveQuestionInFeeds(question: newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                        self.saveQuestionInFeeds(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                         
                     } else {
                         print(error!.localizedDescription)
