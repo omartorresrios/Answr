@@ -17,8 +17,12 @@ class MyProfileViewController: UIViewController {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var userImageView: UIImageView!
+    @IBOutlet weak var numberFollowers: UIButton!
+    @IBOutlet weak var numberFollowing: UIButton!
     
     var user: User!
+    var currentUser:AnyObject?
+    var databaseRef = FIRDatabase.database().reference()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,10 +38,53 @@ class MyProfileViewController: UIViewController {
         backQuesBtn.setImage(img, for: UIControlState.normal)
         backQuesBtn.addTarget(self, action: #selector(comeBackToQuestions), for: .touchUpInside)
         self.navigationItem.titleView = backQuesBtn
+
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
         
-        // Modifying the user layer
-        userImageView.layer.cornerRadius = 20
-        userImageView.layer.borderWidth = 2
+        self.currentUser = FIRAuth.auth()?.currentUser
+        
+        self.databaseRef.child("Users").child(self.currentUser!.uid).observe(.value, with: { (snapshot) in
+            
+            let snapshot = snapshot.value as! [String: AnyObject]
+            self.nameLabel.text = snapshot["firstName"] as? String
+            self.usernameLabel.text = snapshot["username"] as? String
+            
+            if(snapshot["photoURL"] !== nil)
+            {
+                let databasePhotoURL = snapshot["photoURL"] as! String
+                
+                let data = try? Data(contentsOf: URL(string: databasePhotoURL)!)
+                
+                self.setProfilePicture(self.userImageView, imageToSet: UIImage(data: data!)!)
+                
+            }
+            
+            if(snapshot["followersCount"] !== nil)
+            {
+                self.numberFollowers.setTitle("\(snapshot["followersCount"]!)", for: .normal)
+            }
+            
+            if(snapshot["followingCount"] !== nil)
+            {
+                self.numberFollowing.setTitle("\(snapshot["followingCount"]!)", for: .normal)
+            }
+        })
+    }
+    
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return .lightContent
+    }
+    
+    // Customize properties for userImageView
+    internal func setProfilePicture(_ imageView: UIImageView, imageToSet: UIImage) {
+        imageView.layer.cornerRadius = 20
+        imageView.layer.borderWidth = 2
+        imageView.layer.borderColor = UIColor.black.cgColor
+        imageView.layer.masksToBounds = true
+        imageView.image = imageToSet
     }
     
     // Action for the backToQuestions button
@@ -45,42 +92,15 @@ class MyProfileViewController: UIViewController {
         performSegue(withIdentifier: "backToQuestions", sender: nil)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        let userRef = FIRDatabase.database().reference().child("Users").queryOrdered(byChild: "uid").queryEqual(toValue: FIRAuth.auth()!.currentUser!.uid)
-        
-        userRef.observe(.value, with: { (snapshot) in
-            for userInfo in snapshot.children {
-                self.user = User(snapshot: userInfo as! FIRDataSnapshot)
-            }
-            if let user = self.user {
-                
-                self.usernameLabel.text = user.username
-                self.nameLabel.text = user.firstName
-                
-                FIRStorage.storage().reference(forURL: user.photoURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
-                    if let error = error {
-                        let alertView = SCLAlertView()
-                        alertView.showError("OOPS", subTitle: error.localizedDescription)
-                        
-                    }else{
-                        
-                        DispatchQueue.main.async(execute: {
-                            if let data = imgData {
-                                self.userImageView.image = UIImage(data: data)
-                            }
-                        })
-                    }
-                })
-            }
-        }) { (error) in
-            let alertView = SCLAlertView()
-            alertView.showError("OOPS", subTitle: error.localizedDescription)
+        if segue.identifier == "showFollowingTVC" {
+            let showFollowingTVC = segue.destination as! ShowFollowingTableViewController
+            showFollowingTVC.user = self.currentUser as? FIRUser
+            
+        } else if segue.identifier == "showFollowersTVC" {
+            let showFollowersTVC = segue.destination as! ShowFollowersTableViewController
+                showFollowersTVC.user = self.currentUser as? FIRUser
         }
-    }
-    
-    override var preferredStatusBarStyle : UIStatusBarStyle {
-        return .lightContent
     }
 }

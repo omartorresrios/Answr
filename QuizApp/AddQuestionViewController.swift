@@ -31,7 +31,9 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         return FIRStorage.storage()
     }
     
+    var questionsArray = [NSDictionary?]()
     var currentUser: User!
+    var otherUser: NSDictionary?
     var counter = 0
     let anonymous: String = "Anonymous" // Anonymous users name
     var anonymousImage: UIImageView! // Anonymous users image
@@ -152,14 +154,18 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                     if error == nil {
                         metadata!.downloadURL()
                         
-                        let newQuestion = Question(username: self.currentUser.username, questionId: UUID().uuidString, questionText: questionText, questionImageURL: "", questionerImageURL: String(describing: metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter)
-                                
-                        let questionRef = self.databaseRef.child("Questions").childByAutoId()
-                        questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in
-                            if error == nil {
-                                self.navigationController?.popToRootViewController(animated: true)
-                            }
-                        })
+                        // Creating the question
+                        let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: "", questionerImageURL: String(describing: metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter)
+                        
+                        // Saving the question in Questions node
+                        self.saveQuestionInQuestionsNode(question: newQuestion.toAnyObject() as AnyObject)
+                        
+                        // Saving the question in currentUser feed
+                        self.saveMyOwnQuestionInMyFeed(question: newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                        
+                        // Saving the question in the Feed node of all the followers of the currentUser
+                        self.saveQuestionInFeeds(question: newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                        
                     } else {
                         print(error!.localizedDescription)
                     }
@@ -186,14 +192,18 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                         imageRef.put(imageData!, metadata: metaData, completion: { (newMetaData, error) in
                             if error == nil {
                                 
-                                let newQuestion = Question(username: self.currentUser.username, questionId: UUID().uuidString, questionText: questionText, questionImageURL: String(describing: newMetaData!.downloadURL()!), questionerImageURL: String(describing: metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter)
+                                // Creating the question
+                                let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: String(describing: newMetaData!.downloadURL()!), questionerImageURL: String(describing: metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter)
                                 
-                                let questionRef = self.databaseRef.child("Questions").childByAutoId()
-                                questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in
-                                    if error == nil {
-                                        self.navigationController?.popToRootViewController(animated: true)
-                                    }
-                                })
+                                // Saving the question in Questions node
+                                self.saveQuestionInQuestionsNode(question: newQuestion.toAnyObject() as AnyObject)
+                                
+                                // Saving the question in currentUser feed
+                                self.saveMyOwnQuestionInMyFeed(question: newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                                
+                                // Saving the question in the Feed node of all the followers of the currentUser
+                                self.saveQuestionInFeeds(question: newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                                
                             } else {
                                 print(error!.localizedDescription)
                             }
@@ -204,19 +214,21 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 })
             }
             
-            
         } else { // Its not anonymous
             
             if questionImageView.image!.isEqual(camera) { // Its not anonymous. Question without image
                 
-                let newQuestion = Question(username: self.currentUser.username, questionId: UUID().uuidString, questionText: questionText, questionImageURL: "", questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter)
+                // Creating the question
+                let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: "", questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter)
                 
-                let questionRef = self.databaseRef.child("Questions").childByAutoId()
-                questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in
-                    if error == nil {
-                        self.navigationController?.popToRootViewController(animated: true)
-                    }
-                })
+                // Saving the question in Questions node
+                self.saveQuestionInQuestionsNode(question: newQuestion.toAnyObject() as AnyObject)
+                
+                // Saving the question in currentUser feed
+                self.saveMyOwnQuestionInMyFeed(question: newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                
+                // Saving the question in the Feed node of all the followers of the currentUser
+                self.saveQuestionInFeeds(question: newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
                 
             } else { // Its not anonymous. Question with image
                 
@@ -230,14 +242,18 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 imageRef.put(imageData!, metadata: metaData, completion: { (newMetaData, error) in
                     if error == nil {
                         
-                        let newQuestion = Question(username: self.currentUser.username, questionId: UUID().uuidString, questionText: questionText, questionImageURL: String(describing: newMetaData!.downloadURL()!), questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter)
+                        // Creating the question
+                        let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: String(describing: newMetaData!.downloadURL()!), questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter)
                         
-                        let questionRef = self.databaseRef.child("Questions").childByAutoId()
-                        questionRef.setValue(newQuestion.toAnyObject(), withCompletionBlock: { (error, ref) in
-                            if error == nil {
-                                self.navigationController?.popToRootViewController(animated: true)
-                            }
-                        })
+                        // Saving the question in Questions node
+                        self.saveQuestionInQuestionsNode(question: newQuestion.toAnyObject() as AnyObject)
+                        
+                        // Saving the question in currentUser feed
+                        self.saveMyOwnQuestionInMyFeed(question: newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                        
+                        // Saving the question in the Feed node of all the followers of the currentUser
+                        self.saveQuestionInFeeds(question: newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                        
                     } else {
                         print(error!.localizedDescription)
                     }
@@ -245,6 +261,43 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
             }
         }
     }
+    
+    // Function for save the question in Questions node
+    func saveQuestionInQuestionsNode(question: AnyObject) {
+        let questionRef = self.databaseRef.child("Questions").childByAutoId()
+        questionRef.setValue(question, withCompletionBlock: { (error, ref) in
+            if error == nil {
+                self.navigationController?.popToRootViewController(animated: true)
+            }
+        })
+    }
+    
+    // Function for save the question in currentUser feed
+    func saveMyOwnQuestionInMyFeed(question: AnyObject, questionId: String) {
+        let myOwnQuestion = self.databaseRef.child("Users").child(self.currentUser.uid).child("Feed").child(questionId)
+        myOwnQuestion.setValue(question, withCompletionBlock: { (error, ref) in
+            if error == nil {
+                print("My own question added to my Feed!")
+            }
+        })
+    }
+    
+    // Function for save the question in follower's feeds
+    func saveQuestionInFeeds(question: AnyObject, questionId: String) {
+        self.databaseRef.child("followers").child(self.currentUser.uid).observe(.value, with: { (snapshot) in
+            for follower in snapshot.children {
+                let followerSnapshot = User(snapshot: follower as! FIRDataSnapshot)
+                
+                let followerRef = self.databaseRef.child("Users").child(followerSnapshot.uid).child("Feed").child(questionId)
+                followerRef.setValue(question, withCompletionBlock: { (error, ref) in
+                    if error == nil {
+                        print("Question added to follower's feed")
+                    }
+                })
+            }
+        })
+    }
+    
     
     @IBAction func choosePictureAction(_ sender: AnyObject) {
         let pickerController = UIImagePickerController()

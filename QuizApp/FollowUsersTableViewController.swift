@@ -19,6 +19,7 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
     let searchController = UISearchController(searchResultsController: nil)
     var usersArray = [NSDictionary?]()
     var filteredUsers = [NSDictionary?]()
+    var currentUser: FIRUser?
     
     var databaseRef = FIRDatabase.database().reference()
     
@@ -40,10 +41,18 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
         
         databaseRef.child("Users").queryOrdered(byChild: "firstName").observe(.childAdded, with: { (snapshot) in
             
-            self.usersArray.append(snapshot.value as? NSDictionary)
-                    
-            // Insert the rows
-            self.followUsersTableView.insertRows(at: [IndexPath(row: self.usersArray.count - 1, section: 0)], with: UITableViewRowAnimation.automatic)
+            let key = snapshot.key
+            let snapshot = snapshot.value as? NSDictionary
+            snapshot?.setValue(key, forKey: "uid")
+            
+            if key == self.currentUser?.uid {
+                print("Same as currentUser")
+            } else {
+                self.usersArray.append(snapshot)
+                
+                // Insert the rows
+                self.followUsersTableView.insertRows(at: [IndexPath(row: self.usersArray.count - 1, section: 0)], with: UITableViewRowAnimation.automatic)
+            }
             
         }) { (error) in
             print(error.localizedDescription)
@@ -116,5 +125,24 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
         }
         
         tableView.reloadData()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "ShowUser" {
+            let showUserProfileVC = segue.destination as! UserProfileViewController
+            showUserProfileVC.currentUser = self.currentUser
+            
+            if let indexPath = tableView.indexPathForSelectedRow {
+                let user = usersArray[indexPath.row]
+                showUserProfileVC.otherUser = user
+            }
+        }
+        
+        
+        if segue.identifier == "showQuestionsTVC" {
+            let showFollowUsersTVC = segue.destination as! QuestionsTableViewController
+            showFollowUsersTVC.user = self.currentUser
+        }
     }
 }

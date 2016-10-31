@@ -22,9 +22,15 @@ class QuestionsTableViewController: UITableViewController {
     }
     
     var questionsArray = [Question]()
+    var currentUser: AnyObject?
+    var user: FIRUser?
+    var selectedQuestion: Question!
+    var otherUser: NSDictionary?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.currentUser = FIRAuth.auth()?.currentUser
         
         self.tableView.backgroundColor = UIColor.white
         self.tableView.rowHeight = UITableViewAutomaticDimension
@@ -43,11 +49,36 @@ class QuestionsTableViewController: UITableViewController {
         
         // Show the bottom toolbar
         navigationController?.isToolbarHidden = false
+
     }
     
     fileprivate func fetchQuestions(){
         
-        databaseRef.child("Questions").observe(.value, with: { (questions) in
+        self.currentUser = FIRAuth.auth()?.currentUser
+        
+        self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").observe(.value, with: { (questions) in
+            
+            for question in questions.children {
+                let questionSnap = Question(snapshot: question as! FIRDataSnapshot)
+                
+                self.databaseRef.child("Questions").queryOrdered(byChild: "questionId").queryEqual(toValue: questionSnap.questionId).observe(.childAdded, with: { (snapshot) in
+                    
+                    var newQuestionsArray = [Question]()
+                    for question in questions.children {
+                        let newQuestion = Question(snapshot: question as! FIRDataSnapshot)
+                        newQuestionsArray.insert(newQuestion, at: 0)
+                    }
+                    self.questionsArray = newQuestionsArray
+                    self.tableView.reloadData()
+                    
+                }) { (error) in
+                    print(error.localizedDescription)
+                }
+            }
+        })
+    
+        // Questions worldwide (PUEDE QUE SE IMPLEMENTE MÁS ADELANTE) P.E: 2 OPC.(PREG. DEL MUNDO y PREG. DE GENTE QUE SIGO)
+        /*databaseRef.child("Questions").observe(.value, with: { (questions) in
             var newQuestionsArray = [Question]()
             for question in questions.children {
                 let newQuestion = Question(snapshot: question as! FIRDataSnapshot)
@@ -58,7 +89,8 @@ class QuestionsTableViewController: UITableViewController {
             
         }) { (error) in
             print(error.localizedDescription)
-        }
+        }*/
+        
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -128,9 +160,12 @@ class QuestionsTableViewController: UITableViewController {
         if segue.identifier == "addComment" {
             let vc = segue.destination as! CommentViewController
             let indexPath = tableView.indexPathForSelectedRow!
-            
-        
             vc.selectedQuestion = questionsArray[(indexPath.row)]
+        }
+        
+        if segue.identifier == "findUserSegue" {
+            let showFollowUsersTVC = segue.destination as! FollowUsersTableViewController
+            showFollowUsersTVC.currentUser = self.currentUser as? FIRUser
         }
     }
     

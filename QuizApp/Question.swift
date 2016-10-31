@@ -12,7 +12,7 @@ import FirebaseDatabase
 struct Question {
     var ref: FIRDatabaseReference!
     var key: String!
-    var username: String!
+    var userUid: String!
     var firstName: String!
     var questionId: String!
     var questionText: String!
@@ -23,9 +23,9 @@ struct Question {
     var timestamp: NSNumber!
     
 
-    init(username: String, questionId: String, questionText: String, questionImageURL: String, questionerImageURL: String, firstName: String, numberOfComments: String, timestamp: NSNumber, counterComments: Int = 0, key: String = ""){
+    init(userUid: String, questionId: String, questionText: String, questionImageURL: String, questionerImageURL: String, firstName: String, numberOfComments: String, timestamp: NSNumber, counterComments: Int = 0, key: String = ""){
         
-        self.username = username
+        self.userUid = userUid
         self.firstName = firstName
         self.questionId = questionId
         self.questionImageURL = questionImageURL
@@ -43,7 +43,7 @@ struct Question {
         questionerImageURL = (snapshot.value! as! NSDictionary)["questionerImageURL"] as! String
         questionText = (snapshot.value! as! NSDictionary)["questionText"] as! String
         questionImageURL = (snapshot.value! as! NSDictionary)["questionImageURL"] as! String
-        username = (snapshot.value! as! NSDictionary)["username"] as! String
+        userUid = (snapshot.value! as! NSDictionary)["userUid"] as! String
         questionId = (snapshot.value! as! NSDictionary)["questionId"] as! String
         numberOfComments = (snapshot.value! as! NSDictionary)["numberOfComments"] as! String
         counterComments = (snapshot.value! as! NSDictionary)["counterComments"] as! Int
@@ -56,7 +56,7 @@ struct Question {
     
     func toAnyObject() -> [String: AnyObject]{
         
-        return ["firstName":firstName as AnyObject, "username":username as AnyObject, "questionText":questionText as AnyObject,"questionId":questionId as AnyObject,"questionerImageURL":questionerImageURL as AnyObject,"questionImageURL":questionImageURL as AnyObject, "numberOfComments":numberOfComments as AnyObject,"counterComments":counterComments as AnyObject,"timestamp":timestamp]
+        return ["firstName":firstName as AnyObject, "userUid":userUid as AnyObject, "questionText":questionText as AnyObject,"questionId":questionId as AnyObject,"questionerImageURL":questionerImageURL as AnyObject,"questionImageURL":questionImageURL as AnyObject, "numberOfComments":numberOfComments as AnyObject,"counterComments":counterComments as AnyObject,"timestamp":timestamp]
     }
 
 }

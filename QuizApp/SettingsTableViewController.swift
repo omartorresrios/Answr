@@ -39,8 +39,6 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
         nameTextField.delegate = self
         emailTextField.delegate = self
         
-        userImageView.layer.cornerRadius = userImageView.layer.frame.height / 2
-        
         // Creating Tap Gesture to dismiss Keyboard for the userImageView
         let imageTapGesture = UITapGestureRecognizer(target: self, action: #selector(SettingsTableViewController.choosePictureAction))
         imageTapGesture.numberOfTapsRequired = 1
@@ -155,7 +153,7 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
                                     self.databaseRef.child("Questions").observe(.value, with: { (questions) in
                                         for question in questions.children {
                                             let quest = Question(snapshot: question as! FIRDataSnapshot)
-                                            if quest.username == self.user.username {
+                                            if quest.userUid == self.user.uid {
                                                 quest.ref.child("firstName").setValue(name)
                                                 quest.ref.child("questionerImageURL").setValue(String(describing: user.photoURL!))
                                             }
