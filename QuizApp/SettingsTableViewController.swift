@@ -20,7 +20,7 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
     @IBOutlet weak var passwordField: UILabel!
     
     var user: User!
-    var selectedQuestion: Question!
+    let currentUser = FIRAuth.auth()!.currentUser!
     
     var databaseRef: FIRDatabaseReference! {
         return FIRDatabase.database().reference()
@@ -124,15 +124,6 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
             imageRef.put(imgData, metadata: metadata) { (metadata, error) in
                 if error == nil {
                     
-                    FIRAuth.auth()!.currentUser!.updateEmail(finalEmail, completion: { (error) in
-                        if error == nil {
-                            print("email updated succesfully")
-                        } else {
-                            let alertView =  SCLAlertView()
-                            alertView.showError("😁OOPS😁", subTitle: error!.localizedDescription)
-                        }
-                    })
-                    
                     let changeRequest = FIRAuth.auth()!.currentUser!.profileChangeRequest()
                     changeRequest.displayName = name
                     
@@ -142,26 +133,10 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
                     
                     changeRequest.commitChanges(completion: { (error) in
                         if error == nil {
-                            let user = FIRAuth.auth()!.currentUser!
-                            let userInfo: Dictionary<String, Any>? = ["firstName": name, "email": String(describing: user.email!), "username": self.user.username, "uid": user.uid, "photoURL": String(describing: user.photoURL!)]
-                            
                             let userRef = self.databaseRef.child("Users").child(self.user.uid)
-                            
-                            userRef.setValue(userInfo, withCompletionBlock: { (error, ref) in
+                            userRef.child("firstName").setValue(name, withCompletionBlock: { (error, ref) in
                                 if error == nil {
-                                    // Update the new values in questions and comments nodes
-                                    self.databaseRef.child("Questions").observe(.value, with: { (questions) in
-                                        for question in questions.children {
-                                            let quest = Question(snapshot: question as! FIRDataSnapshot)
-                                            if quest.userUid == self.user.uid {
-                                                quest.ref.child("firstName").setValue(name)
-                                                quest.ref.child("questionerImageURL").setValue(String(describing: user.photoURL!))
-                                            }
-                                        }
-                                    }) { (error) in
-                                        print(error.localizedDescription)
-                                    }
-                                    
+                                    print("currentUser firstName updated")
                                     // Once updated, return to MyProfileViewController
                                     for controller in self.navigationController!.viewControllers as Array {
                                         if controller is MyProfileViewController {
@@ -170,21 +145,33 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
                                         }
                                     }
                                 } else {
-                                    let alertView =  SCLAlertView()
-                                    alertView.showError("😁OOPS😁", subTitle: error!.localizedDescription)
+                                    let alertView = SCLAlertView()
+                                    alertView.showError("OOPS", subTitle: error!.localizedDescription)
+                                }
+                            })
+                            
+                            userRef.child("photoURL").setValue(String(describing: self.currentUser.photoURL!), withCompletionBlock: { (error, ref) in
+                                if error == nil {
+                                    print("currentUser photoURL updated")
+                                }
+                            })
+                            
+                            userRef.child("email").setValue(email, withCompletionBlock: { (error, ref) in
+                                if error == nil {
+                                    print("currentUser email updated")
                                 }
                             })
                         } else {
-                            let alertView =  SCLAlertView()
-                            alertView.showError("😁OOPS😁", subTitle: error!.localizedDescription)
+                            print(error!.localizedDescription)
                         }
                     })
                 } else {
-                    let alertView =  SCLAlertView()
-                    alertView.showError("😁OOPS😁", subTitle: error!.localizedDescription)
+                    print(error!.localizedDescription)
                 }
             }
         }
+        
+        
     }
     
     // Dismissing the Keyboard with the Return Keyboard Button
