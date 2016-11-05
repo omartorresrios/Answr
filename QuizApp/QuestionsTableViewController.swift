@@ -104,6 +104,10 @@ class QuestionsTableViewController: UITableViewController {
             
             cell.firstNameLabel.text = questionsArray[(indexPath as NSIndexPath).row].firstName
             cell.questionTextLabel.text = questionsArray[(indexPath as NSIndexPath).row].questionText
+            if questionsArray[(indexPath as NSIndexPath).row].numberOfComments.isEmpty == false {
+                cell.commentsCounter.text = "\(questionsArray[(indexPath as NSIndexPath).row].counterComments!)" + "/"
+                cell.numberOfComments.text = questionsArray[(indexPath as NSIndexPath).row].numberOfComments
+            }
             
             storageRef.reference(forURL: questionsArray[(indexPath as NSIndexPath).row].questionerImageURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (data, error) in
                 if error == nil {
@@ -123,6 +127,10 @@ class QuestionsTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "questionWithImage", for: indexPath) as! ImageQuestionTableViewCell
             cell.firstNameLabel.text = questionsArray[(indexPath as NSIndexPath).row].firstName
             cell.questionTextLabel.text = questionsArray[(indexPath as NSIndexPath).row].questionText
+            if questionsArray[(indexPath as NSIndexPath).row].numberOfComments.isEmpty == false {
+                cell.commentsCounter.text = "\(questionsArray[(indexPath as NSIndexPath).row].counterComments!)" + "/"
+                cell.numberOfComments.text = questionsArray[(indexPath as NSIndexPath).row].numberOfComments
+            }
             
             storageRef.reference(forURL: questionsArray[(indexPath as NSIndexPath).row].questionerImageURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (data, error) in
                 if error == nil {

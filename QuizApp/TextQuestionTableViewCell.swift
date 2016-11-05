@@ -13,6 +13,8 @@ class TextQuestionTableViewCell: UITableViewCell {
     @IBOutlet weak var questionTextLabel: UILabel!
     @IBOutlet weak var firstNameLabel: UILabel!
     @IBOutlet weak var userImageView: UIImageView!
+    @IBOutlet weak var commentsCounter: UILabel!
+    @IBOutlet weak var numberOfComments: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
