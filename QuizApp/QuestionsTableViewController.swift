@@ -100,14 +100,38 @@ class QuestionsTableViewController: UITableViewController {
         if questionsArray[(indexPath as NSIndexPath).row].questionImageURL.isEmpty {
             let cell = tableView.dequeueReusableCell(withIdentifier: "questionWithText", for: indexPath) as! TextQuestionTableViewCell
             
-            //cell.layer.cornerRadius = 10
-            
             cell.firstNameLabel.text = questionsArray[(indexPath as NSIndexPath).row].firstName
             cell.questionTextLabel.text = questionsArray[(indexPath as NSIndexPath).row].questionText
             if questionsArray[(indexPath as NSIndexPath).row].numberOfComments.isEmpty == false {
                 cell.commentsCounter.text = "\(questionsArray[(indexPath as NSIndexPath).row].counterComments!)" + "/"
                 cell.numberOfComments.text = questionsArray[(indexPath as NSIndexPath).row].numberOfComments
             }
+            
+            //TimeStamp
+            let timeInterval  = questionsArray[(indexPath as NSIndexPath).row].timestamp
+            
+            //Convert to Date
+            let date = NSDate(timeIntervalSince1970: timeInterval as! TimeInterval)
+            
+            //Date formatting
+            let dateFormatter = DateFormatter()
+            
+            dateFormatter.timeZone = NSTimeZone.local
+            
+            let elapsedTimeInSeconds = NSDate().timeIntervalSince(date as Date)
+            let secondInDays: TimeInterval = 60 * 60 * 24
+            
+            if elapsedTimeInSeconds > 7 * secondInDays {
+                dateFormatter.dateFormat = "dd/MM/yy"
+            } else if elapsedTimeInSeconds > secondInDays {
+                dateFormatter.dateFormat = "EEE"
+            } else {
+                dateFormatter.dateFormat = "HH:mm:a"
+            }
+            
+            let dateString = dateFormatter.string(from: date as Date)
+            
+            cell.timestamp.text = dateString
             
             storageRef.reference(forURL: questionsArray[(indexPath as NSIndexPath).row].questionerImageURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (data, error) in
                 if error == nil {
@@ -120,17 +144,50 @@ class QuestionsTableViewController: UITableViewController {
                     print(error!.localizedDescription)
                 }
             })
+            
+//            if cell.deleteButon.isSelected {
+//                let itemRef = self.databaseRef.child("Questions").child(questionsArray[(indexPath as NSIndexPath).row].questionId)
+//                itemRef.removeValue()
+//            }
+            
             return cell
             
         } else {
         
             let cell = tableView.dequeueReusableCell(withIdentifier: "questionWithImage", for: indexPath) as! ImageQuestionTableViewCell
+            
             cell.firstNameLabel.text = questionsArray[(indexPath as NSIndexPath).row].firstName
             cell.questionTextLabel.text = questionsArray[(indexPath as NSIndexPath).row].questionText
             if questionsArray[(indexPath as NSIndexPath).row].numberOfComments.isEmpty == false {
                 cell.commentsCounter.text = "\(questionsArray[(indexPath as NSIndexPath).row].counterComments!)" + "/"
                 cell.numberOfComments.text = questionsArray[(indexPath as NSIndexPath).row].numberOfComments
             }
+            
+            //TimeStamp
+            let timeInterval  = questionsArray[(indexPath as NSIndexPath).row].timestamp
+            
+            //Convert to Date
+            let date = NSDate(timeIntervalSince1970: timeInterval as! TimeInterval)
+            
+            //Date formatting
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "HH:mm:a"
+            dateFormatter.timeZone = NSTimeZone.local
+            
+            let elapsedTimeInSeconds = NSDate().timeIntervalSince(date as Date)
+            let secondInDays: TimeInterval = 60 * 60 * 24
+            
+            if elapsedTimeInSeconds > 7 * secondInDays {
+                dateFormatter.dateFormat = "dd/MM/yy"
+            } else if elapsedTimeInSeconds > secondInDays {
+                dateFormatter.dateFormat = "EEE"
+            } else {
+                dateFormatter.dateFormat = "HH:mm:a"
+            }
+            
+            let dateString = dateFormatter.string(from: date as Date)
+            
+            cell.timestamp.text = dateString
             
             storageRef.reference(forURL: questionsArray[(indexPath as NSIndexPath).row].questionerImageURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (data, error) in
                 if error == nil {

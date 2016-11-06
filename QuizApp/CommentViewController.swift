@@ -52,7 +52,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             self.view.bringSubview(toFront: topView)
             // Put all Firebase data on labels
             numberOfComLabel.text = selectedQuestion.numberOfComments
-            counterCommentsLabel.text = "\(selectedQuestion.counterComments!)"
+            counterCommentsLabel.text = "\(selectedQuestion.counterComments!)" + "/"
             
             maxNumberComments = Int(selectedQuestion.numberOfComments)!
             

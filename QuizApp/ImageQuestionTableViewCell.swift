@@ -20,6 +20,7 @@ class ImageQuestionTableViewCell: UITableViewCell {
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var commentsCounter: UILabel!
     @IBOutlet weak var numberOfComments: UILabel!
+    @IBOutlet weak var timestamp: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
