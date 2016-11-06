@@ -157,17 +157,11 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                         // Saving the question in Questions node
                         self.saveQuestionInQuestionsNode(question: newQuestion.toAnyObject() as AnyObject)
                         
-                        self.databaseRef.child("Questions").observe(.value, with: { (question) in
-                            for quest in question.children {
-                                let questSnap = Question(snapshot: quest as! FIRDataSnapshot)
-                                if questSnap.userUid == self.currentUser.uid {
-                                    // Saving the question in currentUser feed
-                                    self.saveMyOwnQuestionInMyFeed(questionKey: questSnap.key)
-                                    // Saving the question in the Feed node of all the followers of the currentUser
-                                    self.saveQuestionInFeeds(questionKey: questSnap.key)
-                                }
-                            }
-                        })
+                        // Saving the question in currentUser feed
+                        self.saveMyOwnQuestionInMyFeed(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                        
+                        // Saving the question in the Feed node of all the followers of the currentUser
+                        self.saveQuestionInFeeds(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                         
                     } else {
                         print(error!.localizedDescription)
@@ -201,17 +195,11 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                                 // Saving the question in Questions node
                                 self.saveQuestionInQuestionsNode(question: newQuestion.toAnyObject() as AnyObject)
                                 
-                                self.databaseRef.child("Questions").observe(.value, with: { (question) in
-                                    for quest in question.children {
-                                        let questSnap = Question(snapshot: quest as! FIRDataSnapshot)
-                                        if questSnap.userUid == self.currentUser.uid {
-                                            // Saving the question in currentUser feed
-                                            self.saveMyOwnQuestionInMyFeed(questionKey: questSnap.key)
-                                            // Saving the question in the Feed node of all the followers of the currentUser
-                                            self.saveQuestionInFeeds(questionKey: questSnap.key)
-                                        }
-                                    }
-                                })
+                                // Saving the question in currentUser feed
+                                self.saveMyOwnQuestionInMyFeed(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                                
+                                // Saving the question in the Feed node of all the followers of the currentUser
+                                self.saveQuestionInFeeds(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                                 
                             } else {
                                 print(error!.localizedDescription)
@@ -233,17 +221,11 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 // Saving the question in Questions node
                 self.saveQuestionInQuestionsNode(question: newQuestion.toAnyObject() as AnyObject)
                 
-                self.databaseRef.child("Questions").observe(.value, with: { (question) in
-                    for quest in question.children {
-                        let questSnap = Question(snapshot: quest as! FIRDataSnapshot)
-                        if questSnap.userUid == self.currentUser.uid {
-                            // Saving the question in currentUser feed
-                            self.saveMyOwnQuestionInMyFeed(questionKey: questSnap.key)
-                            // Saving the question in the Feed node of all the followers of the currentUser
-                            self.saveQuestionInFeeds(questionKey: questSnap.key)
-                        }
-                    }
-                })
+                // Saving the question in currentUser feed
+                self.saveMyOwnQuestionInMyFeed(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                
+                // Saving the question in the Feed node of all the followers of the currentUser
+                self.saveQuestionInFeeds(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                 
             } else { // Its not anonymous. Question with image
                 
@@ -263,17 +245,11 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                         // Saving the question in Questions node
                         self.saveQuestionInQuestionsNode(question: newQuestion.toAnyObject() as AnyObject)
                         
-                        self.databaseRef.child("Questions").observe(.value, with: { (question) in
-                            for quest in question.children {
-                                let questSnap = Question(snapshot: quest as! FIRDataSnapshot)
-                                if questSnap.userUid == self.currentUser.uid {
-                                    // Saving the question in currentUser feed
-                                    self.saveMyOwnQuestionInMyFeed(questionKey: questSnap.key)
-                                    // Saving the question in the Feed node of all the followers of the currentUser
-                                    self.saveQuestionInFeeds(questionKey: questSnap.key)
-                                }
-                            }
-                        })
+                        // Saving the question in currentUser feed
+                        self.saveMyOwnQuestionInMyFeed(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                        
+                        // Saving the question in the Feed node of all the followers of the currentUser
+                        self.saveQuestionInFeeds(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
 
                     } else {
                         print(error!.localizedDescription)
@@ -294,9 +270,9 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     }
     
     // Function for save the question in currentUser feed
-    func saveMyOwnQuestionInMyFeed(questionKey: String) {
-        let myOwnQuestion = self.databaseRef.child("Users").child(self.currentUser.uid).child("Feed").child(questionKey)
-        myOwnQuestion.setValue(questionKey, withCompletionBlock: { (error, ref) in
+    func saveMyOwnQuestionInMyFeed(question: AnyObject, questionId: String) {
+        let myOwnQuestion = self.databaseRef.child("Users").child(self.currentUser.uid).child("Feed").child(questionId)
+        myOwnQuestion.setValue(question, withCompletionBlock: { (error, ref) in
             if error == nil {
                 print("My own question added to my Feed!")
             }
@@ -304,13 +280,13 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     }
     
     // Function for save the question in follower's feeds
-    func saveQuestionInFeeds(questionKey: String) {
+    func saveQuestionInFeeds(question: AnyObject, questionId: String) {
         self.databaseRef.child("followers").child(self.currentUser.uid).observe(.value, with: { (snapshot) in
             for follower in snapshot.children {
                 let followerSnapshot = User(snapshot: follower as! FIRDataSnapshot)
                 
-                let followerRef = self.databaseRef.child("Users").child(followerSnapshot.uid).child("Feed").child(questionKey)
-                followerRef.setValue(questionKey, withCompletionBlock: { (error, ref) in
+                let followerRef = self.databaseRef.child("Users").child(followerSnapshot.uid).child("Feed").child(questionId)
+                followerRef.setValue(question, withCompletionBlock: { (error, ref) in
                     if error == nil {
                         print("Question added to follower's feed")
                     }

@@ -62,14 +62,13 @@ class QuestionsTableViewController: UITableViewController {
             for question in questions.children {
                 let newQuestion = Question(snapshot: question as! FIRDataSnapshot)
                 
-                self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").observe(.value, with: { (questionsFeed) in
-                    for questionFeed in questionsFeed.children {
-                        if newQuestion.key == (questionFeed as AnyObject).value {
+                self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").observe(.childAdded, with: { (questionsFeed) in
+                        let questionKey = questionsFeed.key
+                        if newQuestion.questionId == questionKey {
                             newQuestionsArray.insert(newQuestion, at: 0)
                         }
-                    }
-                    self.questionsArray = newQuestionsArray
-                    self.tableView.reloadData()
+                        self.questionsArray = newQuestionsArray
+                        self.tableView.reloadData()
                 })
             }
             
@@ -222,20 +221,16 @@ class QuestionsTableViewController: UITableViewController {
         
         let question = self.questionsArray[indexPath.row]
         
-        if let questionId = question.questionId {
-            self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").child(questionId).removeValue(completionBlock: { (error, ref) in
+        if let questionKey = question.questionId {
+            self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").child(questionKey).removeValue(completionBlock: { (error, ref) in
                 if error != nil {
                     print(error!.localizedDescription)
                     return
                 }
-                
-                self.questionsDictionary.removeValue(forKey: questionId)
-                self.tableView.reloadData()
-            
+                self.questionsArray.remove(at: indexPath.row)
+                self.tableView.deleteRows(at: [indexPath], with: .automatic)
             })
         }
-        
-        
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
