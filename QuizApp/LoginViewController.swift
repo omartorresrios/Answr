@@ -12,6 +12,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var loginButton: UIButton!
     
     var authService = AuthenticationService()
     
@@ -32,8 +33,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.navigationController!.navigationBar.barTintColor = UIColor.white
     }
     
-    // Unwind Segue Action
-    @IBAction func unwindToLogin(_ storyboard: UIStoryboardSegue){}
+
     
     /*
     // Dismissing the Keyboard with the Return Keyboard Button

@@ -35,6 +35,7 @@ class QuestionsTableViewController: UITableViewController {
         self.tableView.backgroundColor = UIColor.white
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 213
+        self.tableView.allowsMultipleSelectionDuringEditing = true
         
         // Movements for UIToolbar transparency
         let bgImageColor = UIColor.white.withAlphaComponent(0.7)
@@ -63,7 +64,7 @@ class QuestionsTableViewController: UITableViewController {
                 
                 self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").observe(.value, with: { (questionsFeed) in
                     for questionFeed in questionsFeed.children {
-                        if newQuestion.questionId == (questionFeed as AnyObject).value {
+                        if newQuestion.key == (questionFeed as AnyObject).value {
                             newQuestionsArray.insert(newQuestion, at: 0)
                         }
                     }
@@ -145,11 +146,6 @@ class QuestionsTableViewController: UITableViewController {
                 }
             })
             
-//            if cell.deleteButon.isSelected {
-//                let itemRef = self.databaseRef.child("Questions").child(questionsArray[(indexPath as NSIndexPath).row].questionId)
-//                itemRef.removeValue()
-//            }
-            
             return cell
             
         } else {
@@ -214,6 +210,32 @@ class QuestionsTableViewController: UITableViewController {
             })
             return cell
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    var questionsDictionary = [String: Question]()
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        
+        let question = self.questionsArray[indexPath.row]
+        
+        if let questionId = question.questionId {
+            self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").child(questionId).removeValue(completionBlock: { (error, ref) in
+                if error != nil {
+                    print(error!.localizedDescription)
+                    return
+                }
+                
+                self.questionsDictionary.removeValue(forKey: questionId)
+                self.tableView.reloadData()
+            
+            })
+        }
+        
+        
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
