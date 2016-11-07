@@ -92,6 +92,8 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         }) { (error) in
             print(error.localizedDescription)
         }
+        
+        self.hideKeyboardWhenTappedAround()
     }
 
     // Disabled commentContent and sendButton when comments counter is equal to number of commments
@@ -234,6 +236,17 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         numberOfCharLabelCom.text = "\(remainChar)"
         
         return (newLength > 150) ? false : true
+    }
+}
+
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
+    }
+    
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
 
