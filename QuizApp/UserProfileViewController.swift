@@ -11,6 +11,7 @@ import Firebase
 
 class UserProfileViewController: UIViewController {
 
+    @IBOutlet weak var userImage: UIImageView!
     @IBOutlet weak var userName: UILabel!
     @IBOutlet weak var followButton: UIButton!
     var currentUser: FIRUser?
@@ -19,6 +20,15 @@ class UserProfileViewController: UIViewController {
     
     var databaseRef: FIRDatabaseReference! {
         return FIRDatabase.database().reference()
+    }
+    
+    var storageRef: FIRStorage {
+        return FIRStorage.storage()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        userImage.layer.cornerRadius = userImage.frame.size.width / 2
+        userImage.clipsToBounds = true
     }
     
     override func viewDidLoad() {
@@ -58,9 +68,21 @@ class UserProfileViewController: UIViewController {
                 print(error.localizedDescription)
         }
         
-        // Show the otherUser name
+        // Show the otherUser info
         self.userName.text = self.otherUser?["firstName"] as? String
-
+        
+        let otherUserImgURL = self.otherUser?["photoURL"] as? String
+        storageRef.reference(forURL: otherUserImgURL!).data(withMaxSize: 1 * 1024 * 1024) { (imgData, error) in
+            if error == nil {
+                DispatchQueue.main.async {
+                    if let data = imgData {
+                        self.userImage.image = UIImage(data: data)
+                    }
+                }
+            } else {
+                print(error!.localizedDescription)
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
