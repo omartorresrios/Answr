@@ -25,6 +25,9 @@ class ShowFollowingTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.estimatedRowHeight = 44
+        
         databaseRef.child("following").child(self.user!.uid).queryOrdered(byChild: "firstName").observe(.childAdded, with: { (snapshot) in
             
             let snapshot = snapshot.value as? NSDictionary
@@ -82,6 +85,19 @@ class ShowFollowingTableViewController: UITableViewController {
             if controller is MyProfileViewController {
                 self.navigationController!.popToViewController(controller as UIViewController, animated: true)
                 break
+            }
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "ShowUser" {
+            let showUserProfileVC = segue.destination as! UserProfileViewController
+            showUserProfileVC.currentUser = self.user
+            
+            if let indexPath = tableView.indexPathForSelectedRow {
+                let user = listFollowing[indexPath.row]
+                showUserProfileVC.otherUser = user
             }
         }
     }

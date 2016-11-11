@@ -19,8 +19,15 @@ class ShowFollowersTableViewController: UITableViewController {
         return FIRDatabase.database().reference()
     }
     
+    var storageRef: FIRStorage {
+        return FIRStorage.storage()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.estimatedRowHeight = 44
         
         databaseRef.child("followers").child(self.user!.uid).observe(.childAdded, with: { (snapshot) in
             
@@ -50,7 +57,23 @@ class ShowFollowersTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let user: NSDictionary?
         let cell = tableView.dequeueReusableCell(withIdentifier: "followersUserCell", for: indexPath) as! FollowersListTableViewCell
+        
+        user = self.listFollowers[indexPath.row]
+        
+        let userImgURL = user?["photoURL"] as? String
+        storageRef.reference(forURL: userImgURL!).data(withMaxSize: 1 * 1024 * 1024) { (imgData, error) in
+            if error == nil {
+                DispatchQueue.main.async {
+                    if let data = imgData {
+                        cell.userImage.image = UIImage(data: data)
+                    }
+                }
+            } else {
+                print(error!.localizedDescription)
+            }
+        }
 
         cell.firstName.text = self.listFollowers[indexPath.row]?["firstName"] as? String
         cell.username.text = self.listFollowers[indexPath.row]?["username"] as? String
@@ -63,6 +86,19 @@ class ShowFollowersTableViewController: UITableViewController {
             if controller is MyProfileViewController {
                 self.navigationController!.popToViewController(controller as UIViewController, animated: true)
                 break
+            }
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "ShowUser" {
+            let showUserProfileVC = segue.destination as! UserProfileViewController
+            showUserProfileVC.currentUser = self.user
+            
+            if let indexPath = tableView.indexPathForSelectedRow {
+                let user = listFollowers[indexPath.row]
+                showUserProfileVC.otherUser = user
             }
         }
     }
