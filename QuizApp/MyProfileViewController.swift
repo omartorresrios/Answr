@@ -43,35 +43,39 @@ class MyProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        let userRef = FIRDatabase.database().reference().child("Users").queryOrdered(byChild: "uid").queryEqual(toValue: FIRAuth.auth()!.currentUser!.uid)
-        userRef.observe(.value, with: { (snapshot) in
-            for userInfo in snapshot.children {
-                self.user = User(snapshot: userInfo as! FIRDataSnapshot)
-            }
-            if let user = self.user {
+        self.currentUser = FIRAuth.auth()?.currentUser
+
+        self.databaseRef.child("Users").child(self.currentUser!.uid).observe(.value, with: { (snapshot) in
+            
+            let snapshot = snapshot.value as! [String: AnyObject]
+            self.nameLabel.text = snapshot["firstName"] as? String
+            self.usernameLabel.text = snapshot["username"] as? String
+            
+            if(snapshot["photoURL"] !== nil) {
+                let databasePhotoURL = snapshot["photoURL"] as! String
                 
-                self.usernameLabel.text = user.username
-                self.nameLabel.text = user.firstName
+                let data = try? Data(contentsOf: URL(string: databasePhotoURL)!)
                 
-                FIRStorage.storage().reference(forURL: user.photoURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
-                    if let error = error {
-                        let alertView = SCLAlertView()
-                        alertView.showError("OOPS", subTitle: error.localizedDescription)
-                        
-                    }else{
-                        
-                        DispatchQueue.main.async(execute: {
-                            if let data = imgData {
-                                self.userImageView.image = UIImage(data: data)
-                            }
-                        })
-                    }
-                })
+                self.setProfilePicture(self.userImageView, imageToSet: UIImage(data: data!)!)
             }
-        }) { (error) in
-            let alertView = SCLAlertView()
-            alertView.showError("OOPS", subTitle: error.localizedDescription)
-        }
+            
+            if(snapshot["followersCount"] !== nil) {
+                self.numberFollowers.setTitle("\(snapshot["followersCount"]!)", for: .normal)
+            }
+            
+            if(snapshot["followingCount"] !== nil){
+                self.numberFollowing.setTitle("\(snapshot["followingCount"]!)", for: .normal)
+            }
+        })
+    }
+    
+    // Customize properties for userImageView
+    internal func setProfilePicture(_ imageView: UIImageView, imageToSet: UIImage) {
+        imageView.layer.cornerRadius = 20
+        imageView.layer.borderWidth = 2
+        imageView.layer.borderColor = UIColor.black.cgColor
+        imageView.layer.masksToBounds = true
+        imageView.image = imageToSet
     }
     
     override var preferredStatusBarStyle : UIStatusBarStyle {
