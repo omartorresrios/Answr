@@ -46,6 +46,10 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        initialSetupForCommentContentTextView()
+                
+        commentContent.selectedTextRange = commentContent.textRange(from: commentContent.beginningOfDocument, to: commentContent.beginningOfDocument)
+        
         // Allow numberOfComments is optional
         if selectedQuestion.numberOfComments.isEmpty == false {
             // Put to front the topView
@@ -94,6 +98,11 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         }
         
         self.hideKeyboardWhenTappedAround()
+    }
+    
+    func initialSetupForCommentContentTextView() {
+        commentContent.text = "Responde algo ..."
+        commentContent.textColor = UIColor.lightGray
     }
 
     // Disabled commentContent and sendButton when comments counter is equal to number of commments
@@ -201,8 +210,11 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             commentRef.setValue(newComment.toAnyObject())
         }
         
-        // Clean commentContent after send a comment
-        commentContent.text = ""
+//        // Clean commentContent after send a comment
+//        commentContent.text = ""
+        
+        initialSetupForCommentContentTextView()
+        dismissKeyboard()
     }
     
     
@@ -217,8 +229,28 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     // Limit characters for comments
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         
+        // MARK: - Movements for the artificial placeholder
+        
+        // Combine the textView text and the replacement text to create the updated text string
+        let currentText: NSString = textView.text as NSString
+        let updatedText = currentText.replacingCharacters(in: range, with:text)
+        
+        // If updated text view will be empty, add the placeholder and set the cursor to the beginning of the text view
+        if updatedText.isEmpty {
+            textView.text = "Responde algo ..."
+            textView.textColor = UIColor.lightGray
+            
+            textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+            return false
+        } else if textView.textColor == UIColor.lightGray && !text.isEmpty {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+        
+        // MARK: - Movements for the limit characters
+        
         let newLength:Int = (textView.text as NSString).length + (text as NSString).length - range.length
-        let remainChar:Int = 150 - newLength
+        let remainChar:Int = 300 - newLength
         
         if remainChar > 20 {
             numberOfCharLabelCom.textColor = UIColor.black
@@ -235,7 +267,16 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
 
         numberOfCharLabelCom.text = "\(remainChar)"
         
-        return (newLength > 150) ? false : true
+        return (newLength > 300) ? false : true
+    }
+    
+    // Prevent the user from changing the position of the cursor while the placeholder's visible. 
+    func textViewDidChangeSelection(_ textView: UITextView) {
+        if self.view.window != nil {
+            if textView.textColor == UIColor.lightGray {
+                textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+            }
+        }
     }
 }
 

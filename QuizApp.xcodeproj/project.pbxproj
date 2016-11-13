@@ -118,6 +118,8 @@
 			children = (
 				A003086D1DA4385400797A4E /* SettingsTableViewController.swift */,
 				A0E0F7C21D8E2F4700F87EC8 /* MyProfileViewController.swift */,
+				A0ED41E71DC55C4D00C2A1B5 /* ShowFollowersTableViewController.swift */,
+				A0ED41E91DC55C6000C2A1B5 /* ShowFollowingTableViewController.swift */,
 			);
 			name = "User Profile";
 			sourceTree = "<group>";
@@ -173,8 +175,6 @@
 		A0E0F7BF1D8E0F0C00F87EC8 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				A0ED41E71DC55C4D00C2A1B5 /* ShowFollowersTableViewController.swift */,
-				A0ED41E91DC55C6000C2A1B5 /* ShowFollowingTableViewController.swift */,
 				A0ED41E31DC2A44D00C2A1B5 /* TableViewCells */,
 				A0318B6D1DB4233400DFD35C /* User Profile */,
 				A0318B6E1DB4234E00DFD35C /* Login/Signup */,
@@ -192,10 +192,12 @@
 			children = (
 				A0ED41E41DC2A50A00C2A1B5 /* Resources */,
 				A0E0F7A01D8D979100F87EC8 /* Assets.xcassets */,
-				A0E0F7961D8D979100F87EC8 /* AppDelegate.swift */,
 				A003086A1DA1FBA000797A4E /* Main.storyboard */,
 				A0E0F7A21D8D979100F87EC8 /* LaunchScreen.storyboard */,
+				A0E0F7961D8D979100F87EC8 /* AppDelegate.swift */,
+				A0E0F7B91D8E0EA600F87EC8 /* AuthenticationService.swift */,
 				A0EF073E1D933E2D00395413 /* StartViewController.swift */,
+				A0E0F7BB1D8E0EDE00F87EC8 /* SCLAlertView.swift */,
 				A0E0F7A51D8D979100F87EC8 /* Info.plist */,
 				A0E0F7AD1D8DA34F00F87EC8 /* GoogleService-Info.plist */,
 				A0318B6F1DB4236400DFD35C /* Custom Segues */,
@@ -206,12 +208,10 @@
 		A0E0F7C11D8E0F7200F87EC8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				A0EF073D1D8F64AC00395413 /* Model */,
-				A0E0F7BB1D8E0EDE00F87EC8 /* SCLAlertView.swift */,
 				A0E0F7BC1D8E0EDE00F87EC8 /* User.swift */,
-				A0E0F7B91D8E0EA600F87EC8 /* AuthenticationService.swift */,
 				A0E0F7C41D8E315400F87EC8 /* Question.swift */,
 				A0EF07441D95E3BF00395413 /* Comment.swift */,
+				A0EF073D1D8F64AC00395413 /* Core Data Model */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -240,12 +240,12 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
-		A0EF073D1D8F64AC00395413 /* Model */ = {
+		A0EF073D1D8F64AC00395413 /* Core Data Model */ = {
 			isa = PBXGroup;
 			children = (
 				A0EF07321D8F603D00395413 /* Model.xcdatamodeld */,
 			);
-			name = Model;
+			name = "Core Data Model";
 			sourceTree = "<group>";
 		};
 		EF6958EF3FC30456E62E1108 /* Frameworks */ = {
@@ -263,12 +263,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A0E0F7A81D8D979100F87EC8 /* Build configuration list for PBXNativeTarget "QuizApp" */;
 			buildPhases = (
+				C9173B1EFF8647E32FE548A4 /* 📦 Check Pods Manifest.lock */,
 				9238A11C3E5E0B4A1E67C2F5 /* [CP] Check Pods Manifest.lock */,
 				A0E0F78F1D8D979100F87EC8 /* Sources */,
 				A0E0F7901D8D979100F87EC8 /* Frameworks */,
 				A0E0F7911D8D979100F87EC8 /* Resources */,
 				604D6307A3EF8D15A9859D11 /* [CP] Embed Pods Frameworks */,
 				53619BDD8EFF6328012DDA34 /* [CP] Copy Pods Resources */,
+				073DE33351175AD5BABB1BFE /* 📦 Embed Pods Frameworks */,
+				A2A66B26367D8B8376F6A2DF /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -337,6 +340,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		073DE33351175AD5BABB1BFE /* 📦 Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-QuizApp/Pods-QuizApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		53619BDD8EFF6328012DDA34 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -375,6 +393,36 @@
 			inputPaths = (
 			);
 			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		A2A66B26367D8B8376F6A2DF /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-QuizApp/Pods-QuizApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C9173B1EFF8647E32FE548A4 /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
