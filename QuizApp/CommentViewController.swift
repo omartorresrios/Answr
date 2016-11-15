@@ -47,9 +47,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         super.viewDidLoad()
         
         initialSetupForCommentContentTextView()
-                
-        commentContent.selectedTextRange = commentContent.textRange(from: commentContent.beginningOfDocument, to: commentContent.beginningOfDocument)
-        
+
         // Allow numberOfComments is optional
         if selectedQuestion.numberOfComments.isEmpty == false {
             // Put to front the topView
@@ -103,6 +101,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     func initialSetupForCommentContentTextView() {
         commentContent.text = "Responde algo ..."
         commentContent.textColor = UIColor.lightGray
+        commentContent.selectedTextRange = commentContent.textRange(from: commentContent.beginningOfDocument, to: commentContent.beginningOfDocument)
     }
 
     // Disabled commentContent and sendButton when comments counter is equal to number of commments

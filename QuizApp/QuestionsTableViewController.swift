@@ -21,6 +21,7 @@ class QuestionsTableViewController: UITableViewController {
         return FIRStorage.storage()
     }
     
+    @IBOutlet weak var loader: UIActivityIndicatorView!
     var questionsArray = [Question]()
     var currentUser: AnyObject?
     var user: FIRUser?
@@ -46,11 +47,32 @@ class QuestionsTableViewController: UITableViewController {
         super.viewWillAppear(true)
         fetchQuestions()
         
+        self.loader.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+        self.loader.center = self.view.center
+        
         self.navigationController!.navigationBar.barTintColor = UIColor.white
         
         // Show the bottom toolbar
         navigationController?.isToolbarHidden = false
-
+    }
+    
+    @IBAction func deleteQuestion(_ sender: AnyObject) {
+        
+        let position: CGPoint = sender.convert(CGPoint.zero, to: self.view)
+        let indexPath: NSIndexPath = self.tableView.indexPathForRow(at: position)! as NSIndexPath
+        
+        let question = self.questionsArray[indexPath.row]
+        
+        if let questionKey = question.questionId {
+            self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").child(questionKey).removeValue(completionBlock: { (error, ref) in
+                if error != nil {
+                    print(error!.localizedDescription)
+                    return
+                }
+                self.questionsArray.remove(at: indexPath.row)
+                self.tableView.deleteRows(at: [indexPath as IndexPath], with: .right)
+            })
+        }
     }
     
     fileprivate func fetchQuestions(){
@@ -63,12 +85,13 @@ class QuestionsTableViewController: UITableViewController {
                 let newQuestion = Question(snapshot: question as! FIRDataSnapshot)
                 
                 self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").observe(.childAdded, with: { (questionsFeed) in
-                        let questionKey = questionsFeed.key
-                        if newQuestion.questionId == questionKey {
-                            newQuestionsArray.insert(newQuestion, at: 0)
-                        }
-                        self.questionsArray = newQuestionsArray
-                        self.tableView.reloadData()
+                    let questionKey = questionsFeed.key
+                    if newQuestion.questionId == questionKey {
+                        newQuestionsArray.insert(newQuestion, at: 0)
+                    }
+                    self.questionsArray = newQuestionsArray
+                    self.tableView.reloadData()
+                    self.loader.stopAnimating()
                 })
             }
             
@@ -211,27 +234,25 @@ class QuestionsTableViewController: UITableViewController {
         }
     }
     
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    
-    var questionsDictionary = [String: Question]()
-    
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        
-        let question = self.questionsArray[indexPath.row]
-        
-        if let questionKey = question.questionId {
-            self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").child(questionKey).removeValue(completionBlock: { (error, ref) in
-                if error != nil {
-                    print(error!.localizedDescription)
-                    return
-                }
-                self.questionsArray.remove(at: indexPath.row)
-                self.tableView.deleteRows(at: [indexPath], with: .automatic)
-            })
-        }
-    }
+//    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+//        return true
+//    }
+//    
+//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+//        
+//        let question = self.questionsArray[indexPath.row]
+//        
+//        if let questionKey = question.questionId {
+//            self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").child(questionKey).removeValue(completionBlock: { (error, ref) in
+//                if error != nil {
+//                    print(error!.localizedDescription)
+//                    return
+//                }
+//                self.questionsArray.remove(at: indexPath.row)
+//                self.tableView.deleteRows(at: [indexPath], with: .automatic)
+//            })
+//        }
+//    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "addComment", sender: self)
