@@ -56,25 +56,6 @@ class QuestionsTableViewController: UITableViewController {
         navigationController?.isToolbarHidden = false
     }
     
-    @IBAction func deleteQuestion(_ sender: AnyObject) {
-        
-        let position: CGPoint = sender.convert(CGPoint.zero, to: self.view)
-        let indexPath: NSIndexPath = self.tableView.indexPathForRow(at: position)! as NSIndexPath
-        
-        let question = self.questionsArray[indexPath.row]
-        
-        if let questionKey = question.questionId {
-            self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").child(questionKey).removeValue(completionBlock: { (error, ref) in
-                if error != nil {
-                    print(error!.localizedDescription)
-                    return
-                }
-                self.questionsArray.remove(at: indexPath.row)
-                self.tableView.deleteRows(at: [indexPath as IndexPath], with: .right)
-            })
-        }
-    }
-    
     fileprivate func fetchQuestions(){
         
         self.currentUser = FIRAuth.auth()?.currentUser
@@ -120,6 +101,7 @@ class QuestionsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         if questionsArray[(indexPath as NSIndexPath).row].questionImageURL.isEmpty {
             let cell = tableView.dequeueReusableCell(withIdentifier: "questionWithText", for: indexPath) as! TextQuestionTableViewCell
             
@@ -234,25 +216,35 @@ class QuestionsTableViewController: UITableViewController {
         }
     }
     
-//    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-//        return true
-//    }
-//    
-//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-//        
-//        let question = self.questionsArray[indexPath.row]
-//        
-//        if let questionKey = question.questionId {
-//            self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").child(questionKey).removeValue(completionBlock: { (error, ref) in
-//                if error != nil {
-//                    print(error!.localizedDescription)
-//                    return
-//                }
-//                self.questionsArray.remove(at: indexPath.row)
-//                self.tableView.deleteRows(at: [indexPath], with: .automatic)
-//            })
-//        }
-//    }
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let deleteBtn = UITableViewRowAction(style: .destructive, title: "Eliminar") { (action, indexPath) in
+            // delete item at indexPath
+            let question = self.questionsArray[indexPath.row]
+            
+            if let questionKey = question.questionId {
+                self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").child(questionKey).removeValue(completionBlock: { (error, ref) in
+                    if error != nil {
+                        print(error!.localizedDescription)
+                        return
+                    }
+                    self.questionsArray.remove(at: indexPath.row)
+                    self.tableView.deleteRows(at: [indexPath], with: .automatic)
+                })
+            }
+            
+        }
+        
+        UIButton.appearance().setTitleColor(UIColor.red, for: UIControlState.normal)
+        deleteBtn.backgroundColor = UIColor.white
+        
+        return [deleteBtn]
+        
+    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "addComment", sender: self)
@@ -282,4 +274,3 @@ class QuestionsTableViewController: UITableViewController {
         return image
     }
 }
-

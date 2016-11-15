@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A00308691D9D8F4B00797A4E /* anonymous.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A00308681D9D8F4B00797A4E /* anonymous.jpg */; };
 		A003086C1DA1FBA000797A4E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A003086A1DA1FBA000797A4E /* Main.storyboard */; };
 		A003086E1DA4385400797A4E /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A003086D1DA4385400797A4E /* SettingsTableViewController.swift */; };
 		A00308751DA9B3DD00797A4E /* FollowUsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00308741DA9B3DD00797A4E /* FollowUsersTableViewController.swift */; };
@@ -18,13 +17,14 @@
 		A0318B6A1DB323F500DFD35C /* SegueFromTop.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B691DB323F500DFD35C /* SegueFromTop.swift */; };
 		A0318B6C1DB33FA400DFD35C /* SegueFromBottom.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B6B1DB33FA400DFD35C /* SegueFromBottom.swift */; };
 		A0318B711DB425FC00DFD35C /* FollowUsersTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B701DB425FC00DFD35C /* FollowUsersTableViewCell.swift */; };
+		A089081B1DDB7DAA00DE655C /* anonymous.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A089081A1DDB7DAA00DE655C /* anonymous.jpg */; };
+		A089081D1DDB7FA200DE655C /* user-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = A089081C1DDB7FA200DE655C /* user-placeholder.png */; };
+		A089081F1DDB7FDD00DE655C /* emojilengua.png in Resources */ = {isa = PBXBuildFile; fileRef = A089081E1DDB7FDD00DE655C /* emojilengua.png */; };
 		A0E0F7971D8D979100F87EC8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E0F7961D8D979100F87EC8 /* AppDelegate.swift */; };
 		A0E0F7991D8D979100F87EC8 /* QuestionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E0F7981D8D979100F87EC8 /* QuestionsTableViewController.swift */; };
 		A0E0F7A11D8D979100F87EC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0E0F7A01D8D979100F87EC8 /* Assets.xcassets */; };
 		A0E0F7A41D8D979100F87EC8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0E0F7A21D8D979100F87EC8 /* LaunchScreen.storyboard */; };
-		A0E0F7AC1D8D9A6D00F87EC8 /* emojilengua.png in Resources */ = {isa = PBXBuildFile; fileRef = A0E0F7AB1D8D9A6D00F87EC8 /* emojilengua.png */; };
 		A0E0F7AE1D8DA34F00F87EC8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A0E0F7AD1D8DA34F00F87EC8 /* GoogleService-Info.plist */; };
-		A0E0F7B01D8DB1EC00F87EC8 /* user-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = A0E0F7AF1D8DB1EC00F87EC8 /* user-placeholder.png */; };
 		A0E0F7B21D8DB25400F87EC8 /* ImageQuestionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E0F7B11D8DB25400F87EC8 /* ImageQuestionTableViewCell.swift */; };
 		A0E0F7B41D8DB27C00F87EC8 /* TextQuestionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E0F7B31D8DB27C00F87EC8 /* TextQuestionTableViewCell.swift */; };
 		A0E0F7B61D8DFE6700F87EC8 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E0F7B51D8DFE6700F87EC8 /* LoginViewController.swift */; };
@@ -50,7 +50,6 @@
 /* Begin PBXFileReference section */
 		412EF0FEB7FA0485A1FD7B19 /* Pods-QuizApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuizApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QuizApp/Pods-QuizApp.debug.xcconfig"; sourceTree = "<group>"; };
 		7E092A622EE6E60D51C4651D /* Pods_QuizApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QuizApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A00308681D9D8F4B00797A4E /* anonymous.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = anonymous.jpg; sourceTree = "<group>"; };
 		A003086B1DA1FBA000797A4E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A003086D1DA4385400797A4E /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		A00308741DA9B3DD00797A4E /* FollowUsersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowUsersTableViewController.swift; sourceTree = "<group>"; };
@@ -61,15 +60,16 @@
 		A0318B691DB323F500DFD35C /* SegueFromTop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueFromTop.swift; sourceTree = "<group>"; };
 		A0318B6B1DB33FA400DFD35C /* SegueFromBottom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueFromBottom.swift; sourceTree = "<group>"; };
 		A0318B701DB425FC00DFD35C /* FollowUsersTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowUsersTableViewCell.swift; sourceTree = "<group>"; };
+		A089081A1DDB7DAA00DE655C /* anonymous.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = anonymous.jpg; sourceTree = "<group>"; };
+		A089081C1DDB7FA200DE655C /* user-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user-placeholder.png"; sourceTree = "<group>"; };
+		A089081E1DDB7FDD00DE655C /* emojilengua.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emojilengua.png; sourceTree = "<group>"; };
 		A0E0F7931D8D979100F87EC8 /* QuizApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuizApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0E0F7961D8D979100F87EC8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A0E0F7981D8D979100F87EC8 /* QuestionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsTableViewController.swift; sourceTree = "<group>"; };
 		A0E0F7A01D8D979100F87EC8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A0E0F7A31D8D979100F87EC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A0E0F7A51D8D979100F87EC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A0E0F7AB1D8D9A6D00F87EC8 /* emojilengua.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emojilengua.png; sourceTree = "<group>"; };
 		A0E0F7AD1D8DA34F00F87EC8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		A0E0F7AF1D8DB1EC00F87EC8 /* user-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user-placeholder.png"; sourceTree = "<group>"; };
 		A0E0F7B11D8DB25400F87EC8 /* ImageQuestionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageQuestionTableViewCell.swift; sourceTree = "<group>"; };
 		A0E0F7B31D8DB27C00F87EC8 /* TextQuestionTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextQuestionTableViewCell.swift; sourceTree = "<group>"; };
 		A0E0F7B51D8DFE6700F87EC8 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -144,6 +144,16 @@
 			name = "Custom Segues";
 			sourceTree = "<group>";
 		};
+		A08908201DDB7FF500DE655C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A089081C1DDB7FA200DE655C /* user-placeholder.png */,
+				A089081E1DDB7FDD00DE655C /* emojilengua.png */,
+				A089081A1DDB7DAA00DE655C /* anonymous.jpg */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		A0E0F78A1D8D979100F87EC8 = {
 			isa = PBXGroup;
 			children = (
@@ -190,7 +200,7 @@
 		A0E0F7C01D8E0F3B00F87EC8 /* Supporting files */ = {
 			isa = PBXGroup;
 			children = (
-				A0ED41E41DC2A50A00C2A1B5 /* Resources */,
+				A08908201DDB7FF500DE655C /* Resources */,
 				A0E0F7A01D8D979100F87EC8 /* Assets.xcassets */,
 				A003086A1DA1FBA000797A4E /* Main.storyboard */,
 				A0E0F7A21D8D979100F87EC8 /* LaunchScreen.storyboard */,
@@ -228,16 +238,6 @@
 				A0318B701DB425FC00DFD35C /* FollowUsersTableViewCell.swift */,
 			);
 			name = TableViewCells;
-			sourceTree = "<group>";
-		};
-		A0ED41E41DC2A50A00C2A1B5 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				A00308681D9D8F4B00797A4E /* anonymous.jpg */,
-				A0E0F7AB1D8D9A6D00F87EC8 /* emojilengua.png */,
-				A0E0F7AF1D8DB1EC00F87EC8 /* user-placeholder.png */,
-			);
-			name = Resources;
 			sourceTree = "<group>";
 		};
 		A0EF073D1D8F64AC00395413 /* Core Data Model */ = {
@@ -327,13 +327,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A089081F1DDB7FDD00DE655C /* emojilengua.png in Resources */,
 				A003086C1DA1FBA000797A4E /* Main.storyboard in Resources */,
 				A0E0F7A41D8D979100F87EC8 /* LaunchScreen.storyboard in Resources */,
-				A00308691D9D8F4B00797A4E /* anonymous.jpg in Resources */,
+				A089081B1DDB7DAA00DE655C /* anonymous.jpg in Resources */,
 				A0E0F7A11D8D979100F87EC8 /* Assets.xcassets in Resources */,
+				A089081D1DDB7FA200DE655C /* user-placeholder.png in Resources */,
 				A0E0F7AE1D8DA34F00F87EC8 /* GoogleService-Info.plist in Resources */,
-				A0E0F7AC1D8D9A6D00F87EC8 /* emojilengua.png in Resources */,
-				A0E0F7B01D8DB1EC00F87EC8 /* user-placeholder.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
