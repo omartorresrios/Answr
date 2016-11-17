@@ -52,10 +52,6 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         
         questionTextView.becomeFirstResponder()
         
-        // Set the anonymous image to bgImage
-        let image: UIImage = UIImage(named: "anonymous.jpg")!
-        anonymousImage = UIImageView(image: image)
-        
         self.numberOfComments.layer.cornerRadius = 5
         self.numberOfComments.layer.borderWidth = 1
 

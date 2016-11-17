@@ -14,6 +14,8 @@ class UserProfileViewController: UIViewController {
     @IBOutlet weak var userImage: UIImageView!
     @IBOutlet weak var userName: UILabel!
     @IBOutlet weak var followButton: UIButton!
+    @IBOutlet weak var backgroundProfile: UIImageView!
+    @IBOutlet weak var time: UILabel!
     var currentUser: FIRUser?
     var otherUser: NSDictionary?
     var currentUserData: NSDictionary?
@@ -33,6 +35,11 @@ class UserProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Hide the bottom toolbar
+        navigationController?.isToolbarHidden = true
+        
+        backProf()
         
         // Referencing to currentUser
         databaseRef.child("Users").child(self.currentUser!.uid).observe(.value, with: { (snapshot) in
@@ -87,6 +94,41 @@ class UserProfileViewController: UIViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+        
+    }
+    
+    func backProf() {
+        
+        //Convert to Date
+        let date = Date()
+        
+        //Date formatting
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "hh a"
+        
+        // hh for hour mm for minutes and a will show you AM or PM
+        let str = dateFormatter.string(from: date)
+        
+        // Sperate str by space i.e. you will get time and AM/PM at index 0 and 1 respectively
+        var array = str.components(separatedBy: " ")
+        
+        // Now you can check it by 12. If < 12 means Its morning > 12 means its evening or night
+        
+        let timeInHour = array[0]
+        let am_pm = array[1]
+        
+        if Int(timeInHour)! < 12 && (am_pm == "AM") {
+            time.text = "Good morning"
+            backgroundProfile.image = UIImage(named: "morning")
+        }
+        else if Int(timeInHour)! <= 4 && (am_pm == "PM") {
+            time.text = "Good afternoon"
+            backgroundProfile.image = UIImage(named: "afternoon")
+        }
+        else if Int(timeInHour)! > 4 && (am_pm == "PM") {
+            time.text = "Good night"
+            backgroundProfile.image = UIImage(named: "night")
+        }
         
     }
     
