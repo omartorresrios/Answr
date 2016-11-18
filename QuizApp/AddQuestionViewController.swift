@@ -148,7 +148,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                         metadata!.downloadURL()
                         
                         // Creating the question
-                        let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: "", questionerImageURL: String(describing: metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter)
+                        let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: "", questionerImageURL: String(describing: metadata!.downloadURL()!), firstName: self.anonymous, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter, likes: 0)
                         
                         // Saving the question in Questions node
                         self.saveQuestionInQuestionsNode(question: newQuestion.toAnyObject() as AnyObject)
@@ -186,7 +186,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                             if error == nil {
                                 
                                 // Creating the question
-                                let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: String(describing: newMetaData!.downloadURL()!), questionerImageURL: String(describing: metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter)
+                                let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: String(describing: newMetaData!.downloadURL()!), questionerImageURL: String(describing: metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter, likes: 0)
                                 
                                 // Saving the question in Questions node
                                 self.saveQuestionInQuestionsNode(question: newQuestion.toAnyObject() as AnyObject)
@@ -212,7 +212,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
             if questionImageView.image!.isEqual(camera) { // Its not anonymous. Question without image
                 
                 // Creating the question
-                let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: "", questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter)
+                let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: "", questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter, likes: 0)
                 
                 // Saving the question in Questions node
                 self.saveQuestionInQuestionsNode(question: newQuestion.toAnyObject() as AnyObject)
@@ -236,7 +236,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                     if error == nil {
                         
                         // Creating the question
-                        let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: String(describing: newMetaData!.downloadURL()!), questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter)
+                        let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: String(describing: newMetaData!.downloadURL()!), questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter, likes: 0)
                         
                         // Saving the question in Questions node
                         self.saveQuestionInQuestionsNode(question: newQuestion.toAnyObject() as AnyObject)
