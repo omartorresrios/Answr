@@ -18,6 +18,7 @@ struct User {
     var uid: String!
     var ref: FIRDatabaseReference?
     var key: String?
+    var points: Int!
     
     init(snapshot: FIRDataSnapshot){
         
@@ -28,12 +29,14 @@ struct User {
         email = (snapshot.value! as! NSDictionary)["email"] as? String
         photoURL = (snapshot.value! as! NSDictionary)["photoURL"] as! String
         uid = (snapshot.value! as! NSDictionary)["uid"] as? String
+        points = (snapshot.value! as! NSDictionary)["points"] as? Int
         
     }
     
-    init(username: String, userId: String, photoUrl: String){
+    init(username: String, userId: String, photoUrl: String, points: Int){
         self.username = username
         self.uid = userId
         self.photoURL = photoUrl
+        self.points = points
     }
 }

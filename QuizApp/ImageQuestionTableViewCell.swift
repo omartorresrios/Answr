@@ -78,7 +78,7 @@ class ImageQuestionTableViewCell: UITableViewCell {
             self.commentsCounter.text = "\(question.counterComments!)" + "/"
             self.numberOfComments.text = question.numberOfComments
         }
-        self.likes.text = "\(question.likes)"
+        self.likes.text = "\(question.likes!)"
         
         //TimeStamp
         let timeInterval  = question.timestamp
