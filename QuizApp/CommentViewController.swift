@@ -28,10 +28,13 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     @IBOutlet weak var constraintToBottom: NSLayoutConstraint!
     @IBOutlet weak var topView: UIView!
 
-    var databaseRef: FIRDatabaseReference!
+    var databaseRef: FIRDatabaseReference! {
+        return FIRDatabase.database().reference()
+    }
     var storageRef: FIRStorageReference!
     
     var commentsArray = [Comment]()
+    var currentUser: User!
     var selectedQuestion: Question!
     var counter: Int = 0
     var conditionalCounter: Int = 0
@@ -96,6 +99,21 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         }
         
         self.hideKeyboardWhenTappedAround()
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        let userRef = databaseRef.child("Users").queryOrdered(byChild: "uid").queryEqual(toValue: FIRAuth.auth()!.currentUser!.uid)
+        userRef.observe(.value, with: { (snapshot) in
+            for userInfo in snapshot.children {
+                self.currentUser = User(snapshot: userInfo as! FIRDataSnapshot)
+            }
+        }) { (error) in
+            let alertView = SCLAlertView()
+            alertView.showError("OOPS", subTitle: error.localizedDescription)
+        }
     }
     
     func initialSetupForCommentContentTextView() {
@@ -196,6 +214,9 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
                     let commentRef = self.selectedQuestion.ref.child("Comments").childByAutoId()
                     
                     commentRef.setValue(newComment.toAnyObject())
+                    
+                    // Saving the points for the currentUser
+                    self.savePoints()
                 } else {
                     print(error!.localizedDescription)
                 }
@@ -207,13 +228,24 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             let commentRef = self.selectedQuestion.ref.child("Comments").childByAutoId()
             
             commentRef.setValue(newComment.toAnyObject())
+            
+            // Saving the points for the currentUser
+            self.savePoints()
         }
-        
-//        // Clean commentContent after send a comment
-//        commentContent.text = ""
         
         initialSetupForCommentContentTextView()
         dismissKeyboard()
+    }
+    
+    // Counting and saving the number of points for the currentUser by answering
+    func savePoints() {
+        let pointsCount: Int?
+        if self.currentUser.points == nil {
+            pointsCount = 1
+        } else {
+            pointsCount = self.currentUser.points + 1
+        }
+        self.databaseRef.child("Users").child(self.currentUser.uid).child("points").setValue(pointsCount)
     }
     
     

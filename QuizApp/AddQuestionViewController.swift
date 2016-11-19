@@ -159,6 +159,9 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                         // Saving the question in the Feed node of all the followers of the currentUser
                         self.saveQuestionInFeeds(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                         
+                        // Saving the points for the currentUser
+                        self.savePoints()
+                        
                     } else {
                         print(error!.localizedDescription)
                     }
@@ -197,6 +200,9 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                                 // Saving the question in the Feed node of all the followers of the currentUser
                                 self.saveQuestionInFeeds(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                                 
+                                // Saving the points for the currentUser
+                                self.savePoints()
+                                
                             } else {
                                 print(error!.localizedDescription)
                             }
@@ -223,6 +229,9 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 // Saving the question in the Feed node of all the followers of the currentUser
                 self.saveQuestionInFeeds(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                 
+                // Saving the points for the currentUser
+                self.savePoints()
+                
             } else { // Its not anonymous. Question with image
                 
                 // Reference for the Question Image
@@ -246,6 +255,9 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                         
                         // Saving the question in the Feed node of all the followers of the currentUser
                         self.saveQuestionInFeeds(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                        
+                        // Saving the points for the currentUser
+                        self.savePoints()
 
                     } else {
                         print(error!.localizedDescription)
@@ -289,6 +301,17 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 })
             }
         })
+    }
+    
+    // Counting and saving the number of points for the currentUser by asking
+    func savePoints() {
+        let pointsCount: Int?
+        if self.currentUser.points == nil {
+            pointsCount = 1
+        } else {
+            pointsCount = self.currentUser.points + 1
+        }
+        self.databaseRef.child("Users").child(self.currentUser.uid).child("points").setValue(pointsCount)
     }
     
     @IBAction func choosePictureAction(_ sender: AnyObject) {
