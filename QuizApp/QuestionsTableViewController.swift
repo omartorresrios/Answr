@@ -28,9 +28,12 @@ class QuestionsTableViewController: UITableViewController {
     var selectedQuestion: Question!
     var otherUser: NSDictionary?
     
+    // Create message view and label programmatically
+    let messageView = UIView(frame: CGRect(x: 0, y: 0, width: 375, height: 667))
+    let messageLabel = UILabel(frame: CGRect(x: 8, y: 101, width: 359, height: 21))
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.currentUser = FIRAuth.auth()?.currentUser
         
         self.tableView.backgroundColor = UIColor.white
@@ -58,6 +61,7 @@ class QuestionsTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        messageStatus()
         fetchQuestions()
         
         self.loader.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
@@ -67,6 +71,30 @@ class QuestionsTableViewController: UITableViewController {
         
         // Show the bottom toolbar
         navigationController?.isToolbarHidden = false
+    }
+    
+    func messageStatus() {
+        self.currentUser = FIRAuth.auth()?.currentUser
+        self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").observe(.value, with: { (snapshot) in
+            
+            if snapshot.exists() {
+                self.loader.startAnimating()
+                // Remove message from view
+                self.messageView.removeFromSuperview()
+                self.messageLabel.removeFromSuperview()
+            } else {
+                self.loader.stopAnimating()
+                // Show message in view
+                self.messageLabel.textAlignment = .center
+                self.messageLabel.text = "No tienes preguntas! 😟"
+                self.messageLabel.font = UIFont(name: "Helvetica Neue", size: 14.0)
+                
+                self.view.addSubview(self.messageView)
+                self.view.addSubview(self.messageLabel)
+            }
+        }) { (error) in
+            print(error.localizedDescription)
+        }
     }
     
     fileprivate func fetchQuestions(){
@@ -80,13 +108,13 @@ class QuestionsTableViewController: UITableViewController {
                 
                 self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").observe(.childAdded, with: { (questionsFeed) in
                     let questionKey = questionsFeed.key
+                    
                     if newQuestion.questionId == questionKey {
                         newQuestionsArray.insert(newQuestion, at: 0)
                     }
                     self.questionsArray = newQuestionsArray
                     self.tableView.reloadData()
                     self.loader.stopAnimating()
-                    
                 })
             }
             
@@ -140,23 +168,47 @@ class QuestionsTableViewController: UITableViewController {
         return true
     }
     
+    // Function for delete question
+    func deleteBu(_ NSIndexPathData: NSIndexPath) {
+        
+        // delete item at indexPath
+        let question = self.questionsArray[NSIndexPathData.row]
+        
+        if let questionKey = question.questionId {
+            self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").child(questionKey).removeValue(completionBlock: { (error, ref) in
+                if error != nil {
+                    print(error!.localizedDescription)
+                    return
+                }
+                self.questionsArray.remove(at: NSIndexPathData.row)
+                self.tableView.deleteRows(at: [NSIndexPathData as IndexPath], with: .automatic)
+                self.loader.isHidden = true
+                self.showMessage("Pregunta eliminada!", type: .success, options: [
+                    .animation(.slide),
+                    .animationDuration(0.3),
+                    .autoHide(true),
+                    .autoHideDelay(3.0),
+                    .height(20.0),
+                    .hideOnTap(true),
+                    .position(.top),
+                    .textAlignment(.center),
+                    .textColor(UIColor.white),
+                    .textNumberOfLines(1),
+                    .textPadding(30.0)
+                    ])
+            })
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         let deleteBtn = UITableViewRowAction(style: .destructive, title: "Eliminar") { (action, indexPath) in
-            // delete item at indexPath
-            let question = self.questionsArray[indexPath.row]
+//            let alertView = SCLAlertView()
+//            
+//            alertView.addButton("Eliminar", target:self, selector: #selector(QuestionsTableViewController.deleteBu(_:)))
+//            alertView.showSuccess("Estás seguro?", subTitle: "No verás más esta pregunta!")
             
-            if let questionKey = question.questionId {
-                self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").child(questionKey).removeValue(completionBlock: { (error, ref) in
-                    if error != nil {
-                        print(error!.localizedDescription)
-                        return
-                    }
-                    self.questionsArray.remove(at: indexPath.row)
-                    self.tableView.deleteRows(at: [indexPath], with: .automatic)
-                })
-            }
-            
+            self.deleteBu(indexPath as NSIndexPath)
         }
         
         UIButton.appearance().setTitleColor(UIColor.red, for: UIControlState.normal)
