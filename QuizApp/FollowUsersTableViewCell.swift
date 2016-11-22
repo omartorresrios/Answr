@@ -14,6 +14,8 @@ class FollowUsersTableViewCell: UITableViewCell {
     @IBOutlet weak var userImage: UIImageView!
     @IBOutlet weak var firstName: UILabel!
     @IBOutlet weak var username: UILabel!
+    @IBOutlet weak var followButton: UIButton!
+    var tapAction: ((UITableViewCell) -> Void)?
     
     var storageRef: FIRStorage {
         return FIRStorage.storage()
@@ -21,14 +23,12 @@ class FollowUsersTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
     }
-    
+
     override func layoutSubviews() {
         userImage.layer.cornerRadius = userImage.frame.size.height / 2
         userImage.clipsToBounds = true
@@ -52,5 +52,10 @@ class FollowUsersTableViewCell: UITableViewCell {
         self.firstName.text = user.firstName!
         self.username.text = user.username!
     }
-
+    
+    @IBAction func didTapFollow(_ sender: AnyObject) {
+        tapAction?(self)
+    }
+    
+    
 }
