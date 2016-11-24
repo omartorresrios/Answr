@@ -13,6 +13,7 @@ class FollowingsListTableViewCell: UITableViewCell {
     @IBOutlet weak var userImage: UIImageView!
     @IBOutlet weak var firstName: UILabel!
     @IBOutlet weak var username: UILabel!
+    @IBOutlet weak var points: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

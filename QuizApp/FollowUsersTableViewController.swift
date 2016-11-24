@@ -123,6 +123,7 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
         
         cell.firstName.text = user?["firstName"] as? String
         cell.username.text = user?["username"] as? String
+        cell.points.text = "\(user?["points"] as! Int)"
         
         let butCell = cell.followButton
         
@@ -173,12 +174,14 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
                 let followersData = ["uid": self.currentUserData?["uid"] as! String,
                                      "firstName": self.currentUserData?["firstName"] as! String,
                                      "username": self.currentUserData?["username"] as! String,
-                                     "photoURL": "\(self.currentUserData!["photoURL"]!)"]
+                                     "points": self.currentUserData?["points"] as! Int,
+                                     "photoURL": "\(self.currentUserData!["photoURL"]!)"] as [String : Any]
                 
                 let followingData = ["uid": user?["uid"] as! String,
                                      "firstName": user?["firstName"] as! String,
                                      "username": user?["username"] as! String,
-                                     "photoURL": "\(user!["photoURL"]!)"]
+                                     "points": user?["points"] as! Int,
+                                     "photoURL": "\(user!["photoURL"]!)"] as [String : Any]
                 
                 let childUpdates = [followersRef: followersData,
                                     followingRef: followingData]

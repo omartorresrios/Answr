@@ -14,6 +14,7 @@ class FollowUsersTableViewCell: UITableViewCell {
     @IBOutlet weak var userImage: UIImageView!
     @IBOutlet weak var firstName: UILabel!
     @IBOutlet weak var username: UILabel!
+    @IBOutlet weak var points: UILabel!
     @IBOutlet weak var followButton: UIButton!
     var tapAction: ((UITableViewCell) -> Void)?
     
@@ -51,6 +52,7 @@ class FollowUsersTableViewCell: UITableViewCell {
         }
         self.firstName.text = user.firstName!
         self.username.text = user.username!
+        self.points.text = "\(user.points!)"
     }
     
     @IBAction func didTapFollow(_ sender: AnyObject) {

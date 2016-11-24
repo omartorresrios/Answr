@@ -76,6 +76,7 @@ class ShowFollowingTableViewController: UITableViewController {
 
         cell.firstName.text = self.listFollowing[indexPath.row]?["firstName"] as? String
         cell.username.text = self.listFollowing[indexPath.row]?["username"] as? String
+        cell.points.text = "\(self.listFollowing[indexPath.row]?["points"] as! Int)"
         
         return cell
     }

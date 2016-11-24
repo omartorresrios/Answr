@@ -77,6 +77,7 @@ class ShowFollowersTableViewController: UITableViewController {
 
         cell.firstName.text = self.listFollowers[indexPath.row]?["firstName"] as? String
         cell.username.text = self.listFollowers[indexPath.row]?["username"] as? String
+        cell.points.text = "\(self.listFollowers[indexPath.row]?["points"] as! Int)"
 
         return cell
     }
