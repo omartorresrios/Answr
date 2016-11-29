@@ -51,12 +51,15 @@ class MyProfileViewController: UIViewController {
             self.nameLabel.text = snapshot["firstName"] as? String
             self.usernameLabel.text = snapshot["username"] as? String
             
-            if(snapshot["photoURL"] !== nil) {
-                let databasePhotoURL = snapshot["photoURL"] as! String
-                
-                let data = try? Data(contentsOf: URL(string: databasePhotoURL)!)
-                
-                self.setProfilePicture(self.userImageView, imageToSet: UIImage(data: data!)!)
+            if let user = self.currentUser {
+                if user.photoURL != nil {
+                    let databasePhotoURL = snapshot["photoURL"] as! String
+                    if let data = try? Data(contentsOf: URL(string: databasePhotoURL)!) {
+                        self.userImageView!.image = UIImage.init(data: data)
+                    }
+                } else {
+                    //No user is signed in
+                }
             }
             
             if(snapshot["followersCount"] !== nil) {
