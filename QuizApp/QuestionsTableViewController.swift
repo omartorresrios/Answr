@@ -27,6 +27,7 @@ class QuestionsTableViewController: UITableViewController {
     var user: FIRUser?
     var selectedQuestion: Question!
     var otherUser: NSDictionary?
+    var questionSections: UISegmentedControl!
     
     // Create message view and label programmatically
     let messageView = UIView(frame: CGRect(x: 0, y: 0, width: 375, height: 667))
@@ -40,6 +41,15 @@ class QuestionsTableViewController: UITableViewController {
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 213
         self.tableView.allowsMultipleSelectionDuringEditing = true
+        
+        // Configure UISegmentedControl
+        questionSections = UISegmentedControl(items: ["Club", "World"])
+        questionSections.sizeToFit()
+        questionSections.tintColor = UIColor(red:0.99, green:0.00, blue:0.25, alpha:1.00)
+        questionSections.selectedSegmentIndex = 0
+        questionSections.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "HelveticaNeue", size: 15)!], for: UIControlState.normal)
+        questionSections.addTarget(self, action: #selector(QuestionsTableViewController.fetchQuestions), for: .valueChanged)
+        self.navigationItem.titleView = questionSections
         
         // Movements for UIToolbar transparency
         let bgImageColor = UIColor.white.withAlphaComponent(0.7)
@@ -62,7 +72,7 @@ class QuestionsTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         messageStatus()
-        fetchQuestions()
+        fetchQuestions(_sender: questionSections)
         
         self.loader.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
         self.loader.center = self.view.center
@@ -97,45 +107,47 @@ class QuestionsTableViewController: UITableViewController {
         }
     }
     
-    fileprivate func fetchQuestions(){
+    @objc fileprivate func fetchQuestions(_sender: UISegmentedControl){
         
-        self.currentUser = FIRAuth.auth()?.currentUser
-        
-        self.databaseRef.child("Questions").observe(.value, with: { (questions) in
-            var newQuestionsArray = [Question]()
-            for question in questions.children {
-                let newQuestion = Question(snapshot: question as! FIRDataSnapshot)
-                
-                self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").observe(.childAdded, with: { (questionsFeed) in
-                    let questionKey = questionsFeed.key
+        if _sender.selectedSegmentIndex == 0 {
+            // Questions of the people I follow
+            self.currentUser = FIRAuth.auth()?.currentUser
+            
+            self.databaseRef.child("Questions").observe(.value, with: { (questions) in
+                var newQuestionsArray = [Question]()
+                for question in questions.children {
+                    let newQuestion = Question(snapshot: question as! FIRDataSnapshot)
                     
-                    if newQuestion.questionId == questionKey {
-                        newQuestionsArray.insert(newQuestion, at: 0)
-                    }
-                    self.questionsArray = newQuestionsArray
-                    self.tableView.reloadData()
-                    self.loader.stopAnimating()
-                })
+                    self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").observe(.childAdded, with: { (questionsFeed) in
+                        let questionKey = questionsFeed.key
+                        
+                        if newQuestion.questionId == questionKey {
+                            newQuestionsArray.insert(newQuestion, at: 0)
+                        }
+                        self.questionsArray = newQuestionsArray
+                        self.tableView.reloadData()
+                        self.loader.stopAnimating()
+                    })
+                }
+                
+            }) { (error) in
+                print(error.localizedDescription)
             }
-            
-        }) { (error) in
-            print(error.localizedDescription)
+        } else {
+            // Questions from all over the world
+            databaseRef.child("Questions").observe(.value, with: { (questions) in
+                var newQuestionsArray = [Question]()
+                for question in questions.children {
+                    let newQuestion = Question(snapshot: question as! FIRDataSnapshot)
+                    newQuestionsArray.insert(newQuestion, at: 0)
+                }
+                self.questionsArray = newQuestionsArray
+                self.tableView.reloadData()
+                
+            }) { (error) in
+                print(error.localizedDescription)
+            }
         }
-        
-        // Questions worldwide (PUEDE QUE SE IMPLEMENTE MÁS ADELANTE) P.E: 2 OPC.(PREG. DEL MUNDO y PREG. DE GENTE QUE SIGO)
-        /*databaseRef.child("Questions").observe(.value, with: { (questions) in
-            var newQuestionsArray = [Question]()
-            for question in questions.children {
-                let newQuestion = Question(snapshot: question as! FIRDataSnapshot)
-                newQuestionsArray.insert(newQuestion, at: 0)
-            }
-            self.questionsArray = newQuestionsArray
-            self.tableView.reloadData()
-            
-        }) { (error) in
-            print(error.localizedDescription)
-        }*/
-        
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
