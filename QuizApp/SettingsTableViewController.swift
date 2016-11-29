@@ -11,6 +11,7 @@ import FirebaseStorage
 import FirebaseDatabase
 import FirebaseAuth
 import XLActionController
+import SVProgressHUD
 
 class SettingsTableViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
@@ -33,6 +34,7 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
         userImageView.layer.cornerRadius = userImageView.frame.size.height / 2
         userImageView.clipsToBounds = true
     }
+    var progress: Float = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,8 +102,22 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
         }
     }
     
+    func increaseProgress() {
+        progress += 0.05
+        SVProgressHUD.showProgress(progress, status: "Actualizando ...")
+        if progress < 1.0 {
+            self.perform(#selector(self.increaseProgress), with: nil, afterDelay: 0.1)
+        }
+        else {
+            self.perform(#selector(self.dismiss), with: nil, afterDelay: 0.4)
+        }
+    }
+    
     @IBAction func updateAction(_ sender: AnyObject) {
-        
+        progress = 0.0
+        SVProgressHUD.showProgress(0, status: "Actualizando ...")
+        self.perform(#selector(self.increaseProgress), with: nil, afterDelay: 0.1)
+
         let name = nameTextField.text!
         let email = emailTextField.text!.lowercased()
         let finalEmail = email.trimmingCharacters(in: CharacterSet.whitespaces)
@@ -138,6 +154,7 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
                             userRef.child("firstName").setValue(name, withCompletionBlock: { (error, ref) in
                                 if error == nil {
                                     print("currentUser firstName updated")
+                                    SVProgressHUD.showSuccess(withStatus: "Actualizado!")
                                     // Once updated, return to MyProfileViewController
                                     for controller in self.navigationController!.viewControllers as Array {
                                         if controller is MyProfileViewController {
