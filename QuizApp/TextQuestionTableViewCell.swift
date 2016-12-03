@@ -102,6 +102,13 @@ class TextQuestionTableViewCell: UITableViewCell {
         }) { (error) in
             print(error.localizedDescription)
         }
+        
+        // Hiding the likes label
+        if self.likes.text == "0" {
+            self.likes.isHidden = true
+        } else {
+            self.likes.isHidden = false
+        }
     }
     
     func likeTapped(_ sender: UITapGestureRecognizer) {
