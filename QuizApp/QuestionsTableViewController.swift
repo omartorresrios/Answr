@@ -52,12 +52,12 @@ class QuestionsTableViewController: UITableViewController {
         questionSections.tintColor = UIColor(red:0.99, green:0.00, blue:0.25, alpha:1.00)
         questionSections.selectedSegmentIndex = 0
         questionSections.setTitleTextAttributes([NSFontAttributeName: UIFont(name: "HelveticaNeue", size: 15)!], for: UIControlState.normal)
-        questionSections.addTarget(self, action: #selector(QuestionsTableViewController.fetchQuestions), for: .valueChanged)
+        questionSections.addTarget(self, action: #selector(QuestionsTableViewController.fetchQuestions(_:)), for: .valueChanged)
         self.navigationItem.titleView = questionSections
         
         // Movements for UIToolbar transparency
         let bgImageColor = UIColor.white.withAlphaComponent(0.7)
-        navigationController?.toolbar.setBackgroundImage(onePixelImageWithColor(color: bgImageColor), forToolbarPosition: UIBarPosition.bottom, barMetrics: UIBarMetrics.default)
+        navigationController?.toolbar.setBackgroundImage(onePixelImageWithColor(bgImageColor), forToolbarPosition: UIBarPosition.bottom, barMetrics: UIBarMetrics.default)
         
         // DGElasticPullToRefresh
         let loadingView = DGElasticPullToRefreshLoadingViewCircle()
@@ -76,7 +76,7 @@ class QuestionsTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         messageStatus()
-        fetchQuestions(_sender: questionSections)
+        fetchQuestions(questionSections)
         
         self.loader.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
         self.loader.center = self.view.center
@@ -113,13 +113,13 @@ class QuestionsTableViewController: UITableViewController {
         
     }
     
-    @objc fileprivate func fetchQuestions(_sender: UISegmentedControl){
+    @objc fileprivate func fetchQuestions(_ sender: UISegmentedControl){
         
         self.tableView.reloadData()
         
         self.currentUser = FIRAuth.auth()?.currentUser
         
-        if _sender.selectedSegmentIndex == 0 { // Questions of the people I follow
+        if sender.selectedSegmentIndex == 0 { // Questions of the people I follow
             
             // Retrieve data
             self.databaseRef.child("Questions").observe(.value, with: { (questionsSnap) in
@@ -143,7 +143,7 @@ class QuestionsTableViewController: UITableViewController {
                 print(error.localizedDescription)
             }
             
-        } else if _sender.selectedSegmentIndex == 1 { // Questions from all over the world
+        } else if sender.selectedSegmentIndex == 1 { // Questions from all over the world
             self.loader.startAnimating()
             // Remove message from view
             self.messageView.removeFromSuperview()
@@ -216,13 +216,13 @@ class QuestionsTableViewController: UITableViewController {
             if questionsFeedArray[(indexPath as NSIndexPath).row].questionImageURL.isEmpty {
                 
                 let cell = tableView.dequeueReusableCell(withIdentifier: "questionWithText", for: indexPath) as! TextQuestionTableViewCell
-                cell.configureQuestion(question: question)
+                cell.configureQuestion(question)
                 return cell
                 
             } else {
                 
                 let cell = tableView.dequeueReusableCell(withIdentifier: "questionWithImage", for: indexPath) as! ImageQuestionTableViewCell
-                cell.configureQuestion(question: question)
+                cell.configureQuestion(question)
                 return cell
             }
             
@@ -232,13 +232,13 @@ class QuestionsTableViewController: UITableViewController {
             if questionsWorldArray[(indexPath as NSIndexPath).row].questionImageURL.isEmpty {
                 
                 let cell = tableView.dequeueReusableCell(withIdentifier: "questionWithText", for: indexPath) as! TextQuestionTableViewCell
-                cell.configureQuestion(question: question)
+                cell.configureQuestion(question)
                 return cell
                 
             } else {
                 
                 let cell = tableView.dequeueReusableCell(withIdentifier: "questionWithImage", for: indexPath) as! ImageQuestionTableViewCell
-                cell.configureQuestion(question: question)
+                cell.configureQuestion(question)
                 return cell
             }
         }
@@ -256,11 +256,11 @@ class QuestionsTableViewController: UITableViewController {
     }
     
     // Function for delete question
-    func deleteBu(_ NSIndexPathData: NSIndexPath) {
+    func deleteBu(_ NSIndexPathData: IndexPath) {
         
         if questionSections.selectedSegmentIndex == 0 {
             // delete item at indexPath
-            let question = self.questionsFeedArray[NSIndexPathData.row]
+            let question = self.questionsFeedArray[(NSIndexPathData as NSIndexPath).row]
             
             if let questionKey = question.questionId {
                 self.databaseRef.child("Users").child(self.currentUser!.uid).child("Feed").child(questionKey).removeValue(completionBlock: { (error, ref) in
@@ -298,7 +298,7 @@ class QuestionsTableViewController: UITableViewController {
 //            alertView.addButton("Eliminar", target:self, selector: #selector(QuestionsTableViewController.deleteBu(_:)))
 //            alertView.showSuccess("Estás seguro?", subTitle: "No verás más esta pregunta!")
             
-            self.deleteBu(indexPath as NSIndexPath)
+            self.deleteBu(indexPath as IndexPath)
         }
         
         UIButton.appearance().setTitleColor(UIColor.red, for: UIControlState.normal)
@@ -333,7 +333,7 @@ class QuestionsTableViewController: UITableViewController {
     }
     
     // Make UIToolbar Transparency
-    func onePixelImageWithColor(color : UIColor) -> UIImage {
+    func onePixelImageWithColor(_ color : UIColor) -> UIImage {
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
         let context = CGContext(data: nil, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 0, space: colorSpace, bitmapInfo: bitmapInfo.rawValue)

@@ -156,13 +156,13 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                         let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: "", questionerImageURL: String(describing: metadata!.downloadURL()!), firstName: self.anonymous, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter, likes: 0)
                         
                         // Saving the question in Questions node
-                        self.saveQuestionInQuestionsNode(question: newQuestion.toAnyObject() as AnyObject)
+                        self.saveQuestionInQuestionsNode(newQuestion.toAnyObject() as AnyObject)
                         
                         // Saving the question in currentUser feed
-                        self.saveMyOwnQuestionInMyFeed(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                        self.saveMyOwnQuestionInMyFeed(newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                         
                         // Saving the question in the Feed node of all the followers of the currentUser
-                        self.saveQuestionInFeeds(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                        self.saveQuestionInFeeds(newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                         
                         // Saving the points for the currentUser
                         self.savePoints()
@@ -197,13 +197,13 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                                 let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: String(describing: newMetaData!.downloadURL()!), questionerImageURL: String(describing: metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter, likes: 0)
                                 
                                 // Saving the question in Questions node
-                                self.saveQuestionInQuestionsNode(question: newQuestion.toAnyObject() as AnyObject)
+                                self.saveQuestionInQuestionsNode(newQuestion.toAnyObject() as AnyObject)
                                 
                                 // Saving the question in currentUser feed
-                                self.saveMyOwnQuestionInMyFeed(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                                self.saveMyOwnQuestionInMyFeed(newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                                 
                                 // Saving the question in the Feed node of all the followers of the currentUser
-                                self.saveQuestionInFeeds(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                                self.saveQuestionInFeeds(newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                                 
                                 // Saving the points for the currentUser
                                 self.savePoints()
@@ -226,13 +226,13 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: "", questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter, likes: 0)
                 
                 // Saving the question in Questions node
-                self.saveQuestionInQuestionsNode(question: newQuestion.toAnyObject() as AnyObject)
+                self.saveQuestionInQuestionsNode(newQuestion.toAnyObject() as AnyObject)
                 
                 // Saving the question in currentUser feed
-                self.saveMyOwnQuestionInMyFeed(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                self.saveMyOwnQuestionInMyFeed(newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                 
                 // Saving the question in the Feed node of all the followers of the currentUser
-                self.saveQuestionInFeeds(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                self.saveQuestionInFeeds(newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                 
                 // Saving the points for the currentUser
                 self.savePoints()
@@ -253,13 +253,13 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                         let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: String(describing: newMetaData!.downloadURL()!), questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter, likes: 0)
                         
                         // Saving the question in Questions node
-                        self.saveQuestionInQuestionsNode(question: newQuestion.toAnyObject() as AnyObject)
+                        self.saveQuestionInQuestionsNode(newQuestion.toAnyObject() as AnyObject)
                         
                         // Saving the question in currentUser feed
-                        self.saveMyOwnQuestionInMyFeed(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                        self.saveMyOwnQuestionInMyFeed(newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                         
                         // Saving the question in the Feed node of all the followers of the currentUser
-                        self.saveQuestionInFeeds(question: newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                        self.saveQuestionInFeeds(newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
                         
                         // Saving the points for the currentUser
                         self.savePoints()
@@ -273,7 +273,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     }
     
     // Function for save the question in Questions node
-    func saveQuestionInQuestionsNode(question: AnyObject) {
+    func saveQuestionInQuestionsNode(_ question: AnyObject) {
         let questionRef = self.databaseRef.child("Questions").childByAutoId()
         questionRef.setValue(question, withCompletionBlock: { (error, ref) in
             if error == nil {
@@ -283,7 +283,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     }
     
     // Function for save the question in currentUser feed
-    func saveMyOwnQuestionInMyFeed(question: AnyObject, questionId: String) {
+    func saveMyOwnQuestionInMyFeed(_ question: AnyObject, questionId: String) {
         let myOwnQuestion = self.databaseRef.child("Users").child(self.currentUser.uid).child("Feed").child(questionId)
         myOwnQuestion.setValue(question, withCompletionBlock: { (error, ref) in
             if error == nil {
@@ -293,7 +293,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     }
     
     // Function for save the question in follower's feeds
-    func saveQuestionInFeeds(question: AnyObject, questionId: String) {
+    func saveQuestionInFeeds(_ question: AnyObject, questionId: String) {
         self.databaseRef.child("followers").child(self.currentUser.uid).observe(.value, with: { (snapshot) in
             for follower in snapshot.children {
                 let followerSnapshot = User(snapshot: follower as! FIRDataSnapshot)
@@ -361,7 +361,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         }
         return (newLength > 300) ? false : true
     }
-
+    
     @IBAction func comeBackAction(_ sender: AnyObject) {
         self.navigationController?.popToRootViewController(animated: true)
     }

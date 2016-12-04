@@ -35,7 +35,7 @@ class FollowUsersTableViewCell: UITableViewCell {
         userImage.clipsToBounds = true
     }
     
-    func configureCell(user: User) {
+    func configureCell(_ user: User) {
         
         let imageURL = user.photoURL!
         

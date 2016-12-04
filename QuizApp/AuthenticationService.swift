@@ -26,7 +26,7 @@ struct AuthenticationService {
     }
     
     // 3 - We save the user info in the Database
-    private func saveInfo(_ user: FIRUser!, username: String, firstName: String, password: String){
+    fileprivate func saveInfo(_ user: FIRUser!, username: String, firstName: String, password: String){
         
         let userInfo = ["firstName": firstName, "email": user.email!, "username": username, "uid": user.uid, "photoURL": String(describing: user.photoURL!), "points": 0] as [String : Any]
         

@@ -235,10 +235,10 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
     
     func updateSearchResults(for searchController: UISearchController) {
         
-        filterContent(searchText: self.searchController.searchBar.text!)
+        filterContent(self.searchController.searchBar.text!)
     }
     
-    func filterContent(searchText: String) {
+    func filterContent(_ searchText: String) {
         self.filteredUsers = self.usersArray.filter{ user in
             let name = user!["firstName"] as? String
             

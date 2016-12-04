@@ -36,7 +36,7 @@ class TextQuestionTableViewCell: UITableViewCell {
         userImageView.clipsToBounds = true
     }
     
-    func configureQuestion(question: Question) {
+    func configureQuestion(_ question: Question) {
                 
         self.question = question
         
@@ -66,14 +66,14 @@ class TextQuestionTableViewCell: UITableViewCell {
         let timeInterval = question.timestamp
         
         //Convert to Date
-        let date = NSDate(timeIntervalSince1970: timeInterval as! TimeInterval)
+        let date = Date(timeIntervalSince1970: timeInterval as! TimeInterval)
         
         //Date formatting
         let dateFormatter = DateFormatter()
         
-        dateFormatter.timeZone = NSTimeZone.local
+        dateFormatter.timeZone = TimeZone.ReferenceType.local
         
-        let elapsedTimeInSeconds = NSDate().timeIntervalSince(date as Date)
+        let elapsedTimeInSeconds = Date().timeIntervalSince(date as Date)
         let secondInDays: TimeInterval = 60 * 60 * 24
         
         if elapsedTimeInSeconds > 7 * secondInDays {

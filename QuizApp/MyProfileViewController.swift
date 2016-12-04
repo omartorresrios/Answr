@@ -86,7 +86,7 @@ class MyProfileViewController: UIViewController {
     }
     
     // Action for the backToQuestions button
-    func comeBackToQuestions(sender:UIButton!) {
+    func comeBackToQuestions(_ sender:UIButton!) {
         performSegue(withIdentifier: "backToQuestions", sender: nil)
     }
     
