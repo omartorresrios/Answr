@@ -31,10 +31,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func logUser(){
         if FIRAuth.auth()!.currentUser != nil {
             
-            let tabBar = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Home") as! UINavigationController
-            self.window?.rootViewController = tabBar
+            let homeVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Home") as! UINavigationController
+            self.window?.rootViewController = homeVC
         }
-        
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

@@ -23,18 +23,59 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         //Setting the delegates for the Textfields
         
-        emailTextField.delegate = self
+        //emailTextField.delegate = self
         passwordTextField.delegate = self
+        
+        if passwordTextField.text!.isEmpty {
+            loginButton.isUserInteractionEnabled = false
+        }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        // Bottom line to emailTextField
+        let borderBottomEmail = CALayer()
+        let borderWidthEmail = CGFloat(2.0)
+        borderBottomEmail.borderColor = UIColor(colorLiteralRed: 160/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1).cgColor
+        borderBottomEmail.frame = CGRect(x: 0, y: emailTextField.frame.height - 1.0, width: emailTextField.frame.width , height: emailTextField.frame.height - 1.0)
+        borderBottomEmail.borderWidth = borderWidthEmail
+        emailTextField.layer.addSublayer(borderBottomEmail)
+        emailTextField.layer.masksToBounds = true
+        
+        // Bottom line to passwordTextField
+        let borderBottomPass = CALayer()
+        let borderWidthPass = CGFloat(2.0)
+        borderBottomPass.borderColor = UIColor(colorLiteralRed: 160/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1).cgColor
+        borderBottomPass.frame = CGRect(x: 0, y: passwordTextField.frame.height - 1.0, width: passwordTextField.frame.width , height: passwordTextField.frame.height - 1.0)
+        borderBottomPass.borderWidth = borderWidthPass
+        passwordTextField.layer.addSublayer(borderBottomPass)
+        passwordTextField.layer.masksToBounds = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         self.navigationController!.navigationBar.barTintColor = UIColor.white
+        navigationController?.isNavigationBarHidden = false
+        
+        loginButton.backgroundColor = UIColor(colorLiteralRed: 160/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1)
+        loginButton.layer.cornerRadius = 15
     }
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        let currentText: NSString = textField.text! as NSString
+        let updatedText = currentText.replacingCharacters(in: range, with: string)
+        
+        if updatedText.isEmpty {
+            loginButton.isUserInteractionEnabled = false
+            loginButton.backgroundColor = UIColor(colorLiteralRed: 160/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1)
+        } else {
+            loginButton.isUserInteractionEnabled = true
+            loginButton.backgroundColor = UIColor(colorLiteralRed: 12/255.0, green: 206/255.0, blue: 107/255.0, alpha: 1)
+        }
+        return true
+    }
 
-    
     /*
     // Dismissing the Keyboard with the Return Keyboard Button
     func dismissKeyboard(gesture: UIGestureRecognizer){

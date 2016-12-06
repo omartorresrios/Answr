@@ -16,12 +16,49 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var signupButton: UIButton!
     
     var authService = AuthenticationService()
     
     override func viewDidLayoutSubviews() {
         userImageView.layer.cornerRadius = userImageView.frame.size.height / 2
         userImageView.clipsToBounds = true
+        
+        // Bottom line to firstNameTextField
+        let borderBottomName = CALayer()
+        let borderWidthName = CGFloat(2.0)
+        borderBottomName.borderColor = UIColor(colorLiteralRed: 160/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1).cgColor
+        borderBottomName.frame = CGRect(x: 0, y: firstNameTextField.frame.height - 1.0, width: firstNameTextField.frame.width , height: firstNameTextField.frame.height - 1.0)
+        borderBottomName.borderWidth = borderWidthName
+        firstNameTextField.layer.addSublayer(borderBottomName)
+        firstNameTextField.layer.masksToBounds = true
+        
+        // Bottom line to usernameTextField
+        let borderBottomAlias = CALayer()
+        let borderWidthAlias = CGFloat(2.0)
+        borderBottomAlias.borderColor = UIColor(colorLiteralRed: 160/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1).cgColor
+        borderBottomAlias.frame = CGRect(x: 0, y: usernameTextField.frame.height - 1.0, width: usernameTextField.frame.width , height: usernameTextField.frame.height - 1.0)
+        borderBottomAlias.borderWidth = borderWidthAlias
+        usernameTextField.layer.addSublayer(borderBottomAlias)
+        usernameTextField.layer.masksToBounds = true
+        
+        // Bottom line to emailTextField
+        let borderBottomEmail = CALayer()
+        let borderWidthEmail = CGFloat(2.0)
+        borderBottomEmail.borderColor = UIColor(colorLiteralRed: 160/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1).cgColor
+        borderBottomEmail.frame = CGRect(x: 0, y: emailTextField.frame.height - 1.0, width: emailTextField.frame.width , height: emailTextField.frame.height - 1.0)
+        borderBottomEmail.borderWidth = borderWidthEmail
+        emailTextField.layer.addSublayer(borderBottomEmail)
+        emailTextField.layer.masksToBounds = true
+        
+        // Bottom line to passwordTextField
+        let borderBottomPass = CALayer()
+        let borderWidthPass = CGFloat(2.0)
+        borderBottomPass.borderColor = UIColor(colorLiteralRed: 160/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1).cgColor
+        borderBottomPass.frame = CGRect(x: 0, y: passwordTextField.frame.height - 1.0, width: passwordTextField.frame.width , height: passwordTextField.frame.height - 1.0)
+        borderBottomPass.borderWidth = borderWidthPass
+        passwordTextField.layer.addSublayer(borderBottomPass)
+        passwordTextField.layer.masksToBounds = true
     }
     
     override func viewDidLoad() {
@@ -31,10 +68,17 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
         
         userImageView.layer.cornerRadius = userImageView.layer.frame.height / 2
         
-        usernameTextField.delegate = self
+        //usernameTextField.delegate = self
         passwordTextField.delegate = self
-        emailTextField.delegate = self
-        firstNameTextField.delegate = self
+        //emailTextField.delegate = self
+        //firstNameTextField.delegate = self
+        
+        navigationController?.isNavigationBarHidden = false
+        
+        if firstNameTextField.text!.isEmpty || usernameTextField.text!.isEmpty || emailTextField.text!.isEmpty || emailTextField.text!.characters.count < 8 || passwordTextField.text!.isEmpty {
+            signupButton.isUserInteractionEnabled = false
+        }
+        
         /*
         // Creating Tap Gesture to dismiss Keyboard
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(SignUpViewController.dismissKeyboard(_:)))
@@ -51,6 +95,24 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
         super.viewWillAppear(animated)
         
         self.navigationController!.navigationBar.barTintColor = UIColor.white
+        
+        signupButton.backgroundColor = UIColor(colorLiteralRed: 160/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1)
+        signupButton.layer.cornerRadius = 15
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        let currentText: NSString = textField.text! as NSString
+        let updatedText = currentText.replacingCharacters(in: range, with: string)
+        
+        if updatedText.isEmpty {
+            signupButton.isUserInteractionEnabled = false
+            signupButton.backgroundColor = UIColor(colorLiteralRed: 160/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1)
+        } else {
+            signupButton.isUserInteractionEnabled = true
+            signupButton.backgroundColor = UIColor(colorLiteralRed: 12/255.0, green: 206/255.0, blue: 107/255.0, alpha: 1)
+        }
+        return true
     }
 
     //Signin Up the user
@@ -65,7 +127,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
         
         let imgData = UIImageJPEGRepresentation(userPicture!, 0.8)
         
-        if finalEmail.isEmpty || finalEmail.characters.count < 8 || password.isEmpty || username.isEmpty {
+        if firstName.isEmpty || username.isEmpty || finalEmail.isEmpty || finalEmail.characters.count < 8 || password.isEmpty {
             DispatchQueue.main.async(execute: {
                 let alertView = SCLAlertView()
                 alertView.showError("OOPS", subTitle: "Hey, it seems like you did not fill correctly the information")
