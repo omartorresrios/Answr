@@ -24,6 +24,8 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
             questionImageView.layer.cornerRadius = 5
         }
     }
+    @IBOutlet weak var sendButton: UIButton!
+    
     var databaseRef: FIRDatabaseReference! {
         return FIRDatabase.database().reference()
     }
@@ -62,6 +64,16 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
 
         questionTextView.delegate = self
         self.automaticallyAdjustsScrollViewInsets = true
+        
+        // Adding targets to sendButton if its enable
+        if sendButton.isUserInteractionEnabled == true {
+            sendButton.addTarget(self, action: #selector(AddQuestionViewController.buttonPress(_:)), for: .touchDown)
+            sendButton.addTarget(self, action: #selector(AddQuestionViewController.buttonRelease(_:)), for: .touchUpInside)
+            sendButton.addTarget(self, action: #selector(AddQuestionViewController.buttonRelease(_:)), for: .touchUpOutside)
+            
+            let sendBtnLongPress = UILongPressGestureRecognizer(target: self, action: #selector(AddQuestionViewController.lonPress(_:)))
+            sendButton.addGestureRecognizer(sendBtnLongPress)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -75,6 +87,31 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         }) { (error) in
             let alertView = SCLAlertView()
             alertView.showError("OOPS", subTitle: error.localizedDescription)
+        }
+    }
+    
+    // Scale up on sendButton press
+    func buttonPress(_ button: UIButton) {
+        sendButton.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
+        
+        UIView.animate(withDuration: 1.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 4.0,
+                       options: .allowUserInteraction, animations: { [weak self] in
+                        self?.sendButton.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+            }, completion: nil)
+    }
+    
+    // Scale down sendbutton release
+    func buttonRelease(_ button: UIButton) {
+        sendButton.transform = .identity
+    }
+    
+    // Scale down sendbutton release when tapped long time
+    func lonPress(_ sender: UILongPressGestureRecognizer) {
+        if sender.state == .ended {
+            UIView.animate(withDuration: 1.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 4.0,
+                           options: .allowUserInteraction, animations: { [weak self] in
+                            self?.sendButton.transform = .identity
+                }, completion: nil)
         }
     }
     
@@ -121,8 +158,9 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
             }
         }
     }
-
+    
     @IBAction func saveQuestionAction(_ sender: AnyObject) {
+        
         var questionText: String!
         if let text: String = questionTextView.text {
             questionText = text
@@ -349,6 +387,17 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newLength:Int = (textView.text as NSString).length + (text as NSString).length - range.length
+        
+        // Disabled/Enabled sendButton
+        if newLength > 0 {
+            sendButton.isUserInteractionEnabled = true
+            sendButton.setImage(UIImage(named: "SentEna"), for: .normal)
+        } else {
+            sendButton.isUserInteractionEnabled = false
+            sendButton.setImage(UIImage(named: "SentDis"), for: .normal)
+        }
+        
+        // Movements to limit characters
         let remainChar:Int = 300 - newLength
         
         numberOfCharLabel.text = "\(remainChar)"
