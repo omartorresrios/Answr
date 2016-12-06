@@ -96,10 +96,7 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
                     }
                 })
             }
-        }) { (error) in
-            let alertView = SCLAlertView()
-            alertView.showError("OOPS", subTitle: error.localizedDescription)
-        }
+        })
     }
     
     func increaseProgress() {
@@ -239,28 +236,16 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
     }
    
     @IBAction func logoutAction(_ sender: AnyObject) {
-        /*do {
-         try FIRAuth.auth()?.signOut()
-         if FIRAuth.auth()?.currentUser == nil {
-         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("start") as! StartViewController
-         presentViewController(vc, animated: true, completion: nil)
-         }
-         } catch let error as NSError {
-         let alertView = SCLAlertView()
-         alertView.showError("OOPS", subTitle: error.localizedDescription)
-         }*/
-
+        
         if FIRAuth.auth()!.currentUser != nil {
-            do { // Podríamos obviar esta sentencia do. Averiguar y profundizar bien en esto
-                try FIRAuth.auth()?.signOut()
+            do {
+                try? FIRAuth.auth()!.signOut()
                 
-                let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "start") // Podríamos eliminar el StartViewController que se creó
-                present(vc, animated: true, completion: nil)
-                
-            } catch let error as NSError {
-                
-                let alertView = SCLAlertView()
-                alertView.showError("😁OOPS😁", subTitle: error.localizedDescription)
+                if FIRAuth.auth()?.currentUser == nil {
+                    let startViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "start")
+                    
+                    self.present(startViewController, animated: true, completion: nil)
+                }
             }
         }
     }
