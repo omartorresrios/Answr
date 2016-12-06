@@ -94,10 +94,10 @@ class TextQuestionTableViewCell: UITableViewCell {
         likeRef.observe(.value, with: { (snapshot) in
             if (snapshot.exists()) {
                 // currentUser liked for the question
-                self.likesImage.image = UIImage(named: "Like-0")
+                self.likesImage.image = UIImage(named: "choclo1")
             } else {
                 // currentUser hasn't liked for the question... yet
-                self.likesImage.image = UIImage(named: "Like")
+                self.likesImage.image = UIImage(named: "choclo")
             }
         }) { (error) in
             print(error.localizedDescription)
@@ -114,7 +114,7 @@ class TextQuestionTableViewCell: UITableViewCell {
     func likeTapped(_ sender: UITapGestureRecognizer) {
 
         // Counting and saving the number of likes
-        if self.likesImage.image == UIImage(named: "Like") {
+        if self.likesImage.image == UIImage(named: "choclo") {
             let likesCount: Int?
             if question.likes == nil {
                 likesCount = 1
