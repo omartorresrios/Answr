@@ -10,6 +10,7 @@ import UIKit
 import FirebaseStorage
 import FirebaseAuth
 import FirebaseDatabase
+import JDStatusBarNotification
 
 class QuestionsTableViewController: UITableViewController {
     
@@ -22,6 +23,7 @@ class QuestionsTableViewController: UITableViewController {
     }
     
     @IBOutlet weak var loader: UIActivityIndicatorView!
+    
     var questionsWorldArray = [Question]()
     var questionsFeedArray = [Question]()
     var currentUser: AnyObject?
@@ -270,34 +272,18 @@ class QuestionsTableViewController: UITableViewController {
                     }
                     self.questionsFeedArray.remove(at: NSIndexPathData.row)
                     self.tableView.deleteRows(at: [NSIndexPathData as IndexPath], with: .automatic)
+                    
                     self.loader.isHidden = true
-                    self.showMessage("Pregunta eliminada!", type: .success, options: [
-                        .animation(.slide),
-                        .animationDuration(0.3),
-                        .autoHide(true),
-                        .autoHideDelay(3.0),
-                        .height(20.0),
-                        .hideOnTap(true),
-                        .position(.top),
-                        .textAlignment(.center),
-                        .textColor(UIColor.white),
-                        .textNumberOfLines(1),
-                        .textPadding(30.0)
-                        ])
+                    
+                    JDStatusBarNotification.show(withStatus: "Pregunta eliminada!", dismissAfter: 2.0, styleName: JDStatusBarStyleDark)
                 })
             }
         }
-        
     }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         let deleteBtn = UITableViewRowAction(style: .destructive, title: "Eliminar") { (action, indexPath) in
-//            let alertView = SCLAlertView()
-//            
-//            alertView.addButton("Eliminar", target:self, selector: #selector(QuestionsTableViewController.deleteBu(_:)))
-//            alertView.showSuccess("Estás seguro?", subTitle: "No verás más esta pregunta!")
-            
             self.deleteBu(indexPath as IndexPath)
         }
         
