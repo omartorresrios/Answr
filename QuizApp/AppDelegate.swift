@@ -9,14 +9,24 @@
 import UIKit
 import CoreData
 import Firebase
+import JDStatusBarNotification
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    let reachability = Reachability()!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reachabilityChanged),name: ReachabilityChangedNotification,object: reachability)
+        do{
+            try reachability.startNotifier()
+        }catch{
+            print("could not start reachability notifier")
+        }
+        
+        
         // Override point for customization after application launch.
         //UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName : UIColor(red: 255/255.0, green: 219/255.0, blue: 81/255.0, alpha: 1.0)], for: UIControlState.selected)
         
@@ -33,6 +43,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             let homeVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Home") as! UINavigationController
             self.window?.rootViewController = homeVC
+        }
+    }
+    
+    func reachabilityChanged(note: NSNotification) {
+        
+        let reachability = note.object as! Reachability
+        
+        if reachability.isReachable {
+            if reachability.isReachableViaWiFi {
+                print("Reachable via WiFi")
+            } else {
+                print("Reachable via Cellular")
+            }
+        } else {
+            print("Network not reachable")
+            JDStatusBarNotification.show(withStatus: "Revisa tu conexión e intenta de nuevo", dismissAfter: 3.0, styleName: JDStatusBarStyleDark)
         }
     }
 

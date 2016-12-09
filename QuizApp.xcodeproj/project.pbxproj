@@ -26,6 +26,7 @@
 		A08908351DDBDB2C00DE655C /* DGElasticPullToRefreshLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08908301DDBDB2C00DE655C /* DGElasticPullToRefreshLoadingView.swift */; };
 		A08908361DDBDB2C00DE655C /* DGElasticPullToRefreshLoadingViewCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08908311DDBDB2C00DE655C /* DGElasticPullToRefreshLoadingViewCircle.swift */; };
 		A08908371DDBDB2C00DE655C /* DGElasticPullToRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08908321DDBDB2C00DE655C /* DGElasticPullToRefreshView.swift */; };
+		A0D8E20E1DFA43C900E6CA19 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D8E20D1DFA43C900E6CA19 /* Reachability.swift */; };
 		A0E0F7971D8D979100F87EC8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E0F7961D8D979100F87EC8 /* AppDelegate.swift */; };
 		A0E0F7991D8D979100F87EC8 /* QuestionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E0F7981D8D979100F87EC8 /* QuestionsTableViewController.swift */; };
 		A0E0F7A11D8D979100F87EC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0E0F7A01D8D979100F87EC8 /* Assets.xcassets */; };
@@ -75,6 +76,7 @@
 		A08908301DDBDB2C00DE655C /* DGElasticPullToRefreshLoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DGElasticPullToRefreshLoadingView.swift; sourceTree = "<group>"; };
 		A08908311DDBDB2C00DE655C /* DGElasticPullToRefreshLoadingViewCircle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DGElasticPullToRefreshLoadingViewCircle.swift; sourceTree = "<group>"; };
 		A08908321DDBDB2C00DE655C /* DGElasticPullToRefreshView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DGElasticPullToRefreshView.swift; sourceTree = "<group>"; };
+		A0D8E20D1DFA43C900E6CA19 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		A0E0F7931D8D979100F87EC8 /* QuizApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuizApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0E0F7961D8D979100F87EC8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A0E0F7981D8D979100F87EC8 /* QuestionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsTableViewController.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				A021FE971DE67E03003C411F /* SkypeExampleViewController.swift */,
+				A0D8E20D1DFA43C900E6CA19 /* Reachability.swift */,
 				A089082D1DDBDB2C00DE655C /* DGElasticPullToRefresh */,
 				A08908201DDB7FF500DE655C /* Resources */,
 				A0E0F7A01D8D979100F87EC8 /* Assets.xcassets */,
@@ -478,6 +481,7 @@
 				A0E0F7BD1D8E0EDE00F87EC8 /* SCLAlertView.swift in Sources */,
 				A005CC411DB9ACBD0081C548 /* CommentViewController.swift in Sources */,
 				A0318B6C1DB33FA400DFD35C /* SegueFromBottom.swift in Sources */,
+				A0D8E20E1DFA43C900E6CA19 /* Reachability.swift in Sources */,
 				A0318B661DB2F4EF00DFD35C /* SegueFromLeft.swift in Sources */,
 				A003086E1DA4385400797A4E /* SettingsTableViewController.swift in Sources */,
 				A08908341DDBDB2C00DE655C /* DGElasticPullToRefreshExtensions.swift in Sources */,
