@@ -443,7 +443,7 @@ open class SCLAlertView: UIViewController {
 
         // Done button
         if showCloseButton {
-            let txt = completeText != nil ? completeText! : "Done"
+            let txt = completeText != nil ? completeText! : "Ok"
             addButton(txt, target:self, selector:#selector(SCLAlertView.hideView))
         }
 

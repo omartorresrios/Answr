@@ -101,7 +101,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     
     // Move the View Up & Down when the Keyboard appears
-    func animateView(_ up: Bool, moveValue: CGFloat){
+    func animateView(_ up: Bool, moveValue: CGFloat) {
         
         let movementDuration: TimeInterval = 0.3
         let movement: CGFloat = (up ? -moveValue : moveValue)
@@ -127,9 +127,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             
             DispatchQueue.main.async(execute: {
                 let alertView =  SCLAlertView()
-                alertView.showError("OOPS", subTitle: "Hey, it seems like you did not fill correctly the information")
+                alertView.showError("🙁", subTitle: "Ey, parece que no completaste la información!")
             })
-        }else {
+        } else {
             authService.signIn(finalEmail, password: password)
         }
     }

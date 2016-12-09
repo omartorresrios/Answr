@@ -83,8 +83,7 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
                 
                 FIRStorage.storage().reference(forURL: user.photoURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
                     if let error = error {
-                        let alertView = SCLAlertView()
-                        alertView.showError("OOPS", subTitle: error.localizedDescription)
+                        print(error.localizedDescription)
                         
                     } else{
                         
@@ -125,7 +124,7 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
         if name.isEmpty || finalEmail.isEmpty || finalEmail.characters.count < 8 {
             DispatchQueue.main.async(execute: {
                 let alertView = SCLAlertView()
-                alertView.showError("OOPS", subTitle: "Hey, it seems like you did not fill correctly the information")
+                alertView.showError("🙁", subTitle: "Ey, parece que no completaste la información!")
             })
         } else {
             let imagePath = "profileImages/\(self.user.uid)/userPic.jpg"
@@ -161,7 +160,7 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
                                     }
                                 } else {
                                     let alertView = SCLAlertView()
-                                    alertView.showError("OOPS", subTitle: error!.localizedDescription)
+                                    alertView.showError("🙁", subTitle: "Hubo un problema, no se pudo actualizar. Intenta de nuevo!")
                                 }
                             })
                             

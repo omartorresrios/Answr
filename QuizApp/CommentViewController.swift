@@ -111,8 +111,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
                 self.currentUser = User(snapshot: userInfo as! FIRDataSnapshot)
             }
         }) { (error) in
-            let alertView = SCLAlertView()
-            alertView.showError("OOPS", subTitle: error.localizedDescription)
+            print(error.localizedDescription)
         }
     }
     
@@ -326,8 +325,7 @@ extension UIViewController {
 
 extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
     
-        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return commentsArray.count + 1
     }
     
@@ -372,10 +370,10 @@ extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
             }
             
             cell.questionContent.text = selectedQuestion.questionText
+            
             return cell
-        }
-        
-        else {
+            
+        } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "commentCell", for: indexPath) as! CommentTableViewCell
             
             cell.firstNameLabel.text = commentsArray[(indexPath as NSIndexPath).row - 1].firstName

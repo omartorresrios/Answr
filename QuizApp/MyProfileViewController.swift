@@ -54,8 +54,10 @@ class MyProfileViewController: UIViewController {
             if let user = self.currentUser {
                 if user.photoURL != nil {
                     let databasePhotoURL = snapshot["photoURL"] as! String
-                    if let data = try? Data(contentsOf: URL(string: databasePhotoURL)!) {
-                        self.userImageView!.image = UIImage.init(data: data)
+                    DispatchQueue.main.async {
+                        if let data = try? Data(contentsOf: URL(string: databasePhotoURL)!) {
+                            self.userImageView!.image = UIImage.init(data: data)
+                        }
                     }
                 } else {
                     //No user is signed in

@@ -146,7 +146,7 @@ class ImageQuestionTableViewCell: UITableViewCell {
                         self.userImageView.image = UIImage(data: data)
                     }
                 })
-            }else {
+            } else {
                 print(error!.localizedDescription)
             }
         })
@@ -159,7 +159,7 @@ class ImageQuestionTableViewCell: UITableViewCell {
                         self.questionImageView.image = UIImage(data: data)
                     }
                 })
-            }else {
+            } else {
                 print(error!.localizedDescription)
             }
         })

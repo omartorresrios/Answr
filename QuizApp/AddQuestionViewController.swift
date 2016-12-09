@@ -85,8 +85,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 self.currentUser = User(snapshot: userInfo as! FIRDataSnapshot)
             }
         }) { (error) in
-            let alertView = SCLAlertView()
-            alertView.showError("OOPS", subTitle: error.localizedDescription)
+            print(error.localizedDescription)
         }
     }
     
@@ -125,8 +124,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
             if let user = self.currentUser {
                 FIRStorage.storage().reference(forURL: user.photoURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
                     if let error = error {
-                        let alertView = SCLAlertView()
-                        alertView.showError("OOPS", subTitle: error.localizedDescription)
+                        print(error.localizedDescription)
                     } else{
                         DispatchQueue.main.async(execute: {
                             if let data = imgData {
@@ -137,8 +135,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 })
             }
         }) { (error) in
-            let alertView = SCLAlertView()
-            alertView.showError("OOPS", subTitle: error.localizedDescription)
+            print(error.localizedDescription)
         }
     }
     
