@@ -45,6 +45,8 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        UIApplication.shared.isStatusBarHidden = false
+        
         userImgAnonymous.layer.cornerRadius = 5
         
         // Display the user image
@@ -178,7 +180,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 
                 // Reference for the Anonymous Image
                 let anonymousImg = anonymousImage.image
-                let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.8)
+                let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.1)
                 let metaData = FIRStorageMetadata()
                 metaData.contentType = "image/jpeg"
                 let anonymousImagePath = "anonymousQuestionsWithoutImage/\(FIRAuth.auth()!.currentUser!.uid)/\(UUID().uuidString)/anonymousQuestionerPic.jpg"
@@ -194,10 +196,10 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                         self.saveQuestionInQuestionsNode(newQuestion.toAnyObject() as AnyObject)
                         
                         // Saving the question in currentUser feed
-                        self.saveMyOwnQuestionInMyFeed(newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                        self.saveMyOwnQuestionInMyFeed(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
                         
                         // Saving the question in the Feed node of all the followers of the currentUser
-                        self.saveQuestionInFeeds(newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                        self.saveQuestionInFeeds(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
                         
                         // Saving the points for the currentUser
                         self.savePoints()
@@ -218,7 +220,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 
                 // Reference for the Anonymous Image
                 let anonymousImg = anonymousImage.image
-                let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.8)
+                let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.1)
                 let anonymousImagePath = "anonymousQuestionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/\(UUID().uuidString)/anonymousQuestionerPic.jpg"
                 let anonymousImageRef = storageRef.reference().child(anonymousImagePath)
                 anonymousImageRef.put(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
@@ -235,10 +237,10 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                                 self.saveQuestionInQuestionsNode(newQuestion.toAnyObject() as AnyObject)
                                 
                                 // Saving the question in currentUser feed
-                                self.saveMyOwnQuestionInMyFeed(newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                                self.saveMyOwnQuestionInMyFeed(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
                                 
                                 // Saving the question in the Feed node of all the followers of the currentUser
-                                self.saveQuestionInFeeds(newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                                self.saveQuestionInFeeds(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
                                 
                                 // Saving the points for the currentUser
                                 self.savePoints()
@@ -264,10 +266,10 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 self.saveQuestionInQuestionsNode(newQuestion.toAnyObject() as AnyObject)
                 
                 // Saving the question in currentUser feed
-                self.saveMyOwnQuestionInMyFeed(newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                self.saveMyOwnQuestionInMyFeed(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
                 
                 // Saving the question in the Feed node of all the followers of the currentUser
-                self.saveQuestionInFeeds(newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                self.saveQuestionInFeeds(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
                 
                 // Saving the points for the currentUser
                 self.savePoints()
@@ -291,10 +293,10 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                         self.saveQuestionInQuestionsNode(newQuestion.toAnyObject() as AnyObject)
                         
                         // Saving the question in currentUser feed
-                        self.saveMyOwnQuestionInMyFeed(newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                        self.saveMyOwnQuestionInMyFeed(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
                         
                         // Saving the question in the Feed node of all the followers of the currentUser
-                        self.saveQuestionInFeeds(newQuestion.questionId as AnyObject, questionId: newQuestion.questionId)
+                        self.saveQuestionInFeeds(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
                         
                         // Saving the points for the currentUser
                         self.savePoints()
@@ -408,9 +410,9 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         return (newLength > 300) ? false : true
     }
     
-    @IBAction func comeBackAction(_ sender: AnyObject) {
-        self.navigationController?.popToRootViewController(animated: true)
-    }
+//    @IBAction func comeBackAction(_ sender: AnyObject) {
+//        self.navigationController?.popToRootViewController(animated: true)
+//    }
 }
 
 
