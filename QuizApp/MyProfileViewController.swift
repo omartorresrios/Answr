@@ -27,6 +27,8 @@ class MyProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        UIApplication.shared.isStatusBarHidden = false
+        
         // Disable the back button
         self.navigationItem.setHidesBackButton(true, animated: false)
 

@@ -26,6 +26,8 @@ class ShowFollowersTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        UIApplication.shared.isStatusBarHidden = false
+        
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 44
         
@@ -62,17 +64,8 @@ class ShowFollowersTableViewController: UITableViewController {
         
         user = self.listFollowers[indexPath.row]
         
-        let userImgURL = user?["photoURL"] as? String
-        storageRef.reference(forURL: userImgURL!).data(withMaxSize: 1 * 1024 * 1024) { (imgData, error) in
-            if error == nil {
-                DispatchQueue.main.async {
-                    if let data = imgData {
-                        cell.userImage.image = UIImage(data: data)
-                    }
-                }
-            } else {
-                print(error!.localizedDescription)
-            }
+        if let userImgURL = user?["photoURL"] as? String {
+            cell.userImage.loadImageUsingCacheWithUrlString(urlString: userImgURL)
         }
 
         cell.firstName.text = self.listFollowers[indexPath.row]?["firstName"] as? String

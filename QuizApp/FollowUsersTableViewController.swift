@@ -34,6 +34,8 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        UIApplication.shared.isStatusBarHidden = false
+        
         // Disable the back button
         self.navigationItem.setHidesBackButton(true, animated: false)
         
@@ -263,7 +265,7 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
         
         
         if segue.identifier == "showQuestionsTVC" {
-            let showFollowUsersTVC = segue.destination as! QuestionsTableViewController
+            let showFollowUsersTVC = segue.destination as! FeedQuestionsTableViewController
             showFollowUsersTVC.user = self.currentUser
         }
     }

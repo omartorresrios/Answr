@@ -125,7 +125,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
         let username = usernameTextField.text!
         let userPicture = userImageView.image
         
-        let imgData = UIImageJPEGRepresentation(userPicture!, 0.8)
+        let imgData = UIImageJPEGRepresentation(userPicture!, 0.1)
         
         if firstName.isEmpty || username.isEmpty || finalEmail.isEmpty || finalEmail.characters.count < 8 || password.isEmpty {
             DispatchQueue.main.async(execute: {

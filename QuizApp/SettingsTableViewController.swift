@@ -39,6 +39,8 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        UIApplication.shared.isStatusBarHidden = false
+        
         nameTextField.delegate = self
         emailTextField.delegate = self
         
@@ -119,7 +121,7 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
         let finalEmail = email.trimmingCharacters(in: CharacterSet.whitespaces)
         let userPicture = userImageView.image
         
-        let imgData = UIImageJPEGRepresentation(userPicture!, 0.8)!
+        let imgData = UIImageJPEGRepresentation(userPicture!, 0.1)!
         
         if name.isEmpty || finalEmail.isEmpty || finalEmail.characters.count < 8 {
             DispatchQueue.main.async(execute: {
