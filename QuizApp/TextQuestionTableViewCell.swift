@@ -19,8 +19,7 @@ class TextQuestionTableViewCell: UITableViewCell {
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var commentsCounter: UILabel!
     @IBOutlet weak var numberOfComments: UILabel!
-    @IBOutlet weak var timestamp: UILabel!
-    @IBOutlet weak var likesImage: UIImageView!
+    @IBOutlet weak var timestamp: UILabel!    
     @IBOutlet weak var likes: UILabel!
     
     var databaseRef: FIRDatabaseReference! {
@@ -40,19 +39,9 @@ class TextQuestionTableViewCell: UITableViewCell {
                 
         self.question = question
         
-        // Set question's data
-        let questionerImgURL = question.questionerImageURL!
-        storageRef.reference(forURL: questionerImgURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (data, error) in
-            if error == nil {
-                DispatchQueue.main.async(execute: {
-                    if let data = data {
-                        self.userImageView.image = UIImage(data: data)
-                    }
-                })
-            }else {
-                print(error!.localizedDescription)
-            }
-        })
+        if let questionerImgURL = question.questionerImageURL {
+            self.userImageView.loadImageUsingCacheWithUrlString(urlString: questionerImgURL)
+        }
         
         self.firstNameLabel.text = question.firstName
         self.questionTextLabel.text = question.questionText
@@ -60,7 +49,6 @@ class TextQuestionTableViewCell: UITableViewCell {
             self.commentsCounter.text = "\(question.counterComments!)" + "/"
             self.numberOfComments.text = question.numberOfComments
         }
-        self.likes.text = "\(question.likes!)"
         
         //TimeStamp
         let timeInterval = question.timestamp
@@ -88,55 +76,17 @@ class TextQuestionTableViewCell: UITableViewCell {
         
         self.timestamp.text = dateString
         
-        // Check if the currentUser liked the question
-        let likeRef = databaseRef.child("Users").child(FIRAuth.auth()!.currentUser!.uid).child("Likes").child(question.key)
-        
-        likeRef.observe(.value, with: { (snapshot) in
-            if (snapshot.exists()) {
-                // currentUser liked for the question
-                self.likesImage.image = UIImage(named: "choclo1")
-            } else {
-                // currentUser hasn't liked for the question... yet
-                self.likesImage.image = UIImage(named: "choclo")
-            }
-        }) { (error) in
-            print(error.localizedDescription)
-        }
+        self.likes.text = "\(question.likes!)"
         
         // Hiding the likes label
-        if self.likes.text == "0" {
+        if question.likes == 0 {
             self.likes.isHidden = true
         } else {
             self.likes.isHidden = false
         }
     }
     
-    func likeTapped(_ sender: UITapGestureRecognizer) {
-
-        // Counting and saving the number of likes
-        if self.likesImage.image == UIImage(named: "choclo") {
-            let likesCount: Int?
-            if question.likes == nil {
-                likesCount = 1
-            } else {
-                likesCount = question.likes + 1
-            }
-            // Saving the value of likesCount into likes field in Question's Firebase node
-            self.databaseRef.child("Questions").child(question.key).child("likes").setValue(likesCount)
-            // Saving the question's key in the currentUser's Like subnode as a boolean
-            self.databaseRef.child("Users").child(FIRAuth.auth()!.currentUser!.uid).child("Likes").child(question.key).setValue(true)
-        } else {
-            self.databaseRef.child("Questions").child(question.key).child("likes").setValue(question.likes - 1)
-            self.databaseRef.child("Users").child(FIRAuth.auth()!.currentUser!.uid).child("Likes").child(question.key).removeValue()
-        }
-    }
-    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // UITapGestureRecognizer is set programatically.
-        let tap = UITapGestureRecognizer(target: self, action: #selector(TextQuestionTableViewCell.likeTapped(_:)))
-        tap.numberOfTapsRequired = 1
-        likesImage.addGestureRecognizer(tap)
-        likesImage.isUserInteractionEnabled = true
     }
 }

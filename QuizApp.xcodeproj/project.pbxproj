@@ -18,6 +18,7 @@
 		A0318B6A1DB323F500DFD35C /* SegueFromTop.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B691DB323F500DFD35C /* SegueFromTop.swift */; };
 		A0318B6C1DB33FA400DFD35C /* SegueFromBottom.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B6B1DB33FA400DFD35C /* SegueFromBottom.swift */; };
 		A0318B711DB425FC00DFD35C /* FollowUsersTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0318B701DB425FC00DFD35C /* FollowUsersTableViewCell.swift */; };
+		A075B14F1E08978A008AC7E3 /* CommentWorldViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A075B14E1E08978A008AC7E3 /* CommentWorldViewController.swift */; };
 		A089081B1DDB7DAA00DE655C /* anonymous.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A089081A1DDB7DAA00DE655C /* anonymous.jpg */; };
 		A089081D1DDB7FA200DE655C /* user-placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = A089081C1DDB7FA200DE655C /* user-placeholder.png */; };
 		A089081F1DDB7FDD00DE655C /* emojilengua.png in Resources */ = {isa = PBXBuildFile; fileRef = A089081E1DDB7FDD00DE655C /* emojilengua.png */; };
@@ -26,9 +27,13 @@
 		A08908351DDBDB2C00DE655C /* DGElasticPullToRefreshLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08908301DDBDB2C00DE655C /* DGElasticPullToRefreshLoadingView.swift */; };
 		A08908361DDBDB2C00DE655C /* DGElasticPullToRefreshLoadingViewCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08908311DDBDB2C00DE655C /* DGElasticPullToRefreshLoadingViewCircle.swift */; };
 		A08908371DDBDB2C00DE655C /* DGElasticPullToRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08908321DDBDB2C00DE655C /* DGElasticPullToRefreshView.swift */; };
+		A0A96C291E035970006C2B44 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A96C281E035970006C2B44 /* Extensions.swift */; };
+		A0A96C2F1E045C45006C2B44 /* iOSDevCenters+GIF.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A96C2E1E045C45006C2B44 /* iOSDevCenters+GIF.swift */; };
+		A0A96C371E04822D006C2B44 /* chicken.gif in Resources */ = {isa = PBXBuildFile; fileRef = A0A96C361E04822D006C2B44 /* chicken.gif */; };
+		A0A96C551E06ED00006C2B44 /* WorldQuestionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A96C541E06ED00006C2B44 /* WorldQuestionsTableViewController.swift */; };
 		A0D8E20E1DFA43C900E6CA19 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D8E20D1DFA43C900E6CA19 /* Reachability.swift */; };
 		A0E0F7971D8D979100F87EC8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E0F7961D8D979100F87EC8 /* AppDelegate.swift */; };
-		A0E0F7991D8D979100F87EC8 /* QuestionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E0F7981D8D979100F87EC8 /* QuestionsTableViewController.swift */; };
+		A0E0F7991D8D979100F87EC8 /* FeedQuestionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E0F7981D8D979100F87EC8 /* FeedQuestionsTableViewController.swift */; };
 		A0E0F7A11D8D979100F87EC8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0E0F7A01D8D979100F87EC8 /* Assets.xcassets */; };
 		A0E0F7A41D8D979100F87EC8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0E0F7A21D8D979100F87EC8 /* LaunchScreen.storyboard */; };
 		A0E0F7AE1D8DA34F00F87EC8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A0E0F7AD1D8DA34F00F87EC8 /* GoogleService-Info.plist */; };
@@ -68,6 +73,7 @@
 		A0318B691DB323F500DFD35C /* SegueFromTop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueFromTop.swift; sourceTree = "<group>"; };
 		A0318B6B1DB33FA400DFD35C /* SegueFromBottom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueFromBottom.swift; sourceTree = "<group>"; };
 		A0318B701DB425FC00DFD35C /* FollowUsersTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FollowUsersTableViewCell.swift; sourceTree = "<group>"; };
+		A075B14E1E08978A008AC7E3 /* CommentWorldViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentWorldViewController.swift; sourceTree = "<group>"; };
 		A089081A1DDB7DAA00DE655C /* anonymous.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = anonymous.jpg; sourceTree = "<group>"; };
 		A089081C1DDB7FA200DE655C /* user-placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user-placeholder.png"; sourceTree = "<group>"; };
 		A089081E1DDB7FDD00DE655C /* emojilengua.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emojilengua.png; sourceTree = "<group>"; };
@@ -76,10 +82,14 @@
 		A08908301DDBDB2C00DE655C /* DGElasticPullToRefreshLoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DGElasticPullToRefreshLoadingView.swift; sourceTree = "<group>"; };
 		A08908311DDBDB2C00DE655C /* DGElasticPullToRefreshLoadingViewCircle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DGElasticPullToRefreshLoadingViewCircle.swift; sourceTree = "<group>"; };
 		A08908321DDBDB2C00DE655C /* DGElasticPullToRefreshView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DGElasticPullToRefreshView.swift; sourceTree = "<group>"; };
+		A0A96C281E035970006C2B44 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		A0A96C2E1E045C45006C2B44 /* iOSDevCenters+GIF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "iOSDevCenters+GIF.swift"; sourceTree = "<group>"; };
+		A0A96C361E04822D006C2B44 /* chicken.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = chicken.gif; sourceTree = "<group>"; };
+		A0A96C541E06ED00006C2B44 /* WorldQuestionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorldQuestionsTableViewController.swift; sourceTree = "<group>"; };
 		A0D8E20D1DFA43C900E6CA19 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		A0E0F7931D8D979100F87EC8 /* QuizApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuizApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0E0F7961D8D979100F87EC8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A0E0F7981D8D979100F87EC8 /* QuestionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsTableViewController.swift; sourceTree = "<group>"; };
+		A0E0F7981D8D979100F87EC8 /* FeedQuestionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedQuestionsTableViewController.swift; sourceTree = "<group>"; };
 		A0E0F7A01D8D979100F87EC8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A0E0F7A31D8D979100F87EC8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A0E0F7A51D8D979100F87EC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -180,6 +190,14 @@
 			path = DGElasticPullToRefresh;
 			sourceTree = "<group>";
 		};
+		A0A96C271E03594E006C2B44 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				A0A96C281E035970006C2B44 /* Extensions.swift */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
 		A0E0F78A1D8D979100F87EC8 = {
 			isa = PBXGroup;
 			children = (
@@ -201,6 +219,7 @@
 		A0E0F7951D8D979100F87EC8 /* QuizApp */ = {
 			isa = PBXGroup;
 			children = (
+				A0A96C271E03594E006C2B44 /* Helpers */,
 				A0E0F7BF1D8E0F0C00F87EC8 /* Controllers */,
 				A0E0F7C01D8E0F3B00F87EC8 /* Supporting files */,
 				A0E0F7C11D8E0F7200F87EC8 /* Model */,
@@ -215,8 +234,10 @@
 				A0318B6D1DB4233400DFD35C /* User Profile */,
 				A0318B6E1DB4234E00DFD35C /* Login/Signup */,
 				A0EF071E1D8EE71400395413 /* AddQuestionViewController.swift */,
-				A0E0F7981D8D979100F87EC8 /* QuestionsTableViewController.swift */,
+				A0E0F7981D8D979100F87EC8 /* FeedQuestionsTableViewController.swift */,
+				A0A96C541E06ED00006C2B44 /* WorldQuestionsTableViewController.swift */,
 				A005CC401DB9ACBD0081C548 /* CommentViewController.swift */,
+				A075B14E1E08978A008AC7E3 /* CommentWorldViewController.swift */,
 				A00308741DA9B3DD00797A4E /* FollowUsersTableViewController.swift */,
 				A0ED41E51DC4370B00C2A1B5 /* UserProfileViewController.swift */,
 			);
@@ -226,6 +247,8 @@
 		A0E0F7C01D8E0F3B00F87EC8 /* Supporting files */ = {
 			isa = PBXGroup;
 			children = (
+				A0A96C2E1E045C45006C2B44 /* iOSDevCenters+GIF.swift */,
+				A0A96C361E04822D006C2B44 /* chicken.gif */,
 				A021FE971DE67E03003C411F /* SkypeExampleViewController.swift */,
 				A0D8E20D1DFA43C900E6CA19 /* Reachability.swift */,
 				A089082D1DDBDB2C00DE655C /* DGElasticPullToRefresh */,
@@ -324,6 +347,7 @@
 				TargetAttributes = {
 					A0E0F7921D8D979100F87EC8 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = W7KDN9ZT24;
 						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -358,6 +382,7 @@
 			files = (
 				A089081F1DDB7FDD00DE655C /* emojilengua.png in Resources */,
 				A003086C1DA1FBA000797A4E /* Main.storyboard in Resources */,
+				A0A96C371E04822D006C2B44 /* chicken.gif in Resources */,
 				A0E0F7A41D8D979100F87EC8 /* LaunchScreen.storyboard in Resources */,
 				A089081B1DDB7DAA00DE655C /* anonymous.jpg in Resources */,
 				A0E0F7A11D8D979100F87EC8 /* Assets.xcassets in Resources */,
@@ -473,9 +498,10 @@
 				A0E0F7B81D8DFE8000F87EC8 /* SignUpViewController.swift in Sources */,
 				A08908371DDBDB2C00DE655C /* DGElasticPullToRefreshView.swift in Sources */,
 				A0ED41EE1DC5641000C2A1B5 /* FollowingsListTableViewCell.swift in Sources */,
+				A0A96C291E035970006C2B44 /* Extensions.swift in Sources */,
 				A0318B6A1DB323F500DFD35C /* SegueFromTop.swift in Sources */,
 				A0E0F7B41D8DB27C00F87EC8 /* TextQuestionTableViewCell.swift in Sources */,
-				A0E0F7991D8D979100F87EC8 /* QuestionsTableViewController.swift in Sources */,
+				A0E0F7991D8D979100F87EC8 /* FeedQuestionsTableViewController.swift in Sources */,
 				A0EF07451D95E3BF00395413 /* Comment.swift in Sources */,
 				A0E0F7C31D8E2F4700F87EC8 /* MyProfileViewController.swift in Sources */,
 				A0E0F7BD1D8E0EDE00F87EC8 /* SCLAlertView.swift in Sources */,
@@ -483,6 +509,7 @@
 				A0318B6C1DB33FA400DFD35C /* SegueFromBottom.swift in Sources */,
 				A0D8E20E1DFA43C900E6CA19 /* Reachability.swift in Sources */,
 				A0318B661DB2F4EF00DFD35C /* SegueFromLeft.swift in Sources */,
+				A075B14F1E08978A008AC7E3 /* CommentWorldViewController.swift in Sources */,
 				A003086E1DA4385400797A4E /* SettingsTableViewController.swift in Sources */,
 				A08908341DDBDB2C00DE655C /* DGElasticPullToRefreshExtensions.swift in Sources */,
 				A0EF07411D95DF6F00395413 /* CommentTableViewCell.swift in Sources */,
@@ -496,10 +523,12 @@
 				A0ED41E61DC4370B00C2A1B5 /* UserProfileViewController.swift in Sources */,
 				A0E0F7BE1D8E0EDE00F87EC8 /* User.swift in Sources */,
 				A0ED41E81DC55C4D00C2A1B5 /* ShowFollowersTableViewController.swift in Sources */,
+				A0A96C2F1E045C45006C2B44 /* iOSDevCenters+GIF.swift in Sources */,
 				A0EF07341D8F603D00395413 /* Model.xcdatamodeld in Sources */,
 				A0318B681DB3141200DFD35C /* SegueFromRight.swift in Sources */,
 				A08908361DDBDB2C00DE655C /* DGElasticPullToRefreshLoadingViewCircle.swift in Sources */,
 				A021FE981DE67E03003C411F /* SkypeExampleViewController.swift in Sources */,
+				A0A96C551E06ED00006C2B44 /* WorldQuestionsTableViewController.swift in Sources */,
 				A08908331DDBDB2C00DE655C /* DGElasticPullToRefreshConstants.swift in Sources */,
 				A0E0F7BA1D8E0EA600F87EC8 /* AuthenticationService.swift in Sources */,
 				A08908351DDBDB2C00DE655C /* DGElasticPullToRefreshLoadingView.swift in Sources */,
@@ -621,6 +650,7 @@
 			baseConfigurationReference = 412EF0FEB7FA0485A1FD7B19 /* Pods-QuizApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = W7KDN9ZT24;
 				INFOPLIST_FILE = QuizApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.OmarTorres.QuizApp;
@@ -634,6 +664,7 @@
 			baseConfigurationReference = AAF7867F8D2D6C249DBD8291 /* Pods-QuizApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = W7KDN9ZT24;
 				INFOPLIST_FILE = QuizApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.OmarTorres.QuizApp;

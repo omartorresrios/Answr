@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import FirebaseDatabase
+import FirebaseStorage
+import FirebaseAuth
 
 class QuestionTableViewCell: UITableViewCell {
 
@@ -14,8 +17,71 @@ class QuestionTableViewCell: UITableViewCell {
     @IBOutlet weak var firstName: UILabel!
     @IBOutlet weak var questionImage: UIImageView!
     @IBOutlet weak var questionContent: UILabel!
+    @IBOutlet weak var likesButton: UIButton!
     
-    var selectedQuestion: Question!
+    var question: Question!
+    var questionKey: String!
+    var tapAction: ((UITableViewCell) -> Void)?
+    
+    var databaseRef: FIRDatabaseReference! {
+        return FIRDatabase.database().reference()
+    }
+    var storageRef: FIRStorageReference!
+    
+    override func layoutSubviews() {
+        userImageView.layer.cornerRadius = userImageView.frame.size.height / 2
+        userImageView.clipsToBounds = true
+    }
+    
+    func configureQuestion(_ question: Question) {
+        self.question = question
+        
+        // Referencing to question
+        let questionRef = databaseRef.child("Questions").queryOrdered(byChild: "questionId").queryEqual(toValue: question.questionId)
+        questionRef.observe(.childAdded, with: { (snapshotQ) in
+            self.questionKey = snapshotQ.key
+            print("a ver: \(self.questionKey)")
+            
+            
+            // Check if the currentUser liked the question
+            let likeRef = self.databaseRef.child("Users").child(FIRAuth.auth()!.currentUser!.uid).child("Likes").child(self.questionKey)
+            likeRef.observe(.value, with: { (snapshot) in
+                if (snapshot.exists()) {
+                    // currentUser liked for the question
+                    self.likesButton.setImage(UIImage(named: "choclo1"), for: .normal)
+                } else {
+                    // currentUser hasn't liked for the question... yet
+                    self.likesButton.setImage(UIImage(named: "choclo"), for: .normal)
+                }
+                
+            }) { (error) in
+                print(error.localizedDescription)
+            }
+            
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+        
+        if let questionerImgURL = question.questionerImageURL {
+            self.userImageView.loadImageUsingCacheWithUrlString(urlString: questionerImgURL)
+        }
+        
+        self.firstName.text = question.firstName
+        
+        if question.questionImageURL.isEmpty {
+            // Add Top constraint for questionContent to userImage
+            let questionContenTop = NSLayoutConstraint (item: self.questionContent, attribute: .top, relatedBy: .equal, toItem: self.userImageView, attribute: .bottom, multiplier: 1.0, constant: 8)
+            self.contentView.addConstraint(questionContenTop)
+            
+        } else {
+            if let questionImgURL = question.questionImageURL {
+                self.questionImage.loadImageUsingCacheWithUrlString(urlString: questionImgURL)
+            }
+        }
+        
+        self.questionContent.text = question.questionText
+        
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -29,9 +95,7 @@ class QuestionTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    override func layoutSubviews() {
-        userImageView.layer.cornerRadius = userImageView.frame.size.height / 2
-        userImageView.clipsToBounds = true
+    @IBAction func likeTapped(_ sender: AnyObject) {
+        tapAction?(self)
     }
-
 }

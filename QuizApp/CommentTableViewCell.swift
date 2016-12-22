@@ -14,7 +14,8 @@ class CommentTableViewCell: UITableViewCell {
     @IBOutlet weak var firstNameLabel: UILabel!
     @IBOutlet weak var commentContent: UILabel!
     
-
+    var answer: NSDictionary?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -29,6 +30,19 @@ class CommentTableViewCell: UITableViewCell {
     override func layoutSubviews() {
         commenterImageView.layer.cornerRadius = commenterImageView.frame.size.height / 2
         commenterImageView.clipsToBounds = true
+    }
+    
+    func configureCell(_ answer: NSDictionary) {
+        
+         self.answer = answer
+        
+        if let commenterImgURL = answer["commenterImageURL"] as? String {
+            self.commenterImageView.loadImageUsingCacheWithUrlString(urlString: commenterImgURL)
+        }
+        
+        self.firstNameLabel.text = answer["firstName"] as? String
+        self.commentContent.text = answer["commentText"] as? String
+
     }
 
 }

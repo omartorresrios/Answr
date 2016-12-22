@@ -1,8 +1,8 @@
 //
-//  CommentViewController.swift
+//  CommentWorldViewController.swift
 //  QuizApp
 //
-//  Created by Omar Torres on 10/20/16.
+//  Created by Omar Torres on 19/12/16.
 //  Copyright © 2016 OmarTorres. All rights reserved.
 //
 
@@ -12,8 +12,8 @@ import FirebaseDatabase
 import FirebaseStorage
 import Firebase
 
-class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
-    
+class CommentWorldViewController: UIViewController {
+
     @IBOutlet weak var tableviewComment: UITableView!
     @IBOutlet weak var commentContent: UITextView!
     @IBOutlet weak var numberOfCharLabelCom: UILabel!
@@ -28,7 +28,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     @IBOutlet weak var constraintToBottom: NSLayoutConstraint!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var commentStackView: UIView!
-
+    
     var databaseRef: FIRDatabaseReference! {
         return FIRDatabase.database().reference()
     }
@@ -39,9 +39,9 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     var commentsArray = [NSDictionary?]()
     var questionArray = [Question]()
     var currentUser: User!
-    var selectedQuestion: Question!
+    var selectedQuestion1:Question!
     var question: Question!
-    var questionKey: String!
+    var questionKey1: String!
     var counter: Int = 0
     var conditionalCounter: Int = 0
     var maxNumberComments: Int = 0
@@ -51,7 +51,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     var storageRef2: FIRStorage!{
         return FIRStorage.storage()
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -66,7 +66,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         let image: UIImage = UIImage(named: "anonymous.jpg")!
         anonymousImage = UIImageView(image: image)
         
-        if selectedQuestion.questionImageURL.isEmpty {
+        if selectedQuestion1.questionImageURL.isEmpty {
             self.tableviewComment.estimatedRowHeight = 156
             self.tableviewComment.rowHeight = UITableViewAutomaticDimension
         } else {
@@ -75,17 +75,18 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         }
         
         // Movements for the limit of answers per question
-        counter = selectedQuestion.counterComments!// selectedQuestion?["counterComments"] as! Int
+        counter =  selectedQuestion1.counterComments
         
-        self.hideKeyboardWhenTappedAround()
         
-//        self.databaseRef.child("Questions").child(self.selectedQuestion.key).child("Comments").observe(.value, with: { (snapshot) in
-//            if !snapshot.exists() {
-//                let indexP = [NSIndexPath.init(row: 1, section: 0)]
-//                tableView.deleteRows(at: indexP as [IndexPath], with: .automatic)
-//                //tableView.reloadData()
-//            }
-//        })
+        self.hideKeyboardWhenTappedAround1()
+        
+        //        self.databaseRef.child("Questions").child(self.selectedQuestion.key).child("Comments").observe(.value, with: { (snapshot) in
+        //            if !snapshot.exists() {
+        //                let indexP = [NSIndexPath.init(row: 1, section: 0)]
+        //                tableView.deleteRows(at: indexP as [IndexPath], with: .automatic)
+        //                //tableView.reloadData()
+        //            }
+        //        })
         
     }
     
@@ -103,27 +104,25 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             print(error.localizedDescription)
         }
         
-        
         // Referencing to question
-        let questionRef = databaseRef.child("Questions").queryOrdered(byChild: "questionId").queryEqual(toValue: selectedQuestion.questionId)
+        let questionRef = databaseRef.child("Questions").queryOrdered(byChild: "questionId").queryEqual(toValue: selectedQuestion1.questionId)
         questionRef.observe(.childAdded, with: { (snapshotQ) in
-            self.questionKey = snapshotQ.key
+            print("key: \(snapshotQ.key)")
+            self.questionKey1 = snapshotQ.key
             
         }) { (error) in
             print(error.localizedDescription)
         }
         
         // Allow numberOfComments is optional
-        if selectedQuestion.numberOfComments.isEmpty {
-            print("jaja")
-        } else {
+        if selectedQuestion1.numberOfComments.isEmpty == false {
             // Put to front the topView
             self.view.bringSubview(toFront: topView)
             // Put all Firebase data on labels
-            numberOfComLabel.text = selectedQuestion.numberOfComments
-            counterCommentsLabel.text = "\(selectedQuestion.counterComments!)" + "/"
+            numberOfComLabel.text = selectedQuestion1.numberOfComments
+            counterCommentsLabel.text = "\(selectedQuestion1.counterComments!)" + "/"
             
-            maxNumberComments = Int(selectedQuestion.numberOfComments)!
+            maxNumberComments =  Int(selectedQuestion1.numberOfComments)!
             
             // Check if it shows or hides comment elements
             disabledComments()
@@ -134,28 +133,26 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         super.viewDidAppear(animated)
         
         self.fetchAnswers()
-        NotificationCenter.default.addObserver(self, selector: #selector(CommentViewController.showOrHideKeyboard(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CommentWorldViewController.showOrHideKeyboard(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(CommentViewController.showOrHideKeyboard(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CommentWorldViewController.showOrHideKeyboard(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     fileprivate func fetchQuestion() {
-
+        
         databaseRef.child("Questions").observe(.value, with: { (questions) in
             var newQuestionsArray = [Question]()
             for question in questions.children {
                 let newQuestion = Question(snapshot: question as! FIRDataSnapshot)
                 
-                if newQuestion.questionId == self.selectedQuestion.questionId {
+                if newQuestion.questionId == self.selectedQuestion1.questionId {
                     newQuestionsArray.insert(newQuestion, at: 0)
                 }
-                
             }
             self.questionArray = newQuestionsArray
             DispatchQueue.main.async {
                 self.tableviewComment.reloadData()
             }
-            
             
         }) { (error) in
             print(error.localizedDescription)
@@ -163,8 +160,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     }
     
     fileprivate func fetchAnswers() {
-        
-        self.databaseRef.child("Questions").child(self.questionKey!).child("Comments").observe(.childAdded, with: { (snapshot) in
+        self.databaseRef.child("Questions").child(self.questionKey1!).child("Comments").observe(.childAdded, with: { (snapshot) in
             
             let key = snapshot.key
             let snapshot = snapshot.value as? NSDictionary
@@ -185,11 +181,11 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         commentContent.textColor = UIColor.lightGray
         commentContent.selectedTextRange = commentContent.textRange(from: commentContent.beginningOfDocument, to: commentContent.beginningOfDocument)
     }
-
+    
     // Disabled commentContent and sendButton when comments counter is equal to number of commments
     func disabledComments() {
         if counter == maxNumberComments {
-
+            
             // Remove commentContent, numberOfComLabel and sendButton
             commentStackView.removeFromSuperview()
             
@@ -219,6 +215,8 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         super.didReceiveMemoryWarning()
         
     }
+    
+    
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -254,14 +252,14 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             self.tableviewComment.setContentOffset(contentOfSet, animated: true)
         }
     }
-
+    
     @IBAction func addCommentAction(_ sender: AnyObject) {
         // Process counter
         conditionalCounter = counter
         
         if conditionalCounter < maxNumberComments {
             counter += 1
-            selectedQuestion.ref.child("counterComments").setValue(counter)
+            selectedQuestion1.ref.child("counterComments").setValue(counter)
             counterCommentsLabel.text = "\(counter)"
             disabledComments()
         }
@@ -286,9 +284,9 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             anonymousImageRef.put(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
                 if error == nil {
                     // Create the comment whit the user as anonymous
-                    let newComment = Comment(questionId: self.selectedQuestion.questionId, commentText: commentText, commenterImageURL: String(describing: metadata!.downloadURL()!), firstName: self.anonymous, timestamp: NSNumber(value: Date().timeIntervalSince1970))
+                    let newComment = Comment(questionId: self.selectedQuestion1.questionId, commentText: commentText, commenterImageURL: String(describing: metadata!.downloadURL()!), firstName: self.anonymous, timestamp: NSNumber(value: Date().timeIntervalSince1970))
                     
-                    let commentRef = self.databaseRef.child("Questions").child(self.questionKey!).child("Comments").childByAutoId()
+                    let commentRef = self.databaseRef.child("Questions").child(self.questionKey1!).child("Comments").childByAutoId()
                     
                     commentRef.setValue(newComment.toAnyObject())
                     
@@ -300,9 +298,9 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             })
         } else {
             // Create the comment whit the users data
-            let newComment = Comment(questionId: selectedQuestion.questionId, commentText: commentText, commenterImageURL: String(describing: FIRAuth.auth()!.currentUser!.photoURL!), firstName: FIRAuth.auth()!.currentUser!.displayName!, timestamp: NSNumber(value: Date().timeIntervalSince1970))
+            let newComment = Comment(questionId: self.selectedQuestion1.questionId, commentText: commentText, commenterImageURL: String(describing: FIRAuth.auth()!.currentUser!.photoURL!), firstName: FIRAuth.auth()!.currentUser!.displayName!, timestamp: NSNumber(value: Date().timeIntervalSince1970))
             
-            let commentRef = self.databaseRef.child("Questions").child(self.questionKey!).child("Comments").childByAutoId()
+            let commentRef = self.databaseRef.child("Questions").child(self.questionKey1!).child("Comments").childByAutoId()
             
             commentRef.setValue(newComment.toAnyObject())
             
@@ -372,13 +370,13 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         if remainChar == -1 {
             numberOfCharLabelCom.text = "0"
         }
-
+        
         numberOfCharLabelCom.text = "\(remainChar)"
         
         return (newLength > 300) ? false : true
     }
     
-    // Prevent the user from changing the position of the cursor while the placeholder's visible. 
+    // Prevent the user from changing the position of the cursor while the placeholder's visible.
     func textViewDidChangeSelection(_ textView: UITextView) {
         if self.view.window != nil {
             if textView.textColor == UIColor.lightGray {
@@ -389,29 +387,29 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
 }
 
 extension UIViewController {
-    func hideKeyboardWhenTappedAround() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+    func hideKeyboardWhenTappedAround1() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard1))
         view.addGestureRecognizer(tap)
     }
     
-    func dismissKeyboard() {
+    func dismissKeyboard1() {
         view.endEditing(true)
     }
 }
 
 // MARK: - Table view data source
 
-extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
+extension CommentWorldViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return questionArray.count + commentsArray.count 
+        return questionArray.count + commentsArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if (indexPath.row == 0) {
-            
+                        
             let question = self.questionArray[indexPath.row]
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "questionCell", for: indexPath) as! QuestionTableViewCell
@@ -419,12 +417,12 @@ extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
             cell.configureQuestion(question)
             
             let btn = cell.likesButton!
-            print("jajajaja: \(self.questionKey)")
+            print("jajajaja: \(self.questionKey1)")
             cell.tapAction = { (cell) in
                 // Counting and saving the number of likes
                 if btn.currentImage == UIImage(named: "choclo") {
                     // Updating the value into likes field in Question's Firebase node (+1)
-                    self.databaseRef.child("Questions").child(self.questionKey).child("likes").runTransactionBlock({ (currentData: FIRMutableData!) in
+                    self.databaseRef.child("Questions").child(self.questionKey1).child("likes").runTransactionBlock({ (currentData: FIRMutableData!) in
                         var value = currentData.value as? Int
                         
                         //checking for nil data
@@ -439,10 +437,10 @@ extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
                     })
                     
                     // Saving the question's key in the currentUser's Like subnode as a boolean
-                    self.databaseRef.child("Users").child(FIRAuth.auth()!.currentUser!.uid).child("Likes").child(self.questionKey).setValue(true)
+                    self.databaseRef.child("Users").child(FIRAuth.auth()!.currentUser!.uid).child("Likes").child(self.questionKey1).setValue(true)
                 } else {
                     // Updating the value into likes field in Question's Firebase node (-1)
-                    self.databaseRef.child("Questions").child(self.questionKey).child("likes").runTransactionBlock({ (currentData: FIRMutableData!) in
+                    self.databaseRef.child("Questions").child(self.questionKey1).child("likes").runTransactionBlock({ (currentData: FIRMutableData!) in
                         var value = currentData.value as? Int
                         
                         //checking for nil data
@@ -457,9 +455,19 @@ extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
                     })
                     
                     // Removing the boolean value from likes node of currentUser
-                    self.databaseRef.child("Users").child(FIRAuth.auth()!.currentUser!.uid).child("Likes").child(self.questionKey).removeValue()
+                    self.databaseRef.child("Users").child(FIRAuth.auth()!.currentUser!.uid).child("Likes").child(self.questionKey1).removeValue()
                 }
             }
+            
+            //            // Adding bottom line to questionCell
+            //            let border = CALayer()
+            //            let width = CGFloat(0.5)
+            //            border.borderColor = UIColor.lightGray.cgColor
+            //            border.frame = CGRect(x: 0, y: cell.frame.size.height - width, width:  cell.frame.size.width, height: cell.frame.size.height)
+            //
+            //            border.borderWidth = width
+            //            cell.layer.addSublayer(border)
+            //            cell.layer.masksToBounds = true
             
             return cell
             
