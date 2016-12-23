@@ -40,6 +40,8 @@ class FeedQuestionsTableViewController: UITableViewController {
         
         UIApplication.shared.isStatusBarHidden = false
         
+        self.tabBarController?.tabBar.isHidden = false
+        
         self.currentUser = FIRAuth.auth()?.currentUser
         
         // Create message view and label programmatically
@@ -52,10 +54,6 @@ class FeedQuestionsTableViewController: UITableViewController {
         self.tableView.allowsMultipleSelectionDuringEditing = true
         
         fetchQuestions()
-        
-//        // Movements for UIToolbar transparency
-//        let bgImageColor = UIColor.white.withAlphaComponent(0.7)
-//        navigationController?.toolbar.setBackgroundImage(onePixelImageWithColor(bgImageColor), forToolbarPosition: UIBarPosition.bottom, barMetrics: UIBarMetrics.default)
         
         // DGElasticPullToRefresh
         let loadingView = DGElasticPullToRefreshLoadingViewCircle()
@@ -229,16 +227,6 @@ class FeedQuestionsTableViewController: UITableViewController {
         }
     }
     
-    // Make UIToolbar Transparency
-    func onePixelImageWithColor(_ color : UIColor) -> UIImage {
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
-        let context = CGContext(data: nil, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 0, space: colorSpace, bitmapInfo: bitmapInfo.rawValue)
-        context!.setFillColor(color.cgColor)
-        context!.fill(CGRect(x: 0, y: 0, width: 1, height: 1))
-        let image = UIImage(cgImage: context!.makeImage()!)
-        return image
-    }
 }
 //
 //extension UIApplication {
