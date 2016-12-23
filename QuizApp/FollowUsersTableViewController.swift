@@ -36,6 +36,8 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
         
         UIApplication.shared.isStatusBarHidden = false
         
+        self.tabBarController?.tabBar.isHidden = true
+        
         // Disable the back button
         self.navigationItem.setHidesBackButton(true, animated: false)
         
@@ -269,4 +271,18 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
             showFollowUsersTVC.user = self.currentUser
         }
     }
+    
+    @IBAction func comeBackAction(_ sender: AnyObject) {
+        let transition = CATransition()
+        transition.duration = 0.35
+        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
+        transition.type = kCATransitionPush
+        transition.subtype = kCATransitionFromRight
+        //transition.delegate = self
+        self.navigationController!.view.layer.add(transition, forKey: nil)
+        self.navigationController!.isNavigationBarHidden = false
+        self.navigationController!.tabBarController?.tabBar.isHidden = false
+        self.navigationController?.popToRootViewController(animated: true)
+    }
+    
 }

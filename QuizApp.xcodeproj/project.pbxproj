@@ -56,6 +56,7 @@
 		A0EF073F1D933E2D00395413 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EF073E1D933E2D00395413 /* StartViewController.swift */; };
 		A0EF07411D95DF6F00395413 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EF07401D95DF6E00395413 /* CommentTableViewCell.swift */; };
 		A0EF07451D95E3BF00395413 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EF07441D95E3BF00395413 /* Comment.swift */; };
+		A0EF1E921E0C405700FA0CE9 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EF1E911E0C405700FA0CE9 /* MainTabBarViewController.swift */; };
 		D2EFE65E1F51E1DB682CCBBE /* Pods_QuizApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E092A622EE6E60D51C4651D /* Pods_QuizApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -113,6 +114,7 @@
 		A0EF073E1D933E2D00395413 /* StartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		A0EF07401D95DF6E00395413 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		A0EF07441D95E3BF00395413 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
+		A0EF1E911E0C405700FA0CE9 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
 		AAF7867F8D2D6C249DBD8291 /* Pods-QuizApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QuizApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-QuizApp/Pods-QuizApp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -247,6 +249,7 @@
 		A0E0F7C01D8E0F3B00F87EC8 /* Supporting files */ = {
 			isa = PBXGroup;
 			children = (
+				A0EF1E911E0C405700FA0CE9 /* MainTabBarViewController.swift */,
 				A0A96C2E1E045C45006C2B44 /* iOSDevCenters+GIF.swift */,
 				A0A96C361E04822D006C2B44 /* chicken.gif */,
 				A021FE971DE67E03003C411F /* SkypeExampleViewController.swift */,
@@ -494,6 +497,7 @@
 				A0E0F7B61D8DFE6700F87EC8 /* LoginViewController.swift in Sources */,
 				A005CC431DB9B1180081C548 /* QuestionTableViewCell.swift in Sources */,
 				A0318B711DB425FC00DFD35C /* FollowUsersTableViewCell.swift in Sources */,
+				A0EF1E921E0C405700FA0CE9 /* MainTabBarViewController.swift in Sources */,
 				A0EF073F1D933E2D00395413 /* StartViewController.swift in Sources */,
 				A0E0F7B81D8DFE8000F87EC8 /* SignUpViewController.swift in Sources */,
 				A08908371DDBDB2C00DE655C /* DGElasticPullToRefreshView.swift in Sources */,
@@ -650,11 +654,13 @@
 			baseConfigurationReference = 412EF0FEB7FA0485A1FD7B19 /* Pods-QuizApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = W7KDN9ZT24;
 				INFOPLIST_FILE = QuizApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.OmarTorres.QuizApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -664,6 +670,7 @@
 			baseConfigurationReference = AAF7867F8D2D6C249DBD8291 /* Pods-QuizApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = W7KDN9ZT24;
 				INFOPLIST_FILE = QuizApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

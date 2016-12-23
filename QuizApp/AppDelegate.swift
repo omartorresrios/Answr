@@ -18,14 +18,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let reachability = Reachability()!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(self.reachabilityChanged),name: ReachabilityChangedNotification,object: reachability)
         do{
             try reachability.startNotifier()
         }catch{
             print("could not start reachability notifier")
         }
-        
         
         // Override point for customization after application launch.
         //UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName : UIColor(red: 255/255.0, green: 219/255.0, blue: 81/255.0, alpha: 1.0)], for: UIControlState.selected)
@@ -41,7 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func logUser(){
         if FIRAuth.auth()!.currentUser != nil {
             
-            let homeVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Home") as! UINavigationController
+            let homeVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Home") as! UITabBarController
             self.window?.rootViewController = homeVC
         }
     }

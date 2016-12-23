@@ -410,9 +410,9 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         return (newLength > 300) ? false : true
     }
     
-//    @IBAction func comeBackAction(_ sender: AnyObject) {
-//        self.navigationController?.popToRootViewController(animated: true)
-//    }
+    @IBAction func comeBackAction(_ sender: AnyObject) {
+        self.navigationController?.popToRootViewController(animated: true)
+    }
 }
 
 
