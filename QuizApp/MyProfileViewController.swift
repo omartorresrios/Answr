@@ -29,6 +29,8 @@ class MyProfileViewController: UIViewController {
         
         UIApplication.shared.isStatusBarHidden = false
         
+        self.tabBarController?.tabBar.isHidden = true
+        
         // Disable the back button
         self.navigationItem.setHidesBackButton(true, animated: false)
 
@@ -90,8 +92,16 @@ class MyProfileViewController: UIViewController {
     }
     
     // Action for the backToQuestions button
-    func comeBackToQuestions(_ sender:UIButton!) {
-        performSegue(withIdentifier: "backToQuestions", sender: nil)
+    func comeBackToQuestions(_ sender: UIButton!) {
+        let transition = CATransition()
+        transition.duration = 0.35
+        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
+        transition.type = kCATransitionPush
+        transition.subtype = kCATransitionFromTop
+        self.navigationController!.view.layer.add(transition, forKey: nil)
+        self.navigationController!.isNavigationBarHidden = false
+        self.navigationController!.tabBarController?.tabBar.isHidden = false
+        self.navigationController?.popToRootViewController(animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

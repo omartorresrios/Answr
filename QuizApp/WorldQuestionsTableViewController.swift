@@ -27,6 +27,7 @@ class WorldQuestionsTableViewController: UITableViewController {
     var questionsWorldArray = [Question]()
     var currentUser: AnyObject?
     var user: FIRUser?
+    var navBarUser: User!
     var selectedQuestion: Question!
     var otherUser: NSDictionary?
     var questionKey: String!
@@ -77,7 +78,16 @@ class WorldQuestionsTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        
+        // Referencing to currentUser
+        let userRef = databaseRef.child("Users").queryOrdered(byChild: "uid").queryEqual(toValue: FIRAuth.auth()!.currentUser!.uid)
+        userRef.observe(.value, with: { (snapshot) in
+            for userInfo in snapshot.children {
+                self.navBarUser = User(snapshot: userInfo as! FIRDataSnapshot)
+            }
+            self.setupNavBarWithUser(user: self.navBarUser)
+        }) { (error) in
+            print(error.localizedDescription)
+        }
         
         //self.loader.frame = CGRect(x: 0, y: 20, width: 0.5, height: 0.5)
         
@@ -182,6 +192,44 @@ class WorldQuestionsTableViewController: UITableViewController {
     //        (sender.subviews[0] as UIView).tintColor = UIColor.blue
     //        (sender.subviews[1] as UIView).tintColor = UIColor.red
 
+    func setupNavBarWithUser(user: User) {
+        let titleView = UIView()
+        titleView.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        titleView.layer.cornerRadius = 20
+        
+        let profileImageView = UIImageView()
+        //profileImageView.frame = CGRect(x: titleView.frame.size.width / 2, y: 0, width: 40, height: 40)
+        profileImageView.translatesAutoresizingMaskIntoConstraints = false
+        profileImageView.contentMode = .scaleAspectFill
+        profileImageView.layer.cornerRadius = 20
+        profileImageView.clipsToBounds = true
+        
+        if let userImgViewURL = user.photoURL {
+            profileImageView.loadImageUsingCacheWithUrlString(urlString: userImgViewURL)
+        }
+        
+        titleView.addSubview(profileImageView)
+        
+        // ios 9 constraint anchors
+        // Need x,y, width, height anchors
+        profileImageView.leftAnchor.constraint(equalTo: titleView.leftAnchor).isActive = true
+        profileImageView.centerYAnchor.constraint(equalTo: titleView.centerYAnchor).isActive = true
+        profileImageView.centerXAnchor.constraint(equalTo: titleView.centerXAnchor).isActive = true
+        profileImageView.widthAnchor.constraint(equalToConstant: 40.0).isActive = true
+        profileImageView.heightAnchor.constraint(equalToConstant: 40.0).isActive = true
+        
+        // UITapGestureRecognizer
+        let tapGestureRecognizer = UITapGestureRecognizer(target:self, action: #selector(WorldQuestionsTableViewController.imageTapped(_:)))
+        titleView.isUserInteractionEnabled = true
+        titleView.addGestureRecognizer(tapGestureRecognizer)
+        
+        self.navigationItem.titleView = titleView
+        
+    }
+    
+    func imageTapped(_ sender: AnyObject) {
+        performSegue(withIdentifier: "goUserProfileFromWorld", sender: sender)
+    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return questionsWorldArray.count

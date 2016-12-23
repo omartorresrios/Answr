@@ -47,6 +47,8 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         
         UIApplication.shared.isStatusBarHidden = false
         
+        self.tabBarController?.tabBar.isHidden = true
+        
         userImgAnonymous.layer.cornerRadius = 5
         
         // Display the user image
@@ -411,6 +413,15 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     }
     
     @IBAction func comeBackAction(_ sender: AnyObject) {
+        let transition = CATransition()
+        transition.duration = 0.35
+        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
+        transition.type = kCATransitionPush
+        transition.subtype = kCATransitionFromLeft
+        //transition.delegate = self
+        self.navigationController!.view.layer.add(transition, forKey: nil)
+        self.navigationController!.isNavigationBarHidden = false
+        self.navigationController!.tabBarController?.tabBar.isHidden = false
         self.navigationController?.popToRootViewController(animated: true)
     }
 }
