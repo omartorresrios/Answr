@@ -50,11 +50,8 @@ struct AuthenticationService {
                     appDel.logUser()
                 }
                 
-            }else {
-                
-                let alertView =  SCLAlertView()
-                alertView.showError("😁OOPS😁", subTitle: error!.localizedDescription)
-                
+            } else {
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "theChange"), object: nil)                
             }
         })
         
@@ -68,8 +65,7 @@ struct AuthenticationService {
                 self.setUserInfo(user, username: username, firstName: firstName, password: password, data: data)
             } else {
                 DispatchQueue.main.async(execute: {
-                    let alertView =  SCLAlertView()
-                    alertView.showError("😁OOPS😁", subTitle: error!.localizedDescription)
+                    print(error!.localizedDescription)
                 })
             }
         })
@@ -86,7 +82,7 @@ struct AuthenticationService {
                     alertView.showSuccess("Resetting Password", subTitle: "An email containing the different information on how to reset your password has been sent to \(email)")
                 })
                 
-            }else {
+            } else {
                 let alertView =  SCLAlertView()
                 alertView.showError("😁OOPS😁", subTitle: error!.localizedDescription)
             }
