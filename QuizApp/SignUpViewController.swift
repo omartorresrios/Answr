@@ -32,7 +32,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
             signupButton.backgroundColor = UIColor(colorLiteralRed: 160/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1)
         } else {
             signupButton.isUserInteractionEnabled = true
-            signupButton.backgroundColor = UIColor(colorLiteralRed: 12/255.0, green: 206/255.0, blue: 107/255.0, alpha: 1)
+            signupButton.backgroundColor = UIColor(colorLiteralRed: 21/255.0, green: 216/255.0, blue: 161/255.0, alpha: 1)
         }
     }
     
@@ -44,6 +44,20 @@ class SignUpViewController: UIViewController, UITextFieldDelegate, UIPickerViewD
         navigationController?.isNavigationBarHidden = false
         
         navigationController?.navigationBar.topItem?.title = ""
+        
+        signupButton.setBackgroundImage(self.image(color: UIColor(colorLiteralRed: 21/255.0, green: 190/255.0, blue: 161/255.0, alpha: 1)), for: .highlighted)
+        signupButton.clipsToBounds = true
+    }
+    
+    func image(color: UIColor) -> UIImage {
+        let rect = CGRect(x: CGFloat(0.0), y: CGFloat(0.0), width: CGFloat(1.0), height: CGFloat(1.0))
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()!
+        context.setFillColor(color.cgColor)
+        context.fill(rect)
+        let image = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return image
     }
     
     override func viewWillAppear(_ animated: Bool) {

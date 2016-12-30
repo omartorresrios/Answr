@@ -38,6 +38,8 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
         
         self.tabBarController?.tabBar.isHidden = true
         
+        self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor(colorLiteralRed: 21/255.0, green: 216/255.0, blue: 161/255.0, alpha: 1), NSFontAttributeName: UIFont(name: "Avenir Next", size: 20)!]
+        
         // Disable the back button
         self.navigationItem.setHidesBackButton(true, animated: false)
         

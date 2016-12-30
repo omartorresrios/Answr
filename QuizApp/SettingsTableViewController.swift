@@ -20,6 +20,7 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordField: UILabel!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
     
     var user: User!
     let currentUser = FIRAuth.auth()!.currentUser!
@@ -41,6 +42,8 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
         
         UIApplication.shared.isStatusBarHidden = false
         
+        self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor(colorLiteralRed: 21/255.0, green: 216/255.0, blue: 161/255.0, alpha: 1), NSFontAttributeName: UIFont(name: "Avenir Next", size: 20)!]
+                
         nameTextField.delegate = self
         emailTextField.delegate = self
         

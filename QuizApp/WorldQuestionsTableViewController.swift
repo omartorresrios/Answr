@@ -41,6 +41,8 @@ class WorldQuestionsTableViewController: UITableViewController {
         
         UIApplication.shared.isStatusBarHidden = false
         
+        self.navigationController!.navigationBar.setBottomBorderColorWorld(color: UIColor(colorLiteralRed: 225.0/255.0, green: 225.0/255.0, blue: 225.0/255.0, alpha: 1), height: 1)
+        
         self.currentUser = FIRAuth.auth()?.currentUser
         
         // Create message view and label programmatically
@@ -281,6 +283,16 @@ class WorldQuestionsTableViewController: UITableViewController {
         context!.fill(CGRect(x: 0, y: 0, width: 1, height: 1))
         let image = UIImage(cgImage: context!.makeImage()!)
         return image
+    }
+}
+
+extension UINavigationBar {
+    
+    func setBottomBorderColorWorld(color: UIColor, height: CGFloat) {
+        let bottomBorderRect = CGRect(x: 0, y: frame.height, width: frame.width, height: height)
+        let bottomBorderView = UIView(frame: bottomBorderRect)
+        bottomBorderView.backgroundColor = color
+        addSubview(bottomBorderView)
     }
 }
 

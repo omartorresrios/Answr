@@ -48,7 +48,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         if emailTextField.text!.characters.count > 0 && passwordTextField.text!.characters.count > 0 {
             loginButton.isUserInteractionEnabled = true
-            loginButton.backgroundColor = UIColor(colorLiteralRed: 12/255.0, green: 206/255.0, blue: 107/255.0, alpha: 1)
+            loginButton.backgroundColor = UIColor(colorLiteralRed: 21/255.0, green: 216/255.0, blue: 161/255.0, alpha: 1)
         }
         else {
             loginButton.isUserInteractionEnabled = false
@@ -67,6 +67,20 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         let swipDown = UISwipeGestureRecognizer(target: self, action: #selector(LoginViewController.dismissKeyboard(gesture:)))
         swipDown.direction = .down
         view.addGestureRecognizer(swipDown)
+        
+        loginButton.setBackgroundImage(self.image(color: UIColor(colorLiteralRed: 21/255.0, green: 190/255.0, blue: 161/255.0, alpha: 1)), for: .highlighted)
+        loginButton.clipsToBounds = true
+    }
+    
+    func image(color: UIColor) -> UIImage {
+        let rect = CGRect(x: CGFloat(0.0), y: CGFloat(0.0), width: CGFloat(1.0), height: CGFloat(1.0))
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()!
+        context.setFillColor(color.cgColor)
+        context.fill(rect)
+        let image = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return image
     }
     
     func makeTheChange() {
@@ -86,7 +100,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
         if finalEmail.characters.count > 0 && password.characters.count > 0 {
             loginButton.isUserInteractionEnabled = true
-            loginButton.backgroundColor = UIColor(colorLiteralRed: 12/255.0, green: 206/255.0, blue: 107/255.0, alpha: 1)
+            loginButton.backgroundColor = UIColor(colorLiteralRed: 21/255.0, green: 216/255.0, blue: 161/255.0, alpha: 1)
             self.messageLabel.text = ""
         }
         else {
@@ -134,29 +148,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         passwordTextField.resignFirstResponder()
         return true
     }
-    
-//    // Moving the View down after the Keyboard appears
-//    func textFieldDidBeginEditing(textField: UITextField) {
-//        animateView(true, moveValue: 80)
-//    }
-//    
-//    // Moving the View down after the Keyboard disappears
-//    func textFieldDidEndEditing(textField: UITextField) {
-//        animateView(false, moveValue: 80)
-//    }
-//    
-//    
-//    // Move the View Up & Down when the Keyboard appears
-//    func animateView(_ up: Bool, moveValue: CGFloat) {
-//        
-//        let movementDuration: TimeInterval = 0.3
-//        let movement: CGFloat = (up ? -moveValue : moveValue)
-//        UIView.beginAnimations("animateView", context: nil)
-//        UIView.setAnimationBeginsFromCurrentState(true)
-//        UIView.setAnimationDuration(movementDuration)
-//        self.view.frame = self.view.frame.offsetBy(dx: 0, dy: movement)
-//        UIView.commitAnimations()
-//    }
     
     override var preferredStatusBarStyle : UIStatusBarStyle {
         return .lightContent

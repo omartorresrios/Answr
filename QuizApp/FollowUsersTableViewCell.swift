@@ -39,7 +39,7 @@ class FollowUsersTableViewCell: UITableViewCell {
         userImage.clipsToBounds = true
         
         // UI for the followButton
-        followButton.backgroundColor = UIColor(colorLiteralRed: 12/255.0, green: 206/255.0, blue: 107/255.0, alpha: 1)
+        followButton.backgroundColor = UIColor(colorLiteralRed: 21/255.0, green: 216/255.0, blue: 161/255.0, alpha: 1)
         followButton.layer.cornerRadius = followButton.frame.size.height / 2
     }
     

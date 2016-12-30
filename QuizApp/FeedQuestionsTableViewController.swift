@@ -41,6 +41,8 @@ class FeedQuestionsTableViewController: UITableViewController {
         
         UIApplication.shared.isStatusBarHidden = false
         
+        self.navigationController!.navigationBar.setBottomBorderColorFeed(color: UIColor(colorLiteralRed: 225.0/255.0, green: 225.0/255.0, blue: 225.0/255.0, alpha: 1), height: 1)
+        
         self.tabBarController?.tabBar.isHidden = false
         
         self.currentUser = FIRAuth.auth()?.currentUser
@@ -281,6 +283,16 @@ class FeedQuestionsTableViewController: UITableViewController {
     }
     
 }
+extension UINavigationBar {
+    
+    func setBottomBorderColorFeed(color: UIColor, height: CGFloat) {
+        let bottomBorderRect = CGRect(x: 0, y: frame.height, width: frame.width, height: height)
+        let bottomBorderView = UIView(frame: bottomBorderRect)
+        bottomBorderView.backgroundColor = color
+        addSubview(bottomBorderView)
+    }
+}
+
 //
 //extension UIApplication {
 //    var statusBarView: UIView? {

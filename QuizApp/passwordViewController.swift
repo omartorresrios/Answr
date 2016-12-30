@@ -34,12 +34,36 @@ class passwordViewController: UIViewController, UITextFieldDelegate {
         
         if passwordV3.text!.characters.count > 0 {
             button.isUserInteractionEnabled = true
-            button.backgroundColor = UIColor(colorLiteralRed: 12/255.0, green: 206/255.0, blue: 107/255.0, alpha: 1)
+            button.backgroundColor = UIColor(colorLiteralRed: 21/255.0, green: 216/255.0, blue: 161/255.0, alpha: 1)
         } else {
             button.isUserInteractionEnabled = false
             button.backgroundColor = UIColor(colorLiteralRed: 160/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1)
         }
         
+        // Creating Tap Gesture to dismiss Keyboard
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.dismissKeyboard(gesture:)))
+        tapGesture.numberOfTapsRequired = 1
+        view.addGestureRecognizer(tapGesture)
+        
+        // Creating Swipe Gesture to dismiss Keyboard
+        let swipDown = UISwipeGestureRecognizer(target: self, action: #selector(LoginViewController.dismissKeyboard(gesture:)))
+        swipDown.direction = .down
+        view.addGestureRecognizer(swipDown)
+        
+        button.setBackgroundImage(self.image(color: UIColor(colorLiteralRed: 21/255.0, green: 190/255.0, blue: 161/255.0, alpha: 1)), for: .highlighted)
+        button.clipsToBounds = true
+        
+    }
+    
+    func image(color: UIColor) -> UIImage {
+        let rect = CGRect(x: CGFloat(0.0), y: CGFloat(0.0), width: CGFloat(1.0), height: CGFloat(1.0))
+        UIGraphicsBeginImageContext(rect.size)
+        let context = UIGraphicsGetCurrentContext()!
+        context.setFillColor(color.cgColor)
+        context.fill(rect)
+        let image = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return image
     }
     
     @IBAction func handleButton(_ sender: AnyObject) {
@@ -48,7 +72,7 @@ class passwordViewController: UIViewController, UITextFieldDelegate {
             button.backgroundColor = UIColor(colorLiteralRed: 160/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1)
         } else {
             button.isUserInteractionEnabled = true
-            button.backgroundColor = UIColor(colorLiteralRed: 12/255.0, green: 206/255.0, blue: 107/255.0, alpha: 1)
+            button.backgroundColor = UIColor(colorLiteralRed: 21/255.0, green: 216/255.0, blue: 161/255.0, alpha: 1)
         }
         if (sender as! UITextField).text!.characters.count > 0 {
             self.showHideButton.alpha = 1
@@ -116,6 +140,17 @@ class passwordViewController: UIViewController, UITextFieldDelegate {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         
+    }
+    
+    // Dismissing the Keyboard with the Return Keyboard Button
+    func dismissKeyboard(gesture: UIGestureRecognizer){
+        self.view.endEditing(true)
+    }
+    
+    // Dismissing the Keyboard with the Return Keyboard Button
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        passwordV3.resignFirstResponder()
+        return true
     }
     
     @IBAction func comeBackAction(_ sender: AnyObject) {
