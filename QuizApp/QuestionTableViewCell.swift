@@ -15,6 +15,7 @@ class QuestionTableViewCell: UITableViewCell {
 
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var firstName: UILabel!
+    @IBOutlet weak var timestamp: UILabel!
     @IBOutlet weak var questionImage: UIImageView!
     @IBOutlet weak var questionContent: UILabel!
     @IBOutlet weak var likesButton: UIButton!
@@ -39,9 +40,7 @@ class QuestionTableViewCell: UITableViewCell {
         // Referencing to question
         let questionRef = databaseRef.child("Questions").queryOrdered(byChild: "questionId").queryEqual(toValue: question.questionId)
         questionRef.observe(.childAdded, with: { (snapshotQ) in
-            self.questionKey = snapshotQ.key
-            print("a ver: \(self.questionKey)")
-            
+            self.questionKey = snapshotQ.key            
             
             // Check if the currentUser liked the question
             let likeRef = self.databaseRef.child("Users").child(FIRAuth.auth()!.currentUser!.uid).child("Likes").child(self.questionKey)
@@ -67,6 +66,32 @@ class QuestionTableViewCell: UITableViewCell {
         }
         
         self.firstName.text = question.firstName
+        
+        //TimeStamp
+        let timeInterval = question.timestamp
+        
+        //Convert to Date
+        let date = Date(timeIntervalSince1970: timeInterval as! TimeInterval)
+        
+        //Date formatting
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.timeZone = TimeZone.ReferenceType.local
+        
+        let elapsedTimeInSeconds = Date().timeIntervalSince(date as Date)
+        let secondInDays: TimeInterval = 60 * 60 * 24
+        
+        if elapsedTimeInSeconds > 7 * secondInDays {
+            dateFormatter.dateFormat = "dd/MM/yy"
+        } else if elapsedTimeInSeconds > secondInDays {
+            dateFormatter.dateFormat = "EEE"
+        } else {
+            dateFormatter.dateFormat = "HH:mm:a"
+        }
+        
+        let dateString = dateFormatter.string(from: date as Date)
+        
+        self.timestamp.text = dateString
         
         if question.questionImageURL.isEmpty {
             // Add Top constraint for questionContent to userImage
