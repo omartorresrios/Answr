@@ -47,6 +47,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     var maxNumberComments: Int = 0
     let anonymous: String = "Anonymous" // Anonymous users name
     var anonymousImage: UIImageView! // Anonymous users image
+    let placeholderLbl = UILabel()
     
     var storageRef2: FIRStorage!{
         return FIRStorage.storage()
@@ -57,7 +58,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         
         UIApplication.shared.isStatusBarHidden = false
         
-        initialSetupForCommentContentTextView()
+        self.tabBarController?.tabBar.isHidden = true
         
         // Hide the bottom toolbar
         navigationController?.isToolbarHidden = true
@@ -75,9 +76,9 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         }
         
         // Movements for the limit of answers per question
-        counter = selectedQuestion.counterComments!// selectedQuestion?["counterComments"] as! Int
+        counter = selectedQuestion.counterComments!
         
-        self.hideKeyboardWhenTappedAround()
+        self.hideKeyboardWhenTappedAroundFeed()
         
 //        self.databaseRef.child("Questions").child(self.selectedQuestion.key).child("Comments").observe(.value, with: { (snapshot) in
 //            if !snapshot.exists() {
@@ -87,11 +88,23 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
 //            }
 //        })
         
+        // Top border for commentStackView
+        let TopBorder = CALayer()
+        TopBorder.frame = CGRect(x: CGFloat(0.0), y: CGFloat(0.0), width: CGFloat(commentStackView.frame.size.width), height: CGFloat(0.5))
+        TopBorder.backgroundColor = UIColor.lightGray.cgColor
+        commentStackView.layer.addSublayer(TopBorder)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        
+        // Retrieving the question
         self.fetchQuestion()
+        
+        // Disabled sendCommentBtn
+        SendCommentBtn.isUserInteractionEnabled = false
+        SendCommentBtn.setTitleColor(UIColor.darkGray, for: .normal)
         
         // Referencing to currentUser
         let userRef = databaseRef.child("Users").queryOrdered(byChild: "uid").queryEqual(toValue: FIRAuth.auth()!.currentUser!.uid)
@@ -103,7 +116,6 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             print(error.localizedDescription)
         }
         
-        
         // Referencing to question
         let questionRef = databaseRef.child("Questions").queryOrdered(byChild: "questionId").queryEqual(toValue: selectedQuestion.questionId)
         questionRef.observe(.childAdded, with: { (snapshotQ) in
@@ -114,29 +126,44 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         }
         
         // Allow numberOfComments is optional
-        if selectedQuestion.numberOfComments.isEmpty {
-            print("jaja")
-        } else {
+        if selectedQuestion.numberOfComments.isEmpty == false {
             // Put to front the topView
             self.view.bringSubview(toFront: topView)
+            
             // Put all Firebase data on labels
             numberOfComLabel.text = selectedQuestion.numberOfComments
             counterCommentsLabel.text = "\(selectedQuestion.counterComments!)" + "/"
             
             maxNumberComments = Int(selectedQuestion.numberOfComments)!
             
-            // Check if it shows or hides comment elements
-            disabledComments()
+            // Check if it show or hide commentStackView
+            disabledEnabledCommentStackView()
         }
+    }
+    
+    override func viewWillLayoutSubviews() {
+        // UI for commentContent
+        commentContent.layer.cornerRadius = commentContent.frame.size.height / 2
+        commentContent.clipsToBounds = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        // Retrieving the answers
         self.fetchAnswers()
+        
+        // Movements for show or hide the keyboard
         NotificationCenter.default.addObserver(self, selector: #selector(CommentViewController.showOrHideKeyboard(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(CommentViewController.showOrHideKeyboard(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
     }
     
     fileprivate func fetchQuestion() {
@@ -174,20 +201,13 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             
             self.tableviewComment.insertRows(at: [IndexPath(row: self.commentsArray.count, section: 0)], with: UITableViewRowAnimation.automatic)
             
-            print("comments: \(self.commentsArray)")
         }) { (error) in
             print(error.localizedDescription)
         }
     }
-    
-    func initialSetupForCommentContentTextView() {
-        commentContent.text = "Responde algo ..."
-        commentContent.textColor = UIColor.lightGray
-        commentContent.selectedTextRange = commentContent.textRange(from: commentContent.beginningOfDocument, to: commentContent.beginningOfDocument)
-    }
 
-    // Disabled commentContent and sendButton when comments counter is equal to number of commments
-    func disabledComments() {
+    // Disabled/enabled commentStackView according to the counter and number of comments
+    func disabledEnabledCommentStackView() {
         if counter == maxNumberComments {
 
             // Remove commentContent, numberOfComLabel and sendButton
@@ -198,32 +218,55 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             view.addConstraint(tableviewCommentBottom)
             
             // Display UIView from bottom with "No more answers allowed" message
-            let y: CGFloat = UIScreen.main.bounds.size.height - view.frame.size.height
-            let viewY = view.frame.maxY
             
             let viewWidth = view.bounds.width
             let viewHeight = view.frame.size.height
             
-            let noMoreCommentsMsg = UIView(frame: CGRect(x: 0, y: viewY, width: viewWidth, height: 0))
-            noMoreCommentsMsg.backgroundColor = UIColor.red
+            let messageView = UIView(frame: CGRect(x: 0, y: viewHeight, width: viewWidth, height: 0))
+            messageView.backgroundColor = UIColor.red
             
-            UIView.animate(withDuration: 0.5, delay: 0.1, options: .curveEaseIn, animations: {() -> Void in
-                noMoreCommentsMsg.frame = CGRect(x: 0, y: viewHeight - 80, width: viewWidth, height: 30)
+            UIView.animate(withDuration: 0.2, delay: 0.1, options: .curveEaseIn, animations: {() -> Void in
+                messageView.frame = CGRect(x: 0, y: viewHeight - 30, width: viewWidth, height: 30)
                 }, completion: {(_ finished: Bool) -> Void in
             })
-            self.view.addSubview(noMoreCommentsMsg)
+            
+            let messageLabel = UILabel()
+            messageLabel.text = "La pregunta llegó a su límite de respuestas! :("
+            messageLabel.translatesAutoresizingMaskIntoConstraints = false
+            messageLabel.clipsToBounds = true
+            
+            messageView.addSubview(messageLabel)
+            
+            // ios 9 constraint anchors
+            // Need x and y anchors
+            messageLabel.leftAnchor.constraint(equalTo: messageView.leftAnchor).isActive = true
+            messageLabel.centerYAnchor.constraint(equalTo: messageView.centerYAnchor).isActive = true
+            messageLabel.centerXAnchor.constraint(equalTo: messageView.centerXAnchor).isActive = true
+            messageLabel.widthAnchor.constraint(equalToConstant: messageView.frame.size.width - 20).isActive = true
+
+            self.view.addSubview(messageView)
+            
+        } else {
+            
+            // Create placeholder label
+            let placeholderX: CGFloat = self.view.frame.size.width / 75
+            let placeholderY: CGFloat = 0
+            let placeholderWidth = commentContent.bounds.width - placeholderX
+            let placeholderHeight = commentContent.bounds.height
+            let placeholderFontSize = self.view.frame.size.width / 25
+            
+            placeholderLbl.frame = CGRect(x: placeholderX, y: placeholderY, width: placeholderWidth, height: placeholderHeight)
+            placeholderLbl.text = "Comenta algo ..."
+            placeholderLbl.font = UIFont(name: "Avenir Next", size: placeholderFontSize)
+            placeholderLbl.textColor = UIColor.lightGray
+            placeholderLbl.textAlignment = NSTextAlignment.left
+            commentContent.addSubview(placeholderLbl)
         }
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
     }
     
     func showOrHideKeyboard(notification: NSNotification) {
@@ -254,8 +297,71 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             self.tableviewComment.setContentOffset(contentOfSet, animated: true)
         }
     }
+    
+    func animationPoints() {
+        
+        let viewWidth = view.bounds.width
+        let viewHeight = view.frame.size.height
+        let pointsView = UIView()
+        
+        pointsView.backgroundColor = UIColor.red
+        pointsView.layer.cornerRadius = 20
+        pointsView.frame = CGRect(x: (viewWidth / 2) - 20, y: (viewHeight / 2) - 20, width: 40, height: 40)
+        
+        pointsView.alpha = 1.0
+        pointsView.transform = CGAffineTransform.init(scaleX: 1.2, y: 1.2)
+        
+        UIView.animate(withDuration: 1.0, delay: 0.8, options: [.curveEaseInOut], animations: {() -> Void in
+            pointsView.transform = CGAffineTransform.identity
+            pointsView.alpha = 0.0
+            }, completion: {(_ finished: Bool) -> Void in
+        })
+        
+        self.view.addSubview(pointsView)
+        
+        //pointsView.center = self.view.center
+        //pointsView.frame = CGRect(x: 100, y: 240, width: 40, height: 40)
+//        UIView.animate(withDuration: 0.2, delay: 0.1, options: .curveEaseIn, animations: {() -> Void in
+//            messageView.frame = CGRect(x: 0, y: viewHeight - 30, width: viewWidth, height: 30)
+//            }, completion: {(_ finished: Bool) -> Void in
+//        })
+        
+        
+//        let messageLabel = UILabel()
+//        messageLabel.text = "La pregunta llegó a su límite de respuestas! :("
+//        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+//        messageLabel.clipsToBounds = true
+
+        
+        
+        
+//        pointsView.addSubview(messageLabel)
+//        
+//        // ios 9 constraint anchors
+//        // Need x and y anchors
+//        messageLabel.centerYAnchor.constraint(equalTo: messageView.centerYAnchor).isActive = true
+//        messageLabel.centerXAnchor.constraint(equalTo: messageView.centerXAnchor).isActive = true
+//        
+//        self.view.addSubview(messageView)
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        
+        if !textView.text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).isEmpty {
+            SendCommentBtn.isUserInteractionEnabled = true
+            SendCommentBtn.setTitleColor(UIColor(colorLiteralRed: 21/255.0, green: 216/255.0, blue: 161/255.0, alpha: 1), for: .normal)
+            placeholderLbl.isHidden = true
+        } else {
+            SendCommentBtn.isUserInteractionEnabled = false
+            SendCommentBtn.setTitleColor(UIColor.darkGray, for: .normal)
+            placeholderLbl.isHidden = false
+        }
+    }
 
     @IBAction func addCommentAction(_ sender: AnyObject) {
+        
+        animationPoints()
+        
         // Process counter
         conditionalCounter = counter
         
@@ -263,7 +369,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             counter += 1
             selectedQuestion.ref.child("counterComments").setValue(counter)
             counterCommentsLabel.text = "\(counter)"
-            disabledComments()
+            disabledEnabledCommentStackView()
         }
         
         var commentText: String!
@@ -273,16 +379,54 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             commentText = ""
         }
         
-        // Its anonymous or not
-        if isSwitched.isOn {
+        let appearance = SCLAlertView.SCLAppearance(
+            showCircularIcon: true
+        )
+        let alertView = SCLAlertView(appearance: appearance)
+        let alertViewIcon = UIImage(named: "logo")
+        
+        
+        
+        
+        alertView.addButton("Responde como \(FIRAuth.auth()!.currentUser!.displayName!)") {
+            
+            // Reset UI on commentStackView
+            self.SendCommentBtn.isUserInteractionEnabled = false
+            self.SendCommentBtn.setTitleColor(UIColor.darkGray, for: .normal)
+            self.placeholderLbl.isHidden = false
+            self.commentContent.text = ""
+            
+            // Create the comment whit the users data
+            let newComment = Comment(questionId: self.selectedQuestion.questionId, commentText: commentText, commenterImageURL: String(describing: FIRAuth.auth()!.currentUser!.photoURL!), firstName: FIRAuth.auth()!.currentUser!.displayName!, timestamp: NSNumber(value: Date().timeIntervalSince1970))
+            
+            let commentRef = self.databaseRef.child("Questions").child(self.questionKey!).child("Comments").childByAutoId()
+            
+            commentRef.setValue(newComment.toAnyObject())
+            
+            // Saving the points for the currentUser
+            self.savePoints()
+            
+            self.SendCommentBtn.isUserInteractionEnabled = false
+            self.SendCommentBtn.setTitleColor(UIColor.darkGray, for: .normal)
+            self.placeholderLbl.isHidden = false
+            
+        }
+        
+        alertView.addButton("Responde como anónimo") { 
+            
+            // Reset UI on commentStackView
+            self.SendCommentBtn.isUserInteractionEnabled = false
+            self.SendCommentBtn.setTitleColor(UIColor.darkGray, for: .normal)
+            self.placeholderLbl.isHidden = false
+            self.commentContent.text = ""
             
             // Reference for the Anonymous Image
-            let anonymousImg = anonymousImage.image
+            let anonymousImg = self.anonymousImage.image
             let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.1)
             let anonymousImagePath = "anonymousResponses/\(FIRAuth.auth()!.currentUser!.uid)/anonymousResponserPic.jpg"
             let metaData = FIRStorageMetadata()
             metaData.contentType = "image/jpeg"
-            let anonymousImageRef = storageRef2.reference().child(anonymousImagePath)
+            let anonymousImageRef = self.storageRef2.reference().child(anonymousImagePath)
             anonymousImageRef.put(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
                 if error == nil {
                     // Create the comment whit the user as anonymous
@@ -294,24 +438,20 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
                     
                     // Saving the points for the currentUser
                     self.savePoints()
+                    
+                    
+                    
+                    
                 } else {
                     print(error!.localizedDescription)
                 }
             })
-        } else {
-            // Create the comment whit the users data
-            let newComment = Comment(questionId: selectedQuestion.questionId, commentText: commentText, commenterImageURL: String(describing: FIRAuth.auth()!.currentUser!.photoURL!), firstName: FIRAuth.auth()!.currentUser!.displayName!, timestamp: NSNumber(value: Date().timeIntervalSince1970))
-            
-            let commentRef = self.databaseRef.child("Questions").child(self.questionKey!).child("Comments").childByAutoId()
-            
-            commentRef.setValue(newComment.toAnyObject())
-            
-            // Saving the points for the currentUser
-            self.savePoints()
         }
         
-        initialSetupForCommentContentTextView()
-        dismissKeyboard()
+        //alertView.showInfo("Custom icon", subTitle: "This is a nice alert with a custom icon you choose", circleIconImage: alertViewIcon)
+        alertView.showSuccess("Custom icon", subTitle: "This is a nice alert with a custom icon you choose", circleIconImage: alertViewIcon)
+        
+        dismissKeyboardFeed()
     }
     
     // Counting and saving the number of points for the currentUser by answering
@@ -337,31 +477,13 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     // Limit characters for comments
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         
-        // MARK: - Movements for the artificial placeholder
-        
-        // Combine the textView text and the replacement text to create the updated text string
-        let currentText: NSString = textView.text as NSString
-        let updatedText = currentText.replacingCharacters(in: range, with:text)
-        
-        // If updated text view will be empty, add the placeholder and set the cursor to the beginning of the text view
-        if updatedText.isEmpty {
-            textView.text = "Responde algo ..."
-            textView.textColor = UIColor.lightGray
-            
-            textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
-            return false
-        } else if textView.textColor == UIColor.lightGray && !text.isEmpty {
-            textView.text = nil
-            textView.textColor = UIColor.black
-        }
-        
         // MARK: - Movements for the limit characters
         
         let newLength:Int = (textView.text as NSString).length + (text as NSString).length - range.length
-        let remainChar:Int = 300 - newLength
+        let remainChar:Int = 150 - newLength
         
         if remainChar > 20 {
-            numberOfCharLabelCom.textColor = UIColor.black
+            numberOfCharLabelCom.textColor = UIColor(colorLiteralRed: 26/255.0, green: 26/255.0, blue: 26/255.0, alpha: 1)
         }
         if remainChar <= 20 {
             numberOfCharLabelCom.textColor = UIColor.orange
@@ -375,7 +497,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
 
         numberOfCharLabelCom.text = "\(remainChar)"
         
-        return (newLength > 300) ? false : true
+        return (newLength > 150) ? false : true
     }
     
     // Prevent the user from changing the position of the cursor while the placeholder's visible. 
@@ -386,15 +508,28 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             }
         }
     }
+    
+    @IBAction func comeBackAction(_ sender: AnyObject) {
+        let transition = CATransition()
+        transition.duration = 0.35
+        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
+        transition.type = kCATransitionPush
+        transition.subtype = kCATransitionFromLeft
+        self.navigationController!.view.layer.add(transition, forKey: nil)
+        self.navigationController!.isNavigationBarHidden = false
+        self.navigationController!.tabBarController?.tabBar.isHidden = false
+        self.navigationController?.popToRootViewController(animated: true)
+    }
+    
 }
 
 extension UIViewController {
-    func hideKeyboardWhenTappedAround() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+    func hideKeyboardWhenTappedAroundFeed() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboardFeed))
         view.addGestureRecognizer(tap)
     }
     
-    func dismissKeyboard() {
+    func dismissKeyboardFeed() {
         view.endEditing(true)
     }
 }
@@ -419,7 +554,6 @@ extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
             cell.configureQuestion(question)
             
             let btn = cell.likesButton!
-            print("jajajaja: \(self.questionKey)")
             cell.tapAction = { (cell) in
                 // Counting and saving the number of likes
                 if btn.currentImage == UIImage(named: "choclo") {
