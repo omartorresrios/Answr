@@ -72,10 +72,6 @@ class FeedQuestionsTableViewController: UITableViewController {
         
         navigationController?.navigationBar.barTintColor = UIColor.white
         
-    }
-        
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
         
         // Referencing to currentUser
         let userRef = databaseRef.child("Users").queryOrdered(byChild: "uid").queryEqual(toValue: FIRAuth.auth()!.currentUser!.uid)
@@ -88,6 +84,12 @@ class FeedQuestionsTableViewController: UITableViewController {
         }) { (error) in
             print(error.localizedDescription)
         }
+    }
+        
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        
         
         //
         ///self.loader.center = self.view.center

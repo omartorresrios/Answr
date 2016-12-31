@@ -78,7 +78,7 @@ class CommentWorldViewController: UIViewController {
         // Movements for the limit of answers per question
         counter =  selectedQuestion1.counterComments
         
-        self.hideKeyboardWhenTappedAroundWorld()
+        self.hideKeyboardWhenTappedAround()
         
         //        self.databaseRef.child("Questions").child(self.selectedQuestion.key).child("Comments").observe(.value, with: { (snapshot) in
         //            if !snapshot.exists() {
@@ -396,7 +396,7 @@ class CommentWorldViewController: UIViewController {
         //alertView.showInfo("Custom icon", subTitle: "This is a nice alert with a custom icon you choose", circleIconImage: alertViewIcon)
         alertView.showSuccess("Custom icon", subTitle: "This is a nice alert with a custom icon you choose", circleIconImage: alertViewIcon)
         
-        dismissKeyboardWorld()
+        dismissKeyboard()
     }
     
     // Counting and saving the number of points for the currentUser by answering
@@ -466,17 +466,6 @@ class CommentWorldViewController: UIViewController {
         self.navigationController?.popToRootViewController(animated: true)
     }
     
-}
-
-extension UIViewController {
-    func hideKeyboardWhenTappedAroundWorld() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboardWorld))
-        view.addGestureRecognizer(tap)
-    }
-    
-    func dismissKeyboardWorld() {
-        view.endEditing(true)
-    }
 }
 
 // MARK: - Table view data source

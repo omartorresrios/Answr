@@ -75,10 +75,6 @@ class WorldQuestionsTableViewController: UITableViewController {
         
         navigationController?.navigationBar.barTintColor = UIColor.white
         
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
         
         // Referencing to currentUser
         let userRef = databaseRef.child("Users").queryOrdered(byChild: "uid").queryEqual(toValue: FIRAuth.auth()!.currentUser!.uid)
@@ -90,6 +86,12 @@ class WorldQuestionsTableViewController: UITableViewController {
         }) { (error) in
             print(error.localizedDescription)
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        
         
         //self.loader.frame = CGRect(x: 0, y: 20, width: 0.5, height: 0.5)
         

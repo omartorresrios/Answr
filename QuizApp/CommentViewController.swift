@@ -78,7 +78,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         // Movements for the limit of answers per question
         counter = selectedQuestion.counterComments!
         
-        self.hideKeyboardWhenTappedAroundFeed()
+        self.hideKeyboardWhenTappedAround()
         
 //        self.databaseRef.child("Questions").child(self.selectedQuestion.key).child("Comments").observe(.value, with: { (snapshot) in
 //            if !snapshot.exists() {
@@ -138,6 +138,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             
             // Check if it show or hide commentStackView
             disabledEnabledCommentStackView()
+            
         }
     }
     
@@ -246,21 +247,6 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
 
             self.view.addSubview(messageView)
             
-        } else {
-            
-            // Create placeholder label
-            let placeholderX: CGFloat = self.view.frame.size.width / 75
-            let placeholderY: CGFloat = 0
-            let placeholderWidth = commentContent.bounds.width - placeholderX
-            let placeholderHeight = commentContent.bounds.height
-            let placeholderFontSize = self.view.frame.size.width / 25
-            
-            placeholderLbl.frame = CGRect(x: placeholderX, y: placeholderY, width: placeholderWidth, height: placeholderHeight)
-            placeholderLbl.text = "Comenta algo ..."
-            placeholderLbl.font = UIFont(name: "Avenir Next", size: placeholderFontSize)
-            placeholderLbl.textColor = UIColor.lightGray
-            placeholderLbl.textAlignment = NSTextAlignment.left
-            commentContent.addSubview(placeholderLbl)
         }
     }
     
@@ -451,7 +437,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         //alertView.showInfo("Custom icon", subTitle: "This is a nice alert with a custom icon you choose", circleIconImage: alertViewIcon)
         alertView.showSuccess("Custom icon", subTitle: "This is a nice alert with a custom icon you choose", circleIconImage: alertViewIcon)
         
-        dismissKeyboardFeed()
+        dismissKeyboard()
     }
     
     // Counting and saving the number of points for the currentUser by answering
@@ -521,17 +507,6 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         self.navigationController?.popToRootViewController(animated: true)
     }
     
-}
-
-extension UIViewController {
-    func hideKeyboardWhenTappedAroundFeed() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboardFeed))
-        view.addGestureRecognizer(tap)
-    }
-    
-    func dismissKeyboardFeed() {
-        view.endEditing(true)
-    }
 }
 
 // MARK: - Table view data source
