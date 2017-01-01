@@ -27,7 +27,6 @@ class WorldQuestionsTableViewController: UITableViewController {
     var questionsWorldArray = [Question]()
     var currentUser: AnyObject?
     var user: FIRUser?
-    var navBarUser: User!
     var selectedQuestion: Question!
     var otherUser: NSDictionary?
     var questionKey: String!
@@ -40,6 +39,8 @@ class WorldQuestionsTableViewController: UITableViewController {
         super.viewDidLoad()
         
         UIApplication.shared.isStatusBarHidden = false
+        
+        self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor(colorLiteralRed: 21/255.0, green: 216/255.0, blue: 161/255.0, alpha: 1), NSFontAttributeName: UIFont(name: "Avenir Next", size: 20)!]
         
         self.navigationController!.navigationBar.setBottomBorderColorWorld(color: UIColor(colorLiteralRed: 225.0/255.0, green: 225.0/255.0, blue: 225.0/255.0, alpha: 1), height: 1)
         
@@ -57,10 +58,6 @@ class WorldQuestionsTableViewController: UITableViewController {
         
         fetchQuestions()
         
-        //        // Movements for UIToolbar transparency
-        //        let bgImageColor = UIColor.white.withAlphaComponent(0.7)
-        //        navigationController?.toolbar.setBackgroundImage(onePixelImageWithColor(bgImageColor), forToolbarPosition: UIBarPosition.bottom, barMetrics: UIBarMetrics.default)
-        
         // DGElasticPullToRefresh
         let loadingView = DGElasticPullToRefreshLoadingViewCircle()
         loadingView.tintColor = UIColor(red: 78/255.0, green: 221/255.0, blue: 200/255.0, alpha: 1.0)
@@ -74,18 +71,7 @@ class WorldQuestionsTableViewController: UITableViewController {
         tableView.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
         
         navigationController?.navigationBar.barTintColor = UIColor.white
-        
-        
-        // Referencing to currentUser
-        let userRef = databaseRef.child("Users").queryOrdered(byChild: "uid").queryEqual(toValue: FIRAuth.auth()!.currentUser!.uid)
-        userRef.observe(.value, with: { (snapshot) in
-            for userInfo in snapshot.children {
-                self.navBarUser = User(snapshot: userInfo as! FIRDataSnapshot)
-            }
-            self.setupNavBarWithUser(user: self.navBarUser)
-        }) { (error) in
-            print(error.localizedDescription)
-        }
+    
     }
     
     override func viewWillAppear(_ animated: Bool) {

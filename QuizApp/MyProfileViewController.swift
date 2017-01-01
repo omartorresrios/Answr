@@ -20,6 +20,7 @@ class MyProfileViewController: UIViewController {
     @IBOutlet weak var numberFollowers: UIButton!
     @IBOutlet weak var numberFollowing: UIButton!
     
+    @IBOutlet weak var toolbar: UIToolbar!
     var user: User!
     var currentUser:AnyObject?
     var databaseRef = FIRDatabase.database().reference()
@@ -31,17 +32,14 @@ class MyProfileViewController: UIViewController {
         
         self.tabBarController?.tabBar.isHidden = true
         
+        self.navigationController?.isToolbarHidden = true
+        
+        toolbar.barTintColor = UIColor.white
+        toolbar.clipsToBounds = true
+        
         // Disable the back button
         self.navigationItem.setHidesBackButton(true, animated: false)
-
-        // Create a button for back to Questions
-        let backQuesBtn =  UIButton(type: .custom)
-        backQuesBtn.frame = CGRect(x: 0, y: 0, width: 40, height: 40) as CGRect
-        backQuesBtn.tintColor = UIColor(red: 255/255.0, green: 219/255.0, blue: 81/255.0, alpha: 1.0)
-        let img : UIImage = UIImage(named: "Collapse Arrow")!
-        backQuesBtn.setImage(img, for: UIControlState.normal)
-        backQuesBtn.addTarget(self, action: #selector(comeBackToQuestions), for: .touchUpInside)
-        self.navigationItem.titleView = backQuesBtn
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -78,6 +76,10 @@ class MyProfileViewController: UIViewController {
         })
     }
     
+    @IBAction func comeBackToQuestions(_ sender: AnyObject) {
+        performSegue(withIdentifier: "goQuestionsFeedFromMyProfile", sender: sender)
+    }
+    
     // Customize properties for userImageView
     internal func setProfilePicture(_ imageView: UIImageView, imageToSet: UIImage) {
         imageView.layer.cornerRadius = 20
@@ -89,19 +91,6 @@ class MyProfileViewController: UIViewController {
     
     override var preferredStatusBarStyle : UIStatusBarStyle {
         return .lightContent
-    }
-    
-    // Action for the backToQuestions button
-    func comeBackToQuestions(_ sender: UIButton!) {
-        let transition = CATransition()
-        transition.duration = 0.35
-        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromTop
-        self.navigationController!.view.layer.add(transition, forKey: nil)
-        self.navigationController!.isNavigationBarHidden = false
-        self.navigationController!.tabBarController?.tabBar.isHidden = false
-        self.navigationController?.popToRootViewController(animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
