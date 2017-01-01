@@ -56,18 +56,18 @@ class FeedQuestionsTableViewController: UITableViewController {
         self.tableView.estimatedRowHeight = 213
         self.tableView.allowsMultipleSelectionDuringEditing = true
         
-        fetchQuestions()
+        
         
         // DGElasticPullToRefresh
         let loadingView = DGElasticPullToRefreshLoadingViewCircle()
-        loadingView.tintColor = UIColor(red: 78/255.0, green: 221/255.0, blue: 200/255.0, alpha: 1.0)
+        loadingView.tintColor = UIColor.white
         tableView.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
             self?.tableView.reloadData()
             // Do not forget to call dg_stopLoading() at the end
             self?.tableView.dg_stopLoading()
             }, loadingView: loadingView)
         
-        tableView.dg_setPullToRefreshFillColor(UIColor(red: 57/255.0, green: 67/255.0, blue: 89/255.0, alpha: 1.0))
+        tableView.dg_setPullToRefreshFillColor(UIColor(colorLiteralRed: 218/255.0, green: 218/255.0, blue: 218/255.0, alpha: 1))
         tableView.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
         
         navigationController?.navigationBar.barTintColor = UIColor.white
@@ -89,7 +89,7 @@ class FeedQuestionsTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        
+        fetchQuestions()
         
         //
         ///self.loader.center = self.view.center

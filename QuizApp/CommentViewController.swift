@@ -47,7 +47,6 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     var maxNumberComments: Int = 0
     let anonymous: String = "Anonymous" // Anonymous users name
     var anonymousImage: UIImageView! // Anonymous users image
-    let placeholderLbl = UILabel()
     
     var storageRef2: FIRStorage!{
         return FIRStorage.storage()
@@ -336,11 +335,9 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         if !textView.text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).isEmpty {
             SendCommentBtn.isUserInteractionEnabled = true
             SendCommentBtn.setTitleColor(UIColor(colorLiteralRed: 21/255.0, green: 216/255.0, blue: 161/255.0, alpha: 1), for: .normal)
-            placeholderLbl.isHidden = true
         } else {
             SendCommentBtn.isUserInteractionEnabled = false
             SendCommentBtn.setTitleColor(UIColor.darkGray, for: .normal)
-            placeholderLbl.isHidden = false
         }
     }
 
@@ -379,7 +376,6 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             // Reset UI on commentStackView
             self.SendCommentBtn.isUserInteractionEnabled = false
             self.SendCommentBtn.setTitleColor(UIColor.darkGray, for: .normal)
-            self.placeholderLbl.isHidden = false
             self.commentContent.text = ""
             
             // Create the comment whit the users data
@@ -394,7 +390,6 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             
             self.SendCommentBtn.isUserInteractionEnabled = false
             self.SendCommentBtn.setTitleColor(UIColor.darkGray, for: .normal)
-            self.placeholderLbl.isHidden = false
             
         }
         
@@ -403,7 +398,6 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             // Reset UI on commentStackView
             self.SendCommentBtn.isUserInteractionEnabled = false
             self.SendCommentBtn.setTitleColor(UIColor.darkGray, for: .normal)
-            self.placeholderLbl.isHidden = false
             self.commentContent.text = ""
             
             // Reference for the Anonymous Image

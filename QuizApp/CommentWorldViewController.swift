@@ -47,7 +47,6 @@ class CommentWorldViewController: UIViewController {
     var maxNumberComments: Int = 0
     let anonymous: String = "Anonymous" // Anonymous users name
     var anonymousImage: UIImageView! // Anonymous users image
-    let placeholderLbl = UILabel()
     
     var storageRef2: FIRStorage!{
         return FIRStorage.storage()
@@ -244,22 +243,6 @@ class CommentWorldViewController: UIViewController {
             
             self.view.addSubview(messageView)
             
-        } else {
-            
-            // Create placeholder label
-            
-            let placeholderX: CGFloat = self.view.frame.size.width / 75
-            let placeholderY: CGFloat = 0
-            let placeholderWidth = commentContent.bounds.width - placeholderX
-            let placeholderHeight = commentContent.bounds.height
-            let placeholderFontSize = self.view.frame.size.width / 25
-            
-            placeholderLbl.frame = CGRect(x: placeholderX, y: placeholderY, width: placeholderWidth, height: placeholderHeight)
-            placeholderLbl.text = "Comenta algo ..."
-            placeholderLbl.font = UIFont(name: "Avenir Next", size: placeholderFontSize)
-            placeholderLbl.textColor = UIColor.lightGray
-            placeholderLbl.textAlignment = NSTextAlignment.left
-            commentContent.addSubview(placeholderLbl)
         }
     }
     
@@ -302,11 +285,9 @@ class CommentWorldViewController: UIViewController {
         if !textView.text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).isEmpty {
             SendCommentBtn.isUserInteractionEnabled = true
             SendCommentBtn.setTitleColor(UIColor(colorLiteralRed: 21/255.0, green: 216/255.0, blue: 161/255.0, alpha: 1), for: .normal)
-            placeholderLbl.isHidden = true
         } else {
             SendCommentBtn.isUserInteractionEnabled = false
             SendCommentBtn.setTitleColor(UIColor.darkGray, for: .normal)
-            placeholderLbl.isHidden = false
         }
     }
     
@@ -342,7 +323,6 @@ class CommentWorldViewController: UIViewController {
             // Reset UI on commentStackView
             self.SendCommentBtn.isUserInteractionEnabled = false
             self.SendCommentBtn.setTitleColor(UIColor.darkGray, for: .normal)
-            self.placeholderLbl.isHidden = false
             self.commentContent.text = ""
             
             // Create the comment whit the users data
@@ -365,7 +345,6 @@ class CommentWorldViewController: UIViewController {
             // Reset UI on commentStackView
             self.SendCommentBtn.isUserInteractionEnabled = false
             self.SendCommentBtn.setTitleColor(UIColor.darkGray, for: .normal)
-            self.placeholderLbl.isHidden = false
             self.commentContent.text = ""
             
             // Reference for the Anonymous Image
