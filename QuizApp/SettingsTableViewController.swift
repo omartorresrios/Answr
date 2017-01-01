@@ -241,17 +241,28 @@ class SettingsTableViewController: UITableViewController, UIImagePickerControlle
    
     @IBAction func logoutAction(_ sender: AnyObject) {
         
-        if FIRAuth.auth()!.currentUser != nil {
-            do {
-                try? FIRAuth.auth()!.signOut()
-                
-                if FIRAuth.auth()?.currentUser == nil {
-                    let startViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "start")
+        let appearance = SCLAlertView.SCLAppearance(
+            showCircularIcon: true
+        )
+        let alertView = SCLAlertView(appearance: appearance)
+        let alertViewIcon = UIImage(named: "logo")
+        
+        alertView.addButton("Sí") {
+            if FIRAuth.auth()!.currentUser != nil {
+                do {
+                    try? FIRAuth.auth()!.signOut()
                     
-                    self.present(startViewController, animated: true, completion: nil)
+                    if FIRAuth.auth()?.currentUser == nil {
+                        let startViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "start")
+                        
+                        self.present(startViewController, animated: true, completion: nil)
+                    }
                 }
             }
         }
+        
+        alertView.showNotice("Salir", subTitle: "¿Seguro que quieres salir?", circleIconImage: alertViewIcon)
+        
     }
     
     @IBAction func comeBackAction(_ sender: AnyObject) {

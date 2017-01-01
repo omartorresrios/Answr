@@ -42,7 +42,7 @@ class WorldQuestionsTableViewController: UITableViewController {
         
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor(colorLiteralRed: 21/255.0, green: 216/255.0, blue: 161/255.0, alpha: 1), NSFontAttributeName: UIFont(name: "Avenir Next", size: 20)!]
         
-        self.navigationController!.navigationBar.setBottomBorderColorWorld(color: UIColor(colorLiteralRed: 225.0/255.0, green: 225.0/255.0, blue: 225.0/255.0, alpha: 1), height: 1)
+        self.navigationController!.navigationBar.setBottomBorderColor(color: UIColor(colorLiteralRed: 225.0/255.0, green: 225.0/255.0, blue: 225.0/255.0, alpha: 1), height: 1)
         
         self.currentUser = FIRAuth.auth()?.currentUser
         
@@ -271,16 +271,6 @@ class WorldQuestionsTableViewController: UITableViewController {
         context!.fill(CGRect(x: 0, y: 0, width: 1, height: 1))
         let image = UIImage(cgImage: context!.makeImage()!)
         return image
-    }
-}
-
-extension UINavigationBar {
-    
-    func setBottomBorderColorWorld(color: UIColor, height: CGFloat) {
-        let bottomBorderRect = CGRect(x: 0, y: frame.height, width: frame.width, height: height)
-        let bottomBorderView = UIView(frame: bottomBorderRect)
-        bottomBorderView.backgroundColor = color
-        addSubview(bottomBorderView)
     }
 }
 

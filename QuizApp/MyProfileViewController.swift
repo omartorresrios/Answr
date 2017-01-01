@@ -34,9 +34,10 @@ class MyProfileViewController: UIViewController {
         
         self.navigationController?.isToolbarHidden = true
         
+        // UI for toolbar
         toolbar.barTintColor = UIColor.white
         toolbar.clipsToBounds = true
-        
+                
         // Disable the back button
         self.navigationItem.setHidesBackButton(true, animated: false)
         
@@ -44,9 +45,12 @@ class MyProfileViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        
+        showUserInfo()
+    }
+    
+    func showUserInfo() {
         self.currentUser = FIRAuth.auth()?.currentUser
-
+        
         self.databaseRef.child("Users").child(self.currentUser!.uid).observe(.value, with: { (snapshot) in
             
             let snapshot = snapshot.value as! [String: AnyObject]
@@ -78,15 +82,6 @@ class MyProfileViewController: UIViewController {
     
     @IBAction func comeBackToQuestions(_ sender: AnyObject) {
         performSegue(withIdentifier: "goQuestionsFeedFromMyProfile", sender: sender)
-    }
-    
-    // Customize properties for userImageView
-    internal func setProfilePicture(_ imageView: UIImageView, imageToSet: UIImage) {
-        imageView.layer.cornerRadius = 20
-        imageView.layer.borderWidth = 2
-        imageView.layer.borderColor = UIColor.black.cgColor
-        imageView.layer.masksToBounds = true
-        imageView.image = imageToSet
     }
     
     override var preferredStatusBarStyle : UIStatusBarStyle {
