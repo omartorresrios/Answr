@@ -55,9 +55,6 @@ class WorldQuestionsTableViewController: UITableViewController {
         self.tableView.estimatedRowHeight = 213
         self.tableView.allowsMultipleSelectionDuringEditing = true
         
-        
-        
-        
         // DGElasticPullToRefresh
         let loadingView = DGElasticPullToRefreshLoadingViewCircle()
         loadingView.tintColor = UIColor.white
@@ -72,6 +69,11 @@ class WorldQuestionsTableViewController: UITableViewController {
         
         navigationController?.navigationBar.barTintColor = UIColor.white
     
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.tableView.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -231,15 +233,16 @@ class WorldQuestionsTableViewController: UITableViewController {
             
         if questionsWorldArray[(indexPath as NSIndexPath).row].questionImageURL.isEmpty {
                 
-            let cell = tableView.dequeueReusableCell(withIdentifier: "questionWithText", for: indexPath) as! TextQuestionTableViewCell
-            cell.configureQuestion(question)
-            return cell
+            let quesTextCell = tableView.dequeueReusableCell(withIdentifier: "questionWithText", for: indexPath) as! TextQuestionTableViewCell
+            
+            quesTextCell.configureQuestion(question)
+            return quesTextCell
                 
         } else {
                 
-            let cell = tableView.dequeueReusableCell(withIdentifier: "questionWithImage", for: indexPath) as! ImageQuestionTableViewCell
-            cell.configureQuestion(question)
-            return cell
+            let quesImgCell = tableView.dequeueReusableCell(withIdentifier: "questionWithImage", for: indexPath) as! ImageQuestionTableViewCell
+            quesImgCell.configureQuestion(question)
+            return quesImgCell
         }
     }
     

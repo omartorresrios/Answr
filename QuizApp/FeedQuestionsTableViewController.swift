@@ -85,6 +85,11 @@ class FeedQuestionsTableViewController: UITableViewController {
             print(error.localizedDescription)
         }
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.tableView.reloadData()
+    }
         
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
@@ -214,15 +219,15 @@ class FeedQuestionsTableViewController: UITableViewController {
             
         if question.questionImageURL.isEmpty {
                 
-            let cell = tableView.dequeueReusableCell(withIdentifier: "questionWithText", for: indexPath) as! TextQuestionTableViewCell
-            cell.configureQuestion(question)
-            return cell
+            let quesTextCell = tableView.dequeueReusableCell(withIdentifier: "questionWithText", for: indexPath) as! TextQuestionTableViewCell
+            quesTextCell.configureQuestion(question)
+            return quesTextCell
                 
         } else {
                 
-            let cell = tableView.dequeueReusableCell(withIdentifier: "questionWithImage", for: indexPath) as! ImageQuestionTableViewCell
-            cell.configureQuestion(question)
-            return cell
+            let imgTextCell = tableView.dequeueReusableCell(withIdentifier: "questionWithImage", for: indexPath) as! ImageQuestionTableViewCell
+            imgTextCell.configureQuestion(question)
+            return imgTextCell
         }
     }
     

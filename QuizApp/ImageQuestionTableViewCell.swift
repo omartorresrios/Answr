@@ -145,7 +145,13 @@ class ImageQuestionTableViewCell: UITableViewCell {
         
         self.firstNameLabel.text = question.firstName
         self.questionTextLabel.text = question.questionText
-        if question.numberOfComments.isEmpty == false {
+        
+        if question.numberOfComments.isEmpty {
+            self.commentsCounter.isHidden = true
+            self.numberOfComments.isHidden = true
+        } else {
+            self.commentsCounter.isHidden = false
+            self.numberOfComments.isHidden = false
             self.commentsCounter.text = "\(question.counterComments!)" + "/"
             self.numberOfComments.text = question.numberOfComments
         }
