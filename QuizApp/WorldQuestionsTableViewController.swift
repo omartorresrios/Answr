@@ -55,6 +55,9 @@ class WorldQuestionsTableViewController: UITableViewController {
         self.tableView.estimatedRowHeight = 213
         self.tableView.allowsMultipleSelectionDuringEditing = true
         
+        // Call fetchQuestions function
+        fetchQuestions()
+        
         // DGElasticPullToRefresh
         let loadingView = DGElasticPullToRefreshLoadingViewCircle()
         loadingView.tintColor = UIColor.white
@@ -71,25 +74,24 @@ class WorldQuestionsTableViewController: UITableViewController {
     
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        // UI for loader (activity indicator)
+        loader.center = CGPoint(x: CGFloat(view.frame.size.width / 2), y: CGFloat(50))
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.tableView.reloadData()
+        //self.tableView.reloadData()
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        fetchQuestions()
         
-        //self.loader.frame = CGRect(x: 0, y: 20, width: 0.5, height: 0.5)
-        
-        
-        //self.loader.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
-        
-        ///self.loader.center = self.view.center
-        
-        // Show the bottom toolbar
-        //navigationController?.isToolbarHidden = false
         
     }
     
@@ -234,14 +236,35 @@ class WorldQuestionsTableViewController: UITableViewController {
         if questionsWorldArray[(indexPath as NSIndexPath).row].questionImageURL.isEmpty {
                 
             let quesTextCell = tableView.dequeueReusableCell(withIdentifier: "questionWithText", for: indexPath) as! TextQuestionTableViewCell
-            
             quesTextCell.configureQuestion(question)
+            
+//            // Adding bottom line to questionCell
+//            let border = CALayer()
+//            let width = CGFloat(1.0)
+//            border.borderColor = UIColor.lightGray.cgColor
+//            border.frame = CGRect(x: 0, y: quesTextCell.frame.size.height - width, width:  quesTextCell.frame.size.width, height: quesTextCell.frame.size.height)
+//            
+//            border.borderWidth = width
+//            quesTextCell.layer.addSublayer(border)
+//            quesTextCell.layer.masksToBounds = true
+            
             return quesTextCell
                 
         } else {
                 
             let quesImgCell = tableView.dequeueReusableCell(withIdentifier: "questionWithImage", for: indexPath) as! ImageQuestionTableViewCell
             quesImgCell.configureQuestion(question)
+            
+//            // Adding bottom line to questionCell
+//            let border = CALayer()
+//            let width = CGFloat(1.0)
+//            border.borderColor = UIColor.lightGray.cgColor
+//            border.frame = CGRect(x: 0, y: quesImgCell.frame.size.height - width, width:  quesImgCell.frame.size.width, height: quesImgCell.frame.size.height)
+//            
+//            border.borderWidth = width
+//            quesImgCell.layer.addSublayer(border)
+//            quesImgCell.layer.masksToBounds = true
+            
             return quesImgCell
         }
     }
