@@ -81,17 +81,8 @@ class WorldQuestionsTableViewController: UITableViewController {
         loader.center = CGPoint(x: CGFloat(view.frame.size.width / 2), y: CGFloat(50))
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        //self.tableView.reloadData()
-        
-        
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        
-        
         
     }
     

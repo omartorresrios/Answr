@@ -23,7 +23,7 @@ class FeedQuestionsTableViewController: UITableViewController {
     }
     
     @IBOutlet weak var loader: UIActivityIndicatorView!
-    
+
     var questionsFeedArray = [Question]()
     var currentUser: AnyObject?
     var user: FIRUser?
@@ -93,16 +93,9 @@ class FeedQuestionsTableViewController: UITableViewController {
         // UI for loader (activity indicator)
         loader.center = CGPoint(x: CGFloat(view.frame.size.width / 2), y: CGFloat(50))
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.tableView.reloadData()
-    }
         
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        
-        
         
     }
     
@@ -310,6 +303,11 @@ class FeedQuestionsTableViewController: UITableViewController {
         if segue.identifier == "findUserSegue" {
             let showFollowUsersTVC = segue.destination as! FollowUsersTableViewController
             showFollowUsersTVC.currentUser = self.currentUser as? FIRUser
+        }
+        
+        if segue.identifier == "goUserProfileFromFeed" {
+            let showMyProfileTVC = segue.destination as! MyProfileViewController
+            showMyProfileTVC.currentUser = self.currentUser as? FIRUser
         }
     }
     
