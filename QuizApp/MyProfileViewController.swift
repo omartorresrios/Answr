@@ -22,7 +22,7 @@ class MyProfileViewController: UIViewController {
     
     @IBOutlet weak var toolbar: UIToolbar!
     var user: User!
-    var currentUser:AnyObject?
+    var currentUser: FIRUser?
     var databaseRef = FIRDatabase.database().reference()
     
     override func viewDidLoad() {
@@ -33,6 +33,8 @@ class MyProfileViewController: UIViewController {
         self.tabBarController?.tabBar.isHidden = true
         
         self.navigationController?.isToolbarHidden = true
+        
+        showUserInfo()
         
         // UI for toolbar
         toolbar.barTintColor = UIColor.white
@@ -45,7 +47,7 @@ class MyProfileViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        showUserInfo()
+        
     }
     
     func showUserInfo() {
@@ -81,7 +83,16 @@ class MyProfileViewController: UIViewController {
     }
     
     @IBAction func comeBackToQuestions(_ sender: AnyObject) {
-        performSegue(withIdentifier: "goQuestionsFeedFromMyProfile", sender: sender)
+        let transition = CATransition()
+        transition.duration = 0.35
+        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
+        transition.type = kCATransitionPush
+        transition.subtype = kCATransitionFromTop
+        self.navigationController!.view.layer.add(transition, forKey: nil)
+        self.navigationController!.isNavigationBarHidden = false
+        self.navigationController!.tabBarController?.tabBar.isHidden = false
+        self.navigationController?.popToRootViewController(animated: false)
+        
     }
     
     override var preferredStatusBarStyle : UIStatusBarStyle {
@@ -92,11 +103,11 @@ class MyProfileViewController: UIViewController {
         
         if segue.identifier == "showFollowingTVC" {
             let showFollowingTVC = segue.destination as! ShowFollowingTableViewController
-            showFollowingTVC.user = self.currentUser as? FIRUser
+            showFollowingTVC.user = self.currentUser! as FIRUser
             
         } else if segue.identifier == "showFollowersTVC" {
             let showFollowersTVC = segue.destination as! ShowFollowersTableViewController
-                showFollowersTVC.user = self.currentUser as? FIRUser
+            showFollowersTVC.user = self.currentUser! as FIRUser
         }
     }
 }
