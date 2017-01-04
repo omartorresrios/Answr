@@ -267,11 +267,6 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
             }
         }
         
-        
-        if segue.identifier == "showQuestionsTVC" {
-            let showFollowUsersTVC = segue.destination as! FeedQuestionsTableViewController
-            showFollowUsersTVC.user = self.currentUser
-        }
     }
     
     @IBAction func comeBackAction(_ sender: AnyObject) {
