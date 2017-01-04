@@ -11,6 +11,7 @@ import Firebase
 import FirebaseDatabase
 import FirebaseStorage
 import FirebaseAuth
+import JDStatusBarNotification
 
 class ImageQuestionTableViewCell: UITableViewCell {
 
@@ -44,12 +45,32 @@ class ImageQuestionTableViewCell: UITableViewCell {
     
     var statusImageView: UIImageView?
 
+    func showMessage(_ sender: UITapGestureRecognizer) {
+        
+        //Removing the "/" character of numberOfComments
+        var newNumberOfComments = numberOfComments.text!
+        newNumberOfComments = newNumberOfComments.replacingOccurrences(of: "/", with: "")
+        
+        //Showing message with number of comments and counter at the top of the view
+        let message = commentsCounter.text! + " de " + newNumberOfComments + " respuestas!"
+        JDStatusBarNotification.show(withStatus: message, dismissAfter: 3.0, styleName: JDStatusBarStyleDark)
+    }
+    
     override func layoutSubviews() {
+        // UI for user image
         userImageView.layer.cornerRadius = userImageView.frame.size.height / 2
         userImageView.clipsToBounds = true
         
+        // UI for question image
         questionImageView.isUserInteractionEnabled = true
         questionImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageQuestionTableViewCell?.animate(_:))))
+        
+        // UI for numberOfComments and counter
+        numberOfComments.isUserInteractionEnabled = true
+        numberOfComments.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(TextQuestionTableViewCell.showMessage(_:))))
+        
+        commentsCounter.isUserInteractionEnabled = true
+        commentsCounter.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(TextQuestionTableViewCell.showMessage(_:))))
     }
     
     func animateImageView(_ statusImageView: UIImageView) {
@@ -152,8 +173,10 @@ class ImageQuestionTableViewCell: UITableViewCell {
         } else {
             self.commentsCounter.isHidden = false
             self.numberOfComments.isHidden = false
-            self.commentsCounter.text = "\(question.counterComments!)" + "/"
-            self.numberOfComments.text = question.numberOfComments
+            
+            // Put data into labels
+            self.commentsCounter.text = " " + "\(question.counterComments!)"
+            self.numberOfComments.text = "/" + question.numberOfComments + " "
         }
         
         //TimeStamp
