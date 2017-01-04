@@ -146,7 +146,16 @@ class FeedQuestionsTableViewController: UITableViewController {
                     }
                     self.questionsFeedArray = newQuestionsFeedArray
                     DispatchQueue.main.async {
+                        
+                        let transition = CATransition()
+                        transition.type = kCATransitionPush
+                        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
+                        transition.fillMode = kCAFillModeForwards
+                        transition.duration = 0.35
+                        transition.subtype = kCATransitionFade
+                        self.tableView.layer.add(transition, forKey: "UITableViewReloadDataAnimationKey")
                         self.tableView.reloadData()
+
                     }
                     self.loader.stopAnimating()
                         
