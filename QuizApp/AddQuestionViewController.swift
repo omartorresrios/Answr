@@ -14,17 +14,16 @@ import XLActionController
 
 class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
-    @IBOutlet weak var userImgAnonymous: UIImageView!
     @IBOutlet weak var numberOfComments: UITextField!
     @IBOutlet weak var questionTextView: UITextView!
     @IBOutlet weak var numberOfCharLabel: UILabel!
-    @IBOutlet weak var isSwitched: UISwitch!
     @IBOutlet weak var questionImageView: UIImageView! {
         didSet {
             questionImageView.layer.cornerRadius = 5
         }
     }
     @IBOutlet weak var sendButton: UIButton!
+    @IBOutlet var testView: UIView!
     
     var databaseRef: FIRDatabaseReference! {
         return FIRDatabase.database().reference()
@@ -49,13 +48,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         
         self.tabBarController?.tabBar.isHidden = true
         
-        userImgAnonymous.layer.cornerRadius = 5
-        
-        // Display the user image
-        userImgDefault()
-        
-        // Change size of UISwitch
-        isSwitched.transform = CGAffineTransform(scaleX: 0.60, y: 0.60)
+        self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor(colorLiteralRed: 21/255.0, green: 216/255.0, blue: 161/255.0, alpha: 1), NSFontAttributeName: UIFont(name: "Avenir Next", size: 20)!]
         
         questionTextView.becomeFirstResponder()
         
@@ -118,46 +111,17 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         }
     }
     
-    // Configure the currentUser image
-    func userImgDefault() {
-        let userRef = databaseRef.child("Users").queryOrdered(byChild: "uid").queryEqual(toValue: FIRAuth.auth()!.currentUser!.uid)
-        userRef.observe(.value, with: { (snapshot) in
-            for userInfo in snapshot.children {
-                self.currentUser = User(snapshot: userInfo as! FIRDataSnapshot)
-            }
-            if let user = self.currentUser {
-                FIRStorage.storage().reference(forURL: user.photoURL).data(withMaxSize: 1 * 1024 * 1024, completion: { (imgData, error) in
-                    if let error = error {
-                        print(error.localizedDescription)
-                    } else{
-                        DispatchQueue.main.async(execute: {
-                            if let data = imgData {
-                                self.userImgAnonymous.image = UIImage(data: data)
-                            }
-                        })
-                    }
-                })
-            }
-        }) { (error) in
-            print(error.localizedDescription)
-        }
-    }
-    
-    // Option (UISwitch) for the user to choose if is anonymous or not
-    @IBAction func anonymousUser(_ sender: AnyObject) {
-        if isSwitched.isOn {
-            userImgAnonymous.image = UIImage(named: "anonymous.jpg")
+    func textViewDidChange(_ textView: UITextView) {
+        
+        // Enabled/disabled senButton
+        if !textView.text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).isEmpty {
+            sendButton.isUserInteractionEnabled = true
+            sendButton.setImage(UIImage(named: "SentEna"), for: .normal)
         } else {
-            
-            let url = URL(string: currentUser.photoURL)
-            
-            DispatchQueue.global().async {
-                let data = try? Data(contentsOf: url!)
-                DispatchQueue.main.async {
-                    self.userImgAnonymous.image = UIImage(data: data!)
-                }
-            }
+            sendButton.isUserInteractionEnabled = false
+            sendButton.setImage(UIImage(named: "SentDis"), for: .normal)
         }
+        
     }
     
     @IBAction func saveQuestionAction(_ sender: AnyObject) {
@@ -176,17 +140,81 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
             numberComments = ""
         }
         
-        if isSwitched.isOn { // Its anonymous
+        let appearance = SCLAlertView.SCLAppearance(
+            showCircularIcon: true
+        )
+        let alertView = SCLAlertView(appearance: appearance)
+        let alertViewIcon = UIImage(named: "logo")
+        
+        
+        
+        
+        alertView.addButton("Pregunta como \(FIRAuth.auth()!.currentUser!.displayName!)") {
             
-            if questionImageView.image!.isEqual(camera) { // Anonymous. Question without image
+            if self.questionImageView.image!.isEqual(self.camera) { // Its not anonymous. Question without image
+                
+                // Creating the question
+                let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: "", questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter, likes: 0)
+                
+                // Saving the question in Questions node
+                self.saveQuestionInQuestionsNode(newQuestion.toAnyObject() as AnyObject)
+                
+                // Saving the question in currentUser feed
+                self.saveMyOwnQuestionInMyFeed(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                
+                // Saving the question in the Feed node of all the followers of the currentUser
+                self.saveQuestionInFeeds(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                
+                // Saving the points for the currentUser
+                self.savePoints()
+                
+            } else { // Its not anonymous. Question with image
+                
+                // Reference for the Question Image
+                let imageData = UIImageJPEGRepresentation(self.questionImageView.image!, 0.8)
+                let metaData = FIRStorageMetadata()
+                metaData.contentType = "image/jpeg"
+                let imagePath = "questionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/\(UUID().uuidString)/questionPic.jpg"
+                let imageRef = self.storageRef.reference().child(imagePath)
+                
+                imageRef.put(imageData!, metadata: metaData, completion: { (newMetaData, error) in
+                    if error == nil {
+                        
+                        // Creating the question
+                        let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: String(describing: newMetaData!.downloadURL()!), questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter, likes: 0)
+                        
+                        // Saving the question in Questions node
+                        self.saveQuestionInQuestionsNode(newQuestion.toAnyObject() as AnyObject)
+                        
+                        // Saving the question in currentUser feed
+                        self.saveMyOwnQuestionInMyFeed(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                        
+                        // Saving the question in the Feed node of all the followers of the currentUser
+                        self.saveQuestionInFeeds(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                        
+                        // Saving the points for the currentUser
+                        self.savePoints()
+                        
+                    } else {
+                        print(error!.localizedDescription)
+                    }
+                })
+            }
+            
+            
+            
+        }
+        alertView.addButton("Pregunta como anónimo") {
+            
+            if self.questionImageView.image!.isEqual(self.camera) { // Anonymous. Question without image
                 
                 // Reference for the Anonymous Image
-                let anonymousImg = anonymousImage.image
+                let anonymousImg = self.anonymousImage.image
                 let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.1)
                 let metaData = FIRStorageMetadata()
                 metaData.contentType = "image/jpeg"
                 let anonymousImagePath = "anonymousQuestionsWithoutImage/\(FIRAuth.auth()!.currentUser!.uid)/\(UUID().uuidString)/anonymousQuestionerPic.jpg"
-                let anonymousImageRef = storageRef.reference().child(anonymousImagePath)
+                let anonymousImageRef = self.storageRef.reference().child(anonymousImagePath)
                 anonymousImageRef.put(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
                     if error == nil {
                         metadata!.downloadURL()
@@ -214,17 +242,17 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
             } else {  // Anonymous. Question with image
                 
                 // Reference for the Question Image
-                let imageData = UIImageJPEGRepresentation(questionImageView.image!, 0.8)
+                let imageData = UIImageJPEGRepresentation(self.questionImageView.image!, 0.8)
                 let metaData = FIRStorageMetadata()
                 metaData.contentType = "image/jpeg"
                 let imagePath = "anonymousQuestionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/\(UUID().uuidString)/questionPic.jpg"
-                let imageRef = storageRef.reference().child(imagePath)
+                let imageRef = self.storageRef.reference().child(imagePath)
                 
                 // Reference for the Anonymous Image
-                let anonymousImg = anonymousImage.image
+                let anonymousImg = self.anonymousImage.image
                 let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.1)
                 let anonymousImagePath = "anonymousQuestionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/\(UUID().uuidString)/anonymousQuestionerPic.jpg"
-                let anonymousImageRef = storageRef.reference().child(anonymousImagePath)
+                let anonymousImageRef = self.storageRef.reference().child(anonymousImagePath)
                 anonymousImageRef.put(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
                     if error == nil {
                         metadata!.downloadURL()
@@ -257,58 +285,11 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 })
             }
             
-        } else { // Its not anonymous
-            
-            if questionImageView.image!.isEqual(camera) { // Its not anonymous. Question without image
-                
-                // Creating the question
-                let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: "", questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter, likes: 0)
-                
-                // Saving the question in Questions node
-                self.saveQuestionInQuestionsNode(newQuestion.toAnyObject() as AnyObject)
-                
-                // Saving the question in currentUser feed
-                self.saveMyOwnQuestionInMyFeed(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
-                
-                // Saving the question in the Feed node of all the followers of the currentUser
-                self.saveQuestionInFeeds(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
-                
-                // Saving the points for the currentUser
-                self.savePoints()
-                
-            } else { // Its not anonymous. Question with image
-                
-                // Reference for the Question Image
-                let imageData = UIImageJPEGRepresentation(questionImageView.image!, 0.8)
-                let metaData = FIRStorageMetadata()
-                metaData.contentType = "image/jpeg"
-                let imagePath = "questionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/\(UUID().uuidString)/questionPic.jpg"
-                let imageRef = storageRef.reference().child(imagePath)
-                
-                imageRef.put(imageData!, metadata: metaData, completion: { (newMetaData, error) in
-                    if error == nil {
-                        
-                        // Creating the question
-                        let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: String(describing: newMetaData!.downloadURL()!), questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter, likes: 0)
-                        
-                        // Saving the question in Questions node
-                        self.saveQuestionInQuestionsNode(newQuestion.toAnyObject() as AnyObject)
-                        
-                        // Saving the question in currentUser feed
-                        self.saveMyOwnQuestionInMyFeed(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
-                        
-                        // Saving the question in the Feed node of all the followers of the currentUser
-                        self.saveQuestionInFeeds(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
-                        
-                        // Saving the points for the currentUser
-                        self.savePoints()
-
-                    } else {
-                        print(error!.localizedDescription)
-                    }
-                })
-            }
         }
+        
+        alertView.showSuccess("Custom icon", subTitle: "This is a nice alert with a custom icon you choose", circleIconImage: alertViewIcon)
+        
+        dismissKeyboard()
     }
     
     // Function for save the question in Questions node
@@ -316,6 +297,8 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         let questionRef = self.databaseRef.child("Questions").childByAutoId()
         questionRef.setValue(question, withCompletionBlock: { (error, ref) in
             if error == nil {
+                self.navigationController?.isNavigationBarHidden = false
+                self.navigationController?.tabBarController?.tabBar.isHidden = false
                 self.navigationController?.popToRootViewController(animated: true)
             }
         })
@@ -388,16 +371,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newLength:Int = (textView.text as NSString).length + (text as NSString).length - range.length
-        
-        // Disabled/Enabled sendButton
-        if newLength > 0 {
-            sendButton.isUserInteractionEnabled = true
-            sendButton.setImage(UIImage(named: "SentEna"), for: .normal)
-        } else {
-            sendButton.isUserInteractionEnabled = false
-            sendButton.setImage(UIImage(named: "SentDis"), for: .normal)
-        }
-        
+                
         // Movements to limit characters
         let remainChar:Int = 300 - newLength
         
@@ -418,7 +392,6 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
         transition.type = kCATransitionPush
         transition.subtype = kCATransitionFromLeft
-        //transition.delegate = self
         self.navigationController!.view.layer.add(transition, forKey: nil)
         self.navigationController!.isNavigationBarHidden = false
         self.navigationController!.tabBarController?.tabBar.isHidden = false

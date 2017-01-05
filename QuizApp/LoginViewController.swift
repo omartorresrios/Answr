@@ -186,6 +186,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             self.messageLabel.textColor = UIColor.red
             
         }
+        
+        // Hide keyboard
+        dismissKeyboard()
     }
     
     @IBAction func comeBackAction(_ sender: AnyObject) {
