@@ -70,7 +70,22 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
             
             let sendBtnLongPress = UILongPressGestureRecognizer(target: self, action: #selector(AddQuestionViewController.lonPress(_:)))
             sendButton.addGestureRecognizer(sendBtnLongPress)
+            
+            NotificationCenter.default.addObserver(self, selector: #selector(AddQuestionViewController.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         }
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        let userInfo:NSDictionary = notification.userInfo! as NSDictionary
+        let keyboardFrame:NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
+        let keyboardRectangle = keyboardFrame.cgRectValue
+        let keyboardHeight = keyboardRectangle.height
+        
+        let viewWidth = view.bounds.width
+        let viewHeight = view.frame.size.height
+        
+        testView.frame = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight - keyboardHeight)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
