@@ -11,6 +11,7 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
 import Firebase
+import JDStatusBarNotification
 
 class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
     
@@ -130,8 +131,8 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             self.view.bringSubview(toFront: topView)
             
             // Put all Firebase data on labels
-            numberOfComLabel.text = selectedQuestion.numberOfComments
-            counterCommentsLabel.text = "\(selectedQuestion.counterComments!)" + "/"
+            numberOfComLabel.text = "/" + selectedQuestion.numberOfComments + " "
+            counterCommentsLabel.text = " " + "\(selectedQuestion.counterComments!)"
             
             maxNumberComments = Int(selectedQuestion.numberOfComments)!
             
@@ -145,6 +146,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         // UI for commentContent
         commentContent.layer.cornerRadius = commentContent.frame.size.height / 2
         commentContent.clipsToBounds = true
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -223,7 +225,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             let viewHeight = view.frame.size.height
             
             let messageView = UIView(frame: CGRect(x: 0, y: viewHeight, width: viewWidth, height: 0))
-            messageView.backgroundColor = UIColor.red
+            messageView.backgroundColor = UIColor(colorLiteralRed: 18/255.0, green: 165/255.0, blue: 244/255.0, alpha: 1)
             
             UIView.animate(withDuration: 0.2, delay: 0.1, options: .curveEaseIn, animations: {() -> Void in
                 messageView.frame = CGRect(x: 0, y: viewHeight - 30, width: viewWidth, height: 30)
@@ -231,7 +233,9 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             })
             
             let messageLabel = UILabel()
-            messageLabel.text = "La pregunta llegó a su límite de respuestas! :("
+            messageLabel.text = "No se permiten más respuestas 😟"
+            messageLabel.font = UIFont(name: "AvenirNext-Medium", size: 15)
+            messageLabel.textColor = UIColor.white
             messageLabel.translatesAutoresizingMaskIntoConstraints = false
             messageLabel.clipsToBounds = true
             
@@ -239,11 +243,9 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             
             // ios 9 constraint anchors
             // Need x and y anchors
-            messageLabel.leftAnchor.constraint(equalTo: messageView.leftAnchor).isActive = true
             messageLabel.centerYAnchor.constraint(equalTo: messageView.centerYAnchor).isActive = true
             messageLabel.centerXAnchor.constraint(equalTo: messageView.centerXAnchor).isActive = true
-            messageLabel.widthAnchor.constraint(equalToConstant: messageView.frame.size.width - 20).isActive = true
-
+            
             self.view.addSubview(messageView)
             
         }
@@ -284,50 +286,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     }
     
     func animationPoints() {
-        
-        let viewWidth = view.bounds.width
-        let viewHeight = view.frame.size.height
-        let pointsView = UIView()
-        
-        pointsView.backgroundColor = UIColor.red
-        pointsView.layer.cornerRadius = 20
-        pointsView.frame = CGRect(x: (viewWidth / 2) - 20, y: (viewHeight / 2) - 20, width: 40, height: 40)
-        
-        pointsView.alpha = 1.0
-        pointsView.transform = CGAffineTransform.init(scaleX: 1.2, y: 1.2)
-        
-        UIView.animate(withDuration: 1.0, delay: 0.8, options: [.curveEaseInOut], animations: {() -> Void in
-            pointsView.transform = CGAffineTransform.identity
-            pointsView.alpha = 0.0
-            }, completion: {(_ finished: Bool) -> Void in
-        })
-        
-        self.view.addSubview(pointsView)
-        
-        //pointsView.center = self.view.center
-        //pointsView.frame = CGRect(x: 100, y: 240, width: 40, height: 40)
-//        UIView.animate(withDuration: 0.2, delay: 0.1, options: .curveEaseIn, animations: {() -> Void in
-//            messageView.frame = CGRect(x: 0, y: viewHeight - 30, width: viewWidth, height: 30)
-//            }, completion: {(_ finished: Bool) -> Void in
-//        })
-        
-        
-//        let messageLabel = UILabel()
-//        messageLabel.text = "La pregunta llegó a su límite de respuestas! :("
-//        messageLabel.translatesAutoresizingMaskIntoConstraints = false
-//        messageLabel.clipsToBounds = true
-
-        
-        
-        
-//        pointsView.addSubview(messageLabel)
-//        
-//        // ios 9 constraint anchors
-//        // Need x and y anchors
-//        messageLabel.centerYAnchor.constraint(equalTo: messageView.centerYAnchor).isActive = true
-//        messageLabel.centerXAnchor.constraint(equalTo: messageView.centerXAnchor).isActive = true
-//        
-//        self.view.addSubview(messageView)
+        GoogleWearAlert.showAlert(title:"+1", UIImage(named: "logo")!, type: .success, duration: 2.0, inViewController: self)
     }
     
     func textViewDidChange(_ textView: UITextView) {
@@ -343,15 +302,13 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
 
     @IBAction func addCommentAction(_ sender: AnyObject) {
         
-        animationPoints()
-        
         // Process counter
         conditionalCounter = counter
         
         if conditionalCounter < maxNumberComments {
             counter += 1
             selectedQuestion.ref.child("counterComments").setValue(counter)
-            counterCommentsLabel.text = "\(counter)"
+            counterCommentsLabel.text = " " + "\(counter)"
             disabledEnabledCommentStackView()
         }
         
@@ -368,10 +325,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         let alertView = SCLAlertView(appearance: appearance)
         let alertViewIcon = UIImage(named: "logo")
         
-        
-        
-        
-        alertView.addButton("Responde como \(FIRAuth.auth()!.currentUser!.displayName!)") {
+        alertView.addButton("\(FIRAuth.auth()!.currentUser!.displayName!)") {
             
             // Reset UI on commentStackView
             self.SendCommentBtn.isUserInteractionEnabled = false
@@ -391,9 +345,12 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             self.SendCommentBtn.isUserInteractionEnabled = false
             self.SendCommentBtn.setTitleColor(UIColor.darkGray, for: .normal)
             
+            // User geat a point
+            self.animationPoints()
+            
         }
         
-        alertView.addButton("Responde como anónimo") { 
+        alertView.addButton("Anónimo") {
             
             // Reset UI on commentStackView
             self.SendCommentBtn.isUserInteractionEnabled = false
@@ -419,18 +376,18 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
                     // Saving the points for the currentUser
                     self.savePoints()
                     
-                    
-                    
-                    
                 } else {
                     print(error!.localizedDescription)
                 }
             })
+            
+            // User geat a point
+            self.animationPoints()
         }
         
-        //alertView.showInfo("Custom icon", subTitle: "This is a nice alert with a custom icon you choose", circleIconImage: alertViewIcon)
-        alertView.showSuccess("Custom icon", subTitle: "This is a nice alert with a custom icon you choose", circleIconImage: alertViewIcon)
+        alertView.showSuccess("✋", subTitle: "Responde como", circleIconImage: alertViewIcon)
         
+        // Hide keyboard
         dismissKeyboard()
     }
     

@@ -11,8 +11,9 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
 import Firebase
+import JDStatusBarNotification
 
-class CommentWorldViewController: UIViewController {
+class CommentWorldViewController: UIViewController, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var tableviewComment: UITableView!
     @IBOutlet weak var commentContent: UITextView!
@@ -132,20 +133,26 @@ class CommentWorldViewController: UIViewController {
             self.view.bringSubview(toFront: topView)
             
             // Put all Firebase data on labels
-            numberOfComLabel.text = selectedQuestion1.numberOfComments
-            counterCommentsLabel.text = "\(selectedQuestion1.counterComments!)" + "/"
+            numberOfComLabel.text =  "/" + selectedQuestion1.numberOfComments + " "
+            counterCommentsLabel.text = " " + "\(selectedQuestion1.counterComments!)"
             
             maxNumberComments =  Int(selectedQuestion1.numberOfComments)!
             
             // Check if it show or hide commentStackView
             disabledEnabledCommentStackView()
+            
+            
         }
     }
     
     override func viewWillLayoutSubviews() {
-        // UI for commentContent
-        commentContent.layer.cornerRadius = commentContent.frame.size.height / 2
-        commentContent.clipsToBounds = true
+        if counter != maxNumberComments {
+            // UI for commentContent
+            commentContent.layer.cornerRadius = commentContent.frame.size.height / 2
+            commentContent.clipsToBounds = true
+        }
+        
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -222,7 +229,7 @@ class CommentWorldViewController: UIViewController {
             let viewHeight = view.frame.size.height
             
             let messageView = UIView(frame: CGRect(x: 0, y: viewHeight, width: viewWidth, height: 0))
-            messageView.backgroundColor = UIColor.red
+            messageView.backgroundColor = UIColor(colorLiteralRed: 18/255.0, green: 165/255.0, blue: 244/255.0, alpha: 1)
             
             UIView.animate(withDuration: 0.2, delay: 0.1, options: .curveEaseIn, animations: {() -> Void in
                 messageView.frame = CGRect(x: 0, y: viewHeight - 30, width: viewWidth, height: 30)
@@ -230,7 +237,9 @@ class CommentWorldViewController: UIViewController {
             })
             
             let messageLabel = UILabel()
-            messageLabel.text = "La pregunta llegó a su límite de respuestas! :("
+            messageLabel.text = "No se permiten más respuestas 😟"
+            messageLabel.font = UIFont(name: "AvenirNext-Medium", size: 15)
+            messageLabel.textColor = UIColor.white
             messageLabel.translatesAutoresizingMaskIntoConstraints = false
             messageLabel.clipsToBounds = true
             
@@ -280,6 +289,10 @@ class CommentWorldViewController: UIViewController {
         }
     }
     
+    func animationPoints() {
+        GoogleWearAlert.showAlert(title:"+1", UIImage(named: "logo")!, type: .success, duration: 2.0, inViewController: self)
+    }
+    
     func textViewDidChange(_ textView: UITextView) {
         
         if !textView.text.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).isEmpty {
@@ -298,7 +311,7 @@ class CommentWorldViewController: UIViewController {
         if conditionalCounter < maxNumberComments {
             counter += 1
             selectedQuestion1.ref.child("counterComments").setValue(counter)
-            counterCommentsLabel.text = "\(counter)"
+            counterCommentsLabel.text = " " + "\(counter)"
             disabledEnabledCommentStackView()
         }
         
@@ -315,10 +328,7 @@ class CommentWorldViewController: UIViewController {
         let alertView = SCLAlertView(appearance: appearance)
         let alertViewIcon = UIImage(named: "logo")
         
-        
-        
-        
-        alertView.addButton("Responde como \(FIRAuth.auth()!.currentUser!.displayName!)") {
+        alertView.addButton("\(FIRAuth.auth()!.currentUser!.displayName!)") {
             
             // Reset UI on commentStackView
             self.SendCommentBtn.isUserInteractionEnabled = false
@@ -335,12 +345,12 @@ class CommentWorldViewController: UIViewController {
             // Saving the points for the currentUser
             self.savePoints()
             
-            
-            
+            // User geat a point
+            self.animationPoints()
             
         }
         
-        alertView.addButton("Responde como anónimo") {
+        alertView.addButton("Anónimo") {
          
             // Reset UI on commentStackView
             self.SendCommentBtn.isUserInteractionEnabled = false
@@ -370,11 +380,13 @@ class CommentWorldViewController: UIViewController {
                 }
             })
             
+            // User geat a point
+            self.animationPoints()
         }
         
-        //alertView.showInfo("Custom icon", subTitle: "This is a nice alert with a custom icon you choose", circleIconImage: alertViewIcon)
-        alertView.showSuccess("Custom icon", subTitle: "This is a nice alert with a custom icon you choose", circleIconImage: alertViewIcon)
+        alertView.showSuccess("✋", subTitle: "Responde como", circleIconImage: alertViewIcon)
         
+        // Hide keyboard
         dismissKeyboard()
     }
     
@@ -507,16 +519,6 @@ extension CommentWorldViewController: UITableViewDelegate, UITableViewDataSource
                     self.databaseRef.child("Users").child(FIRAuth.auth()!.currentUser!.uid).child("Likes").child(self.questionKey1).removeValue()
                 }
             }
-            
-            //            // Adding bottom line to questionCell
-            //            let border = CALayer()
-            //            let width = CGFloat(0.5)
-            //            border.borderColor = UIColor.lightGray.cgColor
-            //            border.frame = CGRect(x: 0, y: cell.frame.size.height - width, width:  cell.frame.size.width, height: cell.frame.size.height)
-            //
-            //            border.borderWidth = width
-            //            cell.layer.addSublayer(border)
-            //            cell.layer.masksToBounds = true
             
             return cell
             
