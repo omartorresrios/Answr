@@ -286,7 +286,11 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     }
     
     func animationPoints() {
-        GoogleWearAlert.showAlert(title:"+1", UIImage(named: "logo")!, type: .success, duration: 2.0, inViewController: self)
+        if selectedQuestion.numberOfComments.isEmpty {
+            GoogleWearAlert.showAlert(title:"+1", UIImage(named: "logo")!, type: .success, duration: 2.0, inViewController: self)
+        } else {
+            GoogleWearAlert.showAlert(title:"+2", UIImage(named: "logo")!, type: .success, duration: 2.0, inViewController: self)
+        }
     }
     
     func textViewDidChange(_ textView: UITextView) {
@@ -302,16 +306,6 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
 
     @IBAction func addCommentAction(_ sender: AnyObject) {
         
-        // Process counter
-        conditionalCounter = counter
-        
-        if conditionalCounter < maxNumberComments {
-            counter += 1
-            selectedQuestion.ref.child("counterComments").setValue(counter)
-            counterCommentsLabel.text = " " + "\(counter)"
-            disabledEnabledCommentStackView()
-        }
-        
         var commentText: String!
         if let text: String = commentContent.text {
             commentText = text
@@ -326,6 +320,16 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         let alertViewIcon = UIImage(named: "logo")
         
         alertView.addButton("\(FIRAuth.auth()!.currentUser!.displayName!)") {
+            
+            // Process counter
+            self.conditionalCounter = self.counter
+            
+            if self.conditionalCounter < self.maxNumberComments {
+                self.counter += 1
+                self.selectedQuestion.ref.child("counterComments").setValue(self.counter)
+                self.counterCommentsLabel.text = " " + "\(self.counter)"
+                self.disabledEnabledCommentStackView()
+            }
             
             // Reset UI on commentStackView
             self.SendCommentBtn.isUserInteractionEnabled = false
@@ -351,6 +355,16 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         }
         
         alertView.addButton("Anónimo") {
+            
+            // Process counter
+            self.conditionalCounter = self.counter
+            
+            if self.conditionalCounter < self.maxNumberComments {
+                self.counter += 1
+                self.selectedQuestion.ref.child("counterComments").setValue(self.counter)
+                self.counterCommentsLabel.text = " " + "\(self.counter)"
+                self.disabledEnabledCommentStackView()
+            }
             
             // Reset UI on commentStackView
             self.SendCommentBtn.isUserInteractionEnabled = false
@@ -394,12 +408,25 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     // Counting and saving the number of points for the currentUser by answering
     func savePoints() {
         let pointsCount: Int?
-        if self.currentUser.points == nil {
-            pointsCount = 1
+        if selectedQuestion.numberOfComments.isEmpty {
+            
+            if self.currentUser.points == nil {
+                pointsCount = 1
+            } else {
+                pointsCount = self.currentUser.points + 1
+            }
+            self.databaseRef.child("Users").child(self.currentUser.uid).child("points").setValue(pointsCount)
+            
         } else {
-            pointsCount = self.currentUser.points + 1
+            
+            if self.currentUser.points == nil {
+                pointsCount = 2
+            } else {
+                pointsCount = self.currentUser.points + 2
+            }
+            self.databaseRef.child("Users").child(self.currentUser.uid).child("points").setValue(pointsCount)
+            
         }
-        self.databaseRef.child("Users").child(self.currentUser.uid).child("points").setValue(pointsCount)
     }
     
     
