@@ -24,6 +24,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     }
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet var testView: UIView!
+    @IBOutlet weak var loader: UIActivityIndicatorView!
     
     var databaseRef: FIRDatabaseReference! {
         return FIRDatabase.database().reference()
@@ -51,6 +52,8 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor(colorLiteralRed: 21/255.0, green: 216/255.0, blue: 161/255.0, alpha: 1), NSFontAttributeName: UIFont(name: "Avenir Next", size: 20)!]
         
         questionTextView.becomeFirstResponder()
+        
+        self.loader.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
         
         // Set the anonymous image to bgImage
         let image: UIImage = UIImage(named: "anonymous.jpg")!
@@ -166,6 +169,8 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         
         alertView.addButton("Pregunta como \(FIRAuth.auth()!.currentUser!.displayName!)") {
             
+            self.loader.startAnimating()
+            
             if self.questionImageView.image!.isEqual(self.camera) { // Its not anonymous. Question without image
                 
                 // Creating the question
@@ -215,11 +220,11 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                     }
                 })
             }
-            
-            
-            
         }
+        
         alertView.addButton("Pregunta como anónimo") {
+            
+            self.loader.startAnimating()
             
             if self.questionImageView.image!.isEqual(self.camera) { // Anonymous. Question without image
                 
@@ -312,6 +317,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         let questionRef = self.databaseRef.child("Questions").childByAutoId()
         questionRef.setValue(question, withCompletionBlock: { (error, ref) in
             if error == nil {
+                self.loader.stopAnimating()
                 self.navigationController?.isNavigationBarHidden = false
                 self.navigationController?.tabBarController?.tabBar.isHidden = false
                 self.navigationController?.popToRootViewController(animated: true)
