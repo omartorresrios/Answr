@@ -66,9 +66,11 @@ class ImageQuestionTableViewCell: UITableViewCell {
         questionImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imageQuestionTableViewCell?.animate(_:))))
         
         // UI for numberOfComments and counter
+        numberOfComments.backgroundColor = UIColor(colorLiteralRed: 18/255.0, green: 165/255.0, blue: 244/255.0, alpha: 1)
         numberOfComments.isUserInteractionEnabled = true
         numberOfComments.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(TextQuestionTableViewCell.showMessage(_:))))
         
+        commentsCounter.backgroundColor = UIColor(colorLiteralRed: 18/255.0, green: 165/255.0, blue: 244/255.0, alpha: 1)
         commentsCounter.isUserInteractionEnabled = true
         commentsCounter.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(TextQuestionTableViewCell.showMessage(_:))))
     }

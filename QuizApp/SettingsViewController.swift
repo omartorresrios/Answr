@@ -87,7 +87,7 @@ class SettingsViewController: UIViewController, UIImagePickerControllerDelegate,
 
 
         // Creating Tap Gesture to dismiss Keyboard for the userImageView
-        let imageTapGesture = UITapGestureRecognizer(target: self, action: #selector(SettingsTableViewController.choosePictureAction))
+        let imageTapGesture = UITapGestureRecognizer(target: self, action: #selector(SettingsViewController.choosePictureAction))
         imageTapGesture.numberOfTapsRequired = 1
         view.addGestureRecognizer(imageTapGesture)
         
