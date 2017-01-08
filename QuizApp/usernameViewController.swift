@@ -29,7 +29,7 @@ class usernameViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.loader.transform = CGAffineTransform(scaleX: 0.4, y: 0.4)
+        self.loader.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
         
         navigationController?.isNavigationBarHidden = false
         

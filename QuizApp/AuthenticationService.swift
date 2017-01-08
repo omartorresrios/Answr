@@ -79,12 +79,11 @@ struct AuthenticationService {
                 DispatchQueue.main.async(execute: {
                     let alertView =  SCLAlertView()
                     
-                    alertView.showSuccess("Resetting Password", subTitle: "An email containing the different information on how to reset your password has been sent to \(email)")
+                    alertView.showSuccess("Cambiar contraseña", subTitle: "Te hemos enviado un correo a \(email) para que puedas cambiar tu contraseña. ✌️")
                 })
                 
             } else {
-                let alertView =  SCLAlertView()
-                alertView.showError("😁OOPS😁", subTitle: error!.localizedDescription)
+                print(error!.localizedDescription)
             }
         })
         
