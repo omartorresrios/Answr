@@ -129,6 +129,10 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         }
     }
     
+    func animationPoints() {
+        GoogleWearAlert.showAlert(title:"+1", UIImage(named: "logo")!, type: .success, duration: 2.0, inViewController: self)
+    }
+    
     func textViewDidChange(_ textView: UITextView) {
         
         // Enabled/disabled senButton
@@ -164,10 +168,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         let alertView = SCLAlertView(appearance: appearance)
         let alertViewIcon = UIImage(named: "logo")
         
-        
-        
-        
-        alertView.addButton("Pregunta como \(FIRAuth.auth()!.currentUser!.displayName!)") {
+        alertView.addButton("\(FIRAuth.auth()!.currentUser!.displayName!)") {
             
             self.loader.startAnimating()
             
@@ -220,9 +221,13 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                     }
                 })
             }
+            
+            // User geat a point
+            self.animationPoints()
+            
         }
         
-        alertView.addButton("Pregunta como anónimo") {
+        alertView.addButton("Anónimo") {
             
             self.loader.startAnimating()
             
@@ -305,10 +310,14 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
                 })
             }
             
+            // User geat a point
+            self.animationPoints()
+            
         }
         
-        alertView.showSuccess("Custom icon", subTitle: "This is a nice alert with a custom icon you choose", circleIconImage: alertViewIcon)
+        alertView.showSuccess("✋", subTitle: "Pregunta como", circleIconImage: alertViewIcon)
         
+        // Hide keyboard
         dismissKeyboard()
     }
     
