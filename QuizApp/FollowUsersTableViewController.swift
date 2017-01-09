@@ -15,6 +15,7 @@ import FirebaseAuth
 class FollowUsersTableViewController: UITableViewController, UISearchResultsUpdating {
     
     @IBOutlet var followUsersTableView: UITableView!
+    @IBOutlet weak var loader: UIActivityIndicatorView!
     
     let searchController = UISearchController(searchResultsController: nil)
     var usersArray = [NSDictionary?]()
@@ -49,24 +50,7 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
         tableView.tableHeaderView = searchController.searchBar
         searchController.searchBar.placeholder = "Busca"
         
-        databaseRef.child("Users").queryOrdered(byChild: "firstName").observe(.childAdded, with: { (snapshot) in
-            
-            let key = snapshot.key
-            let snapshot = snapshot.value as? NSDictionary
-            snapshot?.setValue(key, forKey: "uid")
-            
-            if key == self.currentUser?.uid {
-                print("Same as currentUser")
-            } else {
-                self.usersArray.append(snapshot)
-                
-                // Insert the rows
-                self.followUsersTableView.insertRows(at: [IndexPath(row: self.usersArray.count - 1, section: 0)], with: UITableViewRowAnimation.automatic)
-            }
-            
-        }) { (error) in
-            print(error.localizedDescription)
-        }
+        fetchUsers()
         
         // DGElasticPullToRefresh
         let loadingView = DGElasticPullToRefreshLoadingViewCircle()
@@ -80,6 +64,39 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
         tableView.dg_setPullToRefreshFillColor(UIColor(red: 57/255.0, green: 67/255.0, blue: 89/255.0, alpha: 1.0))
         tableView.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
         
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        // UI for loader (activity indicator)
+        loader.center = CGPoint(x: CGFloat(view.frame.size.width / 2), y: CGFloat(100))
+    }
+    
+    func fetchUsers() {
+        
+        self.loader.startAnimating()
+        
+        databaseRef.child("Users").queryOrdered(byChild: "firstName").observe(.childAdded, with: { (snapshot) in
+            
+            let key = snapshot.key
+            let snapshot = snapshot.value as? NSDictionary
+            snapshot?.setValue(key, forKey: "uid")
+            
+            if key == self.currentUser?.uid {
+                print("Same as currentUser")
+            } else {
+                self.usersArray.append(snapshot)
+                
+                // Insert the rows
+                self.followUsersTableView.insertRows(at: [IndexPath(row: self.usersArray.count - 1, section: 0)], with: UITableViewRowAnimation.automatic)
+                
+                self.loader.stopAnimating()
+            }
+            
+        }) { (error) in
+            print(error.localizedDescription)
+        }
     }
     
     override func didReceiveMemoryWarning() {

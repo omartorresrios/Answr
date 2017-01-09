@@ -44,7 +44,17 @@ class UpdatePasswordViewController: UIViewController {
         
         userEmail.becomeFirstResponder()
         
+        // Reachability for checking internet connection
+        NotificationCenter.default.addObserver(self, selector: #selector(AddQuestionViewController.reachabilityStatusChanged), name: NSNotification.Name(rawValue: "ReachStatusChanged"), object: nil)
+        
     }
+    
+    func reachabilityStatusChanged() {
+        if reachability?.isReachable == false {
+            saveButton.isUserInteractionEnabled = false
+        }
+    }
+    
     @IBAction func userEmailEditingChanged(_ sender: AnyObject) {
         if userEmail.text!.characters.count > 0 {
             self.message.text = ""
@@ -63,30 +73,34 @@ class UpdatePasswordViewController: UIViewController {
         
         self.loader.startAnimating()
         
-        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
-        let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
-        
-        if emailTest.evaluate(with: userEmail.text!) == true { // Valid email
+        // Check for internet connection
+        if (reachability?.isReachable)! {
             
-            if userEmail.text! == user.email {
+            let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
+            let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
+            
+            if emailTest.evaluate(with: userEmail.text!) == true { // Valid email
+                
+                if userEmail.text! == user.email {
+                    self.loader.stopAnimating()
+                    
+                    let email = self.userEmail.text!
+                    
+                    self.authenticationService.resetPassword(email)
+                    
+                } else {
+                    self.loader.stopAnimating()
+                    
+                    self.message.text = "Ese no es tu correo."
+                    self.message.textColor = UIColor.red
+                }
+                
+            } else { // Invalid email
                 self.loader.stopAnimating()
-                
-                let email = self.userEmail.text!
-                
-                self.authenticationService.resetPassword(email)
-                
-            } else {
-                self.loader.stopAnimating()
-                
-                self.message.text = "Ese no es tu correo."
+                self.message.text = "Introduce un correo válido por favor."
                 self.message.textColor = UIColor.red
+                
             }
-            
-        } else { // Invalid email
-            self.loader.stopAnimating()
-            self.message.text = "Introduce un correo válido por favor."
-            self.message.textColor = UIColor.red
-            
         }
     }
     

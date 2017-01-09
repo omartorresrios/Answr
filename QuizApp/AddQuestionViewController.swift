@@ -76,6 +76,15 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
             
             NotificationCenter.default.addObserver(self, selector: #selector(AddQuestionViewController.keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         }
+        
+        // Reachability for checking internet connection
+        NotificationCenter.default.addObserver(self, selector: #selector(AddQuestionViewController.reachabilityStatusChanged), name: NSNotification.Name(rawValue: "ReachStatusChanged"), object: nil)
+    }
+    
+    func reachabilityStatusChanged() {
+        if reachability?.isReachable == false {
+            sendButton.isUserInteractionEnabled = false
+        }
     }
     
     func keyboardWillShow(notification: NSNotification) {
@@ -130,7 +139,10 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     }
     
     func animationPoints() {
-        GoogleWearAlert.showAlert(title:"+1", UIImage(named: "logo")!, type: .success, duration: 2.0, inViewController: self)
+        // Check for internet connection
+        if (reachability?.isReachable)! {
+            GoogleWearAlert.showAlert(title:"+1", UIImage(named: "logo")!, type: .success, duration: 2.0, inViewController: self)
+        }
     }
     
     func textViewDidChange(_ textView: UITextView) {
@@ -143,7 +155,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
             sendButton.isUserInteractionEnabled = false
             sendButton.setImage(UIImage(named: "SentDis"), for: .normal)
         }
-        
+
     }
     
     @IBAction func saveQuestionAction(_ sender: AnyObject) {
@@ -172,146 +184,154 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
             
             self.loader.startAnimating()
             
-            if self.questionImageView.image!.isEqual(self.camera) { // Its not anonymous. Question without image
+            // Check for internet connection
+            if (reachability?.isReachable)! {
                 
-                // Creating the question
-                let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: "", questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter, likes: 0)
-                
-                // Saving the question in Questions node
-                self.saveQuestionInQuestionsNode(newQuestion.toAnyObject() as AnyObject)
-                
-                // Saving the question in currentUser feed
-                self.saveMyOwnQuestionInMyFeed(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
-                
-                // Saving the question in the Feed node of all the followers of the currentUser
-                self.saveQuestionInFeeds(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
-                
-                // Saving the points for the currentUser
-                self.savePoints()
-                
-            } else { // Its not anonymous. Question with image
-                
-                // Reference for the Question Image
-                let imageData = UIImageJPEGRepresentation(self.questionImageView.image!, 0.8)
-                let metaData = FIRStorageMetadata()
-                metaData.contentType = "image/jpeg"
-                let imagePath = "questionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/\(UUID().uuidString)/questionPic.jpg"
-                let imageRef = self.storageRef.reference().child(imagePath)
-                
-                imageRef.put(imageData!, metadata: metaData, completion: { (newMetaData, error) in
-                    if error == nil {
-                        
-                        // Creating the question
-                        let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: String(describing: newMetaData!.downloadURL()!), questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter, likes: 0)
-                        
-                        // Saving the question in Questions node
-                        self.saveQuestionInQuestionsNode(newQuestion.toAnyObject() as AnyObject)
-                        
-                        // Saving the question in currentUser feed
-                        self.saveMyOwnQuestionInMyFeed(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
-                        
-                        // Saving the question in the Feed node of all the followers of the currentUser
-                        self.saveQuestionInFeeds(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
-                        
-                        // Saving the points for the currentUser
-                        self.savePoints()
-                        
-                    } else {
-                        print(error!.localizedDescription)
-                    }
-                })
+                if self.questionImageView.image!.isEqual(self.camera) { // Its not anonymous. Question without image
+                    
+                    // Creating the question
+                    let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: "", questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter, likes: 0)
+                    
+                    // Saving the question in Questions node
+                    self.saveQuestionInQuestionsNode(newQuestion.toAnyObject() as AnyObject)
+                    
+                    // Saving the question in currentUser feed
+                    self.saveMyOwnQuestionInMyFeed(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                    
+                    // Saving the question in the Feed node of all the followers of the currentUser
+                    self.saveQuestionInFeeds(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                    
+                    // Saving the points for the currentUser
+                    self.savePoints()
+                    
+                } else { // Its not anonymous. Question with image
+                    
+                    // Reference for the Question Image
+                    let imageData = UIImageJPEGRepresentation(self.questionImageView.image!, 0.8)
+                    let metaData = FIRStorageMetadata()
+                    metaData.contentType = "image/jpeg"
+                    let imagePath = "questionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/\(UUID().uuidString)/questionPic.jpg"
+                    let imageRef = self.storageRef.reference().child(imagePath)
+                    
+                    imageRef.put(imageData!, metadata: metaData, completion: { (newMetaData, error) in
+                        if error == nil {
+                            
+                            // Creating the question
+                            let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: String(describing: newMetaData!.downloadURL()!), questionerImageURL: self.currentUser.photoURL, firstName: self.currentUser.firstName, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter, likes: 0)
+                            
+                            // Saving the question in Questions node
+                            self.saveQuestionInQuestionsNode(newQuestion.toAnyObject() as AnyObject)
+                            
+                            // Saving the question in currentUser feed
+                            self.saveMyOwnQuestionInMyFeed(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                            
+                            // Saving the question in the Feed node of all the followers of the currentUser
+                            self.saveQuestionInFeeds(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                            
+                            // Saving the points for the currentUser
+                            self.savePoints()
+                            
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                }
+            
+                // User get a point
+                self.animationPoints()
             }
-            
-            // User geat a point
-            self.animationPoints()
-            
         }
         
         alertView.addButton("Anónimo") {
             
             self.loader.startAnimating()
             
-            if self.questionImageView.image!.isEqual(self.camera) { // Anonymous. Question without image
+            // Check for internet connection
+            if (reachability?.isReachable)! {
                 
-                // Reference for the Anonymous Image
-                let anonymousImg = self.anonymousImage.image
-                let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.1)
-                let metaData = FIRStorageMetadata()
-                metaData.contentType = "image/jpeg"
-                let anonymousImagePath = "anonymousQuestionsWithoutImage/\(FIRAuth.auth()!.currentUser!.uid)/\(UUID().uuidString)/anonymousQuestionerPic.jpg"
-                let anonymousImageRef = self.storageRef.reference().child(anonymousImagePath)
-                anonymousImageRef.put(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
-                    if error == nil {
-                        metadata!.downloadURL()
-                        
-                        // Creating the question
-                        let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: "", questionerImageURL: String(describing: metadata!.downloadURL()!), firstName: self.anonymous, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter, likes: 0)
-                        
-                        // Saving the question in Questions node
-                        self.saveQuestionInQuestionsNode(newQuestion.toAnyObject() as AnyObject)
-                        
-                        // Saving the question in currentUser feed
-                        self.saveMyOwnQuestionInMyFeed(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
-                        
-                        // Saving the question in the Feed node of all the followers of the currentUser
-                        self.saveQuestionInFeeds(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
-                        
-                        // Saving the points for the currentUser
-                        self.savePoints()
-                        
-                    } else {
-                        print(error!.localizedDescription)
-                    }
-                })
-                
-            } else {  // Anonymous. Question with image
-                
-                // Reference for the Question Image
-                let imageData = UIImageJPEGRepresentation(self.questionImageView.image!, 0.8)
-                let metaData = FIRStorageMetadata()
-                metaData.contentType = "image/jpeg"
-                let imagePath = "anonymousQuestionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/\(UUID().uuidString)/questionPic.jpg"
-                let imageRef = self.storageRef.reference().child(imagePath)
-                
-                // Reference for the Anonymous Image
-                let anonymousImg = self.anonymousImage.image
-                let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.1)
-                let anonymousImagePath = "anonymousQuestionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/\(UUID().uuidString)/anonymousQuestionerPic.jpg"
-                let anonymousImageRef = self.storageRef.reference().child(anonymousImagePath)
-                anonymousImageRef.put(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
-                    if error == nil {
-                        metadata!.downloadURL()
-                        
-                        imageRef.put(imageData!, metadata: metaData, completion: { (newMetaData, error) in
-                            if error == nil {
-                                
-                                // Creating the question
-                                let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: String(describing: newMetaData!.downloadURL()!), questionerImageURL: String(describing: metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter, likes: 0)
-                                
-                                // Saving the question in Questions node
-                                self.saveQuestionInQuestionsNode(newQuestion.toAnyObject() as AnyObject)
-                                
-                                // Saving the question in currentUser feed
-                                self.saveMyOwnQuestionInMyFeed(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
-                                
-                                // Saving the question in the Feed node of all the followers of the currentUser
-                                self.saveQuestionInFeeds(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
-                                
-                                // Saving the points for the currentUser
-                                self.savePoints()
-                                
-                            } else {
-                                print(error!.localizedDescription)
-                            }
-                        })
-                    } else {
-                        print(error!.localizedDescription)
-                    }
-                })
-            }
+                if self.questionImageView.image!.isEqual(self.camera) { // Anonymous. Question without image
+                    
+                    // Reference for the Anonymous Image
+                    let anonymousImg = self.anonymousImage.image
+                    let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.1)
+                    let metaData = FIRStorageMetadata()
+                    metaData.contentType = "image/jpeg"
+                    let anonymousImagePath = "anonymousQuestionsWithoutImage/\(FIRAuth.auth()!.currentUser!.uid)/\(UUID().uuidString)/anonymousQuestionerPic.jpg"
+                    let anonymousImageRef = self.storageRef.reference().child(anonymousImagePath)
+                    anonymousImageRef.put(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
+                        if error == nil {
+                            metadata!.downloadURL()
+                            
+                            // Creating the question
+                            let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: "", questionerImageURL: String(describing: metadata!.downloadURL()!), firstName: self.anonymous, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter, likes: 0)
+                            
+                            // Saving the question in Questions node
+                            self.saveQuestionInQuestionsNode(newQuestion.toAnyObject() as AnyObject)
+                            
+                            // Saving the question in currentUser feed
+                            self.saveMyOwnQuestionInMyFeed(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                            
+                            // Saving the question in the Feed node of all the followers of the currentUser
+                            self.saveQuestionInFeeds(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                            
+                            // Saving the points for the currentUser
+                            self.savePoints()
+                            
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                    
+                } else {  // Anonymous. Question with image
+                    
+                    // Reference for the Question Image
+                    let imageData = UIImageJPEGRepresentation(self.questionImageView.image!, 0.8)
+                    let metaData = FIRStorageMetadata()
+                    metaData.contentType = "image/jpeg"
+                    let imagePath = "anonymousQuestionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/\(UUID().uuidString)/questionPic.jpg"
+                    let imageRef = self.storageRef.reference().child(imagePath)
+                    
+                    // Reference for the Anonymous Image
+                    let anonymousImg = self.anonymousImage.image
+                    let anonymousImgData = UIImageJPEGRepresentation(anonymousImg!, 0.1)
+                    let anonymousImagePath = "anonymousQuestionsWithImage/\(FIRAuth.auth()!.currentUser!.uid)/\(UUID().uuidString)/anonymousQuestionerPic.jpg"
+                    let anonymousImageRef = self.storageRef.reference().child(anonymousImagePath)
+                    anonymousImageRef.put(anonymousImgData!, metadata: metaData, completion: { (metadata, error) in
+                        if error == nil {
+                            metadata!.downloadURL()
+                            
+                            imageRef.put(imageData!, metadata: metaData, completion: { (newMetaData, error) in
+                                if error == nil {
+                                    
+                                    // Creating the question
+                                    let newQuestion = Question(userUid: self.currentUser.uid, questionId: UUID().uuidString, questionText: questionText, questionImageURL: String(describing: newMetaData!.downloadURL()!), questionerImageURL: String(describing: metadata!.downloadURL()!),firstName: self.anonymous, numberOfComments: numberComments, timestamp: NSNumber(value: Date().timeIntervalSince1970), counterComments: self.counter, likes: 0)
+                                    
+                                    // Saving the question in Questions node
+                                    self.saveQuestionInQuestionsNode(newQuestion.toAnyObject() as AnyObject)
+                                    
+                                    // Saving the question in currentUser feed
+                                    self.saveMyOwnQuestionInMyFeed(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                                    
+                                    // Saving the question in the Feed node of all the followers of the currentUser
+                                    self.saveQuestionInFeeds(newQuestion.toAnyObject() as AnyObject, questionId: newQuestion.questionId)
+                                    
+                                    // Saving the points for the currentUser
+                                    self.savePoints()
+                                    
+                                } else {
+                                    print(error!.localizedDescription)
+                                }
+                            })
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                }
             
-            // User geat a point
-            self.animationPoints()
+                // User geat a point
+                self.animationPoints()
+            
+            }
             
         }
         
@@ -349,8 +369,9 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         self.databaseRef.child("followers").child(self.currentUser.uid).observe(.value, with: { (snapshot) in
             for follower in snapshot.children {
                 let followerSnapshot = User(snapshot: follower as! FIRDataSnapshot)
-                
+            
                 let followerRef = self.databaseRef.child("Users").child(followerSnapshot.uid).child("Feed").child(questionId)
+                
                 followerRef.setValue(question, withCompletionBlock: { (error, ref) in
                     if error == nil {
                         print("Question added to follower's feed")
@@ -362,13 +383,18 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     
     // Counting and saving the number of points for the currentUser by asking
     func savePoints() {
-        let pointsCount: Int?
-        if self.currentUser.points == nil {
-            pointsCount = 1
-        } else {
-            pointsCount = self.currentUser.points + 1
+        
+        // Check for internet connection
+        if (reachability?.isReachable)! {
+            
+            let pointsCount: Int?
+            if self.currentUser.points == nil {
+                pointsCount = 1
+            } else {
+                pointsCount = self.currentUser.points + 1
+            }
+            self.databaseRef.child("Users").child(self.currentUser.uid).child("points").setValue(pointsCount)
         }
-        self.databaseRef.child("Users").child(self.currentUser.uid).child("points").setValue(pointsCount)
     }
     
     @IBAction func choosePictureAction(_ sender: AnyObject) {

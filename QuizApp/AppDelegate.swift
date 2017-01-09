@@ -11,11 +11,14 @@ import CoreData
 import Firebase
 import JDStatusBarNotification
 
+
+let reachability = Reachability()
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    let reachability = Reachability()!
+    var reachability = Reachability()!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 
@@ -41,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func reachabilityChanged(note: NSNotification) {
         
-        let reachability = note.object as! Reachability
+        reachability = note.object as! Reachability
         
         if reachability.isReachable {
             if reachability.isReachableViaWiFi {
@@ -53,6 +56,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("Network not reachable")
             JDStatusBarNotification.show(withStatus: "Revisa tu conexión e intenta de nuevo", dismissAfter: 3.0, styleName: JDStatusBarStyleDark)
         }
+        
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "ReachStatusChanged"), object: nil)
+        
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

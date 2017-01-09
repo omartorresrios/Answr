@@ -46,6 +46,15 @@ class UpdateEmailViewController: UIViewController {
         
         userEmail.becomeFirstResponder()
         
+        // Reachability for checking internet connection
+        NotificationCenter.default.addObserver(self, selector: #selector(AddQuestionViewController.reachabilityStatusChanged), name: NSNotification.Name(rawValue: "ReachStatusChanged"), object: nil)
+        
+    }
+    
+    func reachabilityStatusChanged() {
+        if reachability?.isReachable == false {
+            saveButton.isUserInteractionEnabled = false
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -70,65 +79,69 @@ class UpdateEmailViewController: UIViewController {
         
         self.loader.startAnimating()
         
-        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
-        let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
-        
-        if emailTest.evaluate(with: userEmail.text!) == true { // Valid email
+        // Check for internet connection
+        if (reachability?.isReachable)! {
             
-            self.databaseRef.child("Users").queryOrdered(byChild: "email").queryEqual(toValue: userEmail.text!)
-                .observe(.value, with: { snapshot in
-                    
-                    if snapshot.exists() {
-                        self.loader.stopAnimating()
+            let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
+            let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
+            
+            if emailTest.evaluate(with: userEmail.text!) == true { // Valid email
+                
+                self.databaseRef.child("Users").queryOrdered(byChild: "email").queryEqual(toValue: userEmail.text!)
+                    .observe(.value, with: { snapshot in
                         
-                        self.message.text = "Ese correo ya está asociado a un nombre de usuario."
-                        self.message.textColor = UIColor.red
-                        
-                    } else {
-                        self.loader.stopAnimating()
-                        
-                        let email = self.userEmail.text!
-                        
-                        let changeRequest = FIRAuth.auth()!.currentUser!.profileChangeRequest()
-                        changeRequest.displayName = self.name
-                        
-                        changeRequest.commitChanges(completion: { (error) in
-                            if error == nil {
-                                let userRef = self.databaseRef.child("Users").child(self.user.uid)
-                                userRef.child("email").setValue(email, withCompletionBlock: { (error, ref) in
-                                    if error == nil {
-                                        print("currentUser email updated")
-                                        
-                                        // Once updated, return to SettingsVC
-                                        for controller in self.navigationController!.viewControllers as Array {
-                                            if controller is SettingsViewController {
-                                                self.navigationController!.popToViewController(controller as UIViewController, animated: true)
-                                                break
+                        if snapshot.exists() {
+                            self.loader.stopAnimating()
+                            
+                            self.message.text = "Ese correo ya está asociado a un nombre de usuario."
+                            self.message.textColor = UIColor.red
+                            
+                        } else {
+                            self.loader.stopAnimating()
+                            
+                            let email = self.userEmail.text!
+                            
+                            let changeRequest = FIRAuth.auth()!.currentUser!.profileChangeRequest()
+                            changeRequest.displayName = self.name
+                            
+                            changeRequest.commitChanges(completion: { (error) in
+                                if error == nil {
+                                    let userRef = self.databaseRef.child("Users").child(self.user.uid)
+                                    userRef.child("email").setValue(email, withCompletionBlock: { (error, ref) in
+                                        if error == nil {
+                                            print("currentUser email updated")
+                                            
+                                            // Once updated, return to SettingsVC
+                                            for controller in self.navigationController!.viewControllers as Array {
+                                                if controller is SettingsViewController {
+                                                    self.navigationController!.popToViewController(controller as UIViewController, animated: true)
+                                                    break
+                                                }
                                             }
+                                        } else {
+                                            let alertView = SCLAlertView()
+                                            alertView.showError("🙁", subTitle: "Hubo un problema, no se pudo actualizar. Intenta de nuevo!")
                                         }
-                                    } else {
-                                        let alertView = SCLAlertView()
-                                        alertView.showError("🙁", subTitle: "Hubo un problema, no se pudo actualizar. Intenta de nuevo!")
-                                    }
-                                })
-                                
-                                
-                            } else {
-                                print(error!.localizedDescription)
-                            }
-                        })
+                                    })
+                                    
+                                    
+                                } else {
+                                    print(error!.localizedDescription)
+                                }
+                            })
+                            
+                        }
                         
-                    }
-                    
-                }) { (error) in
-                    print(error.localizedDescription)
+                    }) { (error) in
+                        print(error.localizedDescription)
+                }
+                
+            } else { // Invalid email
+                self.loader.stopAnimating()
+                self.message.text = "Introduce un correo válido por favor."
+                self.message.textColor = UIColor.red
+                
             }
-            
-        } else { // Invalid email
-            self.loader.stopAnimating()
-            self.message.text = "Introduce un correo válido por favor."
-            self.message.textColor = UIColor.red
-            
         }
     }
     

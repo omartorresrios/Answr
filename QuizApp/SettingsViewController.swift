@@ -94,8 +94,17 @@ class SettingsViewController: UIViewController, UIImagePickerControllerDelegate,
         userImageView.isUserInteractionEnabled = true
         userImageView.addGestureRecognizer(imageTapGesture)
         
-        
         fetchCurrentUserInfo()
+        
+        // Reachability for checking internet connection
+        NotificationCenter.default.addObserver(self, selector: #selector(AddQuestionViewController.reachabilityStatusChanged), name: NSNotification.Name(rawValue: "ReachStatusChanged"), object: nil)
+        
+    }
+    
+    func reachabilityStatusChanged() {
+        if reachability?.isReachable == false {
+            print("JAJAJ")//saveButton.isUserInteractionEnabled = false
+        }
     }
     
     func topBorder(uiView: UIView) {
@@ -208,60 +217,69 @@ class SettingsViewController: UIViewController, UIImagePickerControllerDelegate,
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         self.dismiss(animated: true, completion: nil)
         
+        
         self.loader.startAnimating()
         
         self.userImageView.image = image
+        self.userImageView.alpha = 0.2
         
-        let name = self.name.text!
-        
-        let imgData = UIImageJPEGRepresentation(image, 0.1)!
-        
-        let imagePath = "profileImages/\(self.user.uid)/userPic.jpg"
-        
-        let imageRef = self.storageRef.child(imagePath)
-        
-        let metadata = FIRStorageMetadata()
-        metadata.contentType = "image/jpeg"
-        
-        imageRef.put(imgData, metadata: metadata) { (metadata, error) in
-            if error == nil {
-                
-                let changeRequest = FIRAuth.auth()!.currentUser!.profileChangeRequest()
-                changeRequest.displayName = name
-                
-                if let photoURL = metadata!.downloadURL(){
-                    changeRequest.photoURL = photoURL
-                }
-                
-                changeRequest.commitChanges(completion: { (error) in
-                    if error == nil {
-                        let userRef = self.databaseRef.child("Users").child(self.user.uid)
-                        
-                        
-                        userRef.child("photoURL").setValue(String(describing: self.currentUser.photoURL!), withCompletionBlock: { (error, ref) in
-                            
-                            if error == nil {
-                                print("currentUser photoURL updated")
-                                
-                                self.loader.stopAnimating()
-                                
-                                UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.5, options: [.curveEaseIn], animations: { 
-                                    self.checkmark.alpha = 1
-                                    }, completion: {(_ finished: Bool) -> Void in
-                                        self.checkmark.alpha = 0
-                                })
-                                
-                            } else {
-                                let alertView = SCLAlertView()
-                                alertView.showError("🙁", subTitle: "Hubo un problema, no se pudo actualizar. Intenta de nuevo!")
-                            }
-                        })
-                    } else {
-                        print(error!.localizedDescription)
+        // Check for internet connection
+        if (reachability?.isReachable)! {
+            
+            //self.userImageView.image = image
+            
+            let name = self.name.text!
+            
+            let imgData = UIImageJPEGRepresentation(image, 0.1)!
+            
+            let imagePath = "profileImages/\(self.user.uid)/userPic.jpg"
+            
+            let imageRef = self.storageRef.child(imagePath)
+            
+            let metadata = FIRStorageMetadata()
+            metadata.contentType = "image/jpeg"
+            
+            imageRef.put(imgData, metadata: metadata) { (metadata, error) in
+                if error == nil {
+                    
+                    let changeRequest = FIRAuth.auth()!.currentUser!.profileChangeRequest()
+                    changeRequest.displayName = name
+                    
+                    if let photoURL = metadata!.downloadURL(){
+                        changeRequest.photoURL = photoURL
                     }
-                })
-            } else {
-                print(error!.localizedDescription)
+                    
+                    changeRequest.commitChanges(completion: { (error) in
+                        if error == nil {
+                            let userRef = self.databaseRef.child("Users").child(self.user.uid)
+                            
+                            
+                            userRef.child("photoURL").setValue(String(describing: self.currentUser.photoURL!), withCompletionBlock: { (error, ref) in
+                                
+                                if error == nil {
+                                    print("currentUser photoURL updated")
+                                    
+                                    self.loader.stopAnimating()
+                                    
+                                    UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.5, options: [.curveEaseIn], animations: {
+                                        self.checkmark.alpha = 1
+                                        }, completion: {(_ finished: Bool) -> Void in
+                                            self.checkmark.alpha = 0
+                                            self.userImageView.alpha = 1
+                                    })
+                                    
+                                } else {
+                                    let alertView = SCLAlertView()
+                                    alertView.showError("🙁", subTitle: "Hubo un problema, no se pudo actualizar. Intenta de nuevo!")
+                                }
+                            })
+                        } else {
+                            print(error!.localizedDescription)
+                        }
+                    })
+                } else {
+                    print(error!.localizedDescription)
+                }
             }
         }
     }
