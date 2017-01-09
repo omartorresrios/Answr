@@ -950,11 +950,11 @@ respuestas</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="followersUserCell" rowHeight="64" id="JvU-FL-TAk" customClass="FollowersListTableViewCell" customModule="QuizApp" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="followersUserCell" rowHeight="64" id="JvU-FL-TAk" customClass="FollowersListTableViewCell" customModule="QuizApp" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="92" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JvU-FL-TAk" id="qCd-E3-Rs3">
-                                    <frame key="frameInset" width="342" height="64"/>
+                                    <frame key="frameInset" width="375" height="63"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ljX-OD-EYv">
@@ -996,14 +996,29 @@ respuestas</string>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I7v-Il-1ja">
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="69" id="xd5-Ss-khn"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="14"/>
+                                            <state key="normal" title="Follow">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="didTapFollow:" destination="JvU-FL-TAk" eventType="touchUpInside" id="2KB-n0-g1k"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="I7v-Il-1ja" secondAttribute="bottom" constant="18" id="4BS-xZ-J8s"/>
                                         <constraint firstItem="ksk-G3-Thw" firstAttribute="leading" secondItem="ljX-OD-EYv" secondAttribute="trailing" constant="4" id="AlM-Hy-2I2"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="nGU-RS-1uD" secondAttribute="bottom" constant="13" id="DLi-sS-WK4"/>
                                         <constraint firstItem="nGU-RS-1uD" firstAttribute="leading" secondItem="ksk-G3-Thw" secondAttribute="trailing" constant="4" id="Gfk-7h-Jjy"/>
+                                        <constraint firstItem="I7v-Il-1ja" firstAttribute="top" secondItem="qCd-E3-Rs3" secondAttribute="top" constant="16" id="JH1-on-fWV"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="ljX-OD-EYv" secondAttribute="bottom" constant="8" id="KVL-uP-ZqO"/>
                                         <constraint firstItem="GZv-dX-g5g" firstAttribute="top" secondItem="qCd-E3-Rs3" secondAttribute="topMargin" constant="5" id="MiN-0r-Mv6"/>
                                         <constraint firstAttribute="leadingMargin" secondItem="GZv-dX-g5g" secondAttribute="leading" id="OTS-kh-xKc"/>
+                                        <constraint firstAttribute="trailing" secondItem="I7v-Il-1ja" secondAttribute="trailing" id="POX-sM-1iu"/>
                                         <constraint firstItem="ljX-OD-EYv" firstAttribute="leading" secondItem="GZv-dX-g5g" secondAttribute="trailing" constant="8" id="TGC-D6-BI6"/>
                                         <constraint firstItem="ljX-OD-EYv" firstAttribute="top" secondItem="jda-iw-q1z" secondAttribute="bottom" constant="4" id="Tam-dk-XLI"/>
                                         <constraint firstItem="nGU-RS-1uD" firstAttribute="top" secondItem="qCd-E3-Rs3" secondAttribute="topMargin" constant="13" id="Tmf-73-ObG"/>
@@ -1018,10 +1033,11 @@ respuestas</string>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="firstName" destination="jda-iw-q1z" id="04p-Lm-Ada"/>
+                                    <outlet property="followButton" destination="I7v-Il-1ja" id="Jz8-34-0nY"/>
                                     <outlet property="points" destination="nGU-RS-1uD" id="DQ5-vs-NNW"/>
                                     <outlet property="userImage" destination="GZv-dX-g5g" id="wRF-bD-t4x"/>
                                     <outlet property="username" destination="ljX-OD-EYv" id="CLt-xl-Q4J"/>
-                                    <segue destination="P1f-ga-tIW" kind="push" identifier="ShowUser" id="1yc-WX-sgd"/>
+                                    <segue destination="P1f-ga-tIW" kind="push" identifier="showUserFromFollowers" id="A44-11-pdW"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -1056,11 +1072,11 @@ respuestas</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="followingUserCell" rowHeight="64" id="R94-Eu-Szx" customClass="FollowingsListTableViewCell" customModule="QuizApp" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="followingUserCell" rowHeight="64" id="R94-Eu-Szx" customClass="FollowingsListTableViewCell" customModule="QuizApp" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="92" width="375" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="R94-Eu-Szx" id="10E-Iu-cv5">
-                                    <frame key="frameInset" width="342" height="64"/>
+                                    <frame key="frameInset" width="375" height="63"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="edz-7z-PTx">
@@ -1102,6 +1118,19 @@ respuestas</string>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tPr-mD-8Sk">
+                                            <frame key="frameInset" minX="306" minY="16" width="69" height="29.5"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="69" id="JBd-wf-DgA"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="14"/>
+                                            <state key="normal" title="Follow">
+                                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="didTapFollow:" destination="R94-Eu-Szx" eventType="touchUpInside" id="JMQ-MB-VhA"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="rfc-up-Phm" firstAttribute="top" secondItem="10E-Iu-cv5" secondAttribute="topMargin" constant="13" id="0L8-1a-dHa"/>
@@ -1111,11 +1140,14 @@ respuestas</string>
                                         <constraint firstAttribute="bottomMargin" secondItem="edz-7z-PTx" secondAttribute="bottom" constant="5" id="9js-tB-gpW"/>
                                         <constraint firstItem="rfc-up-Phm" firstAttribute="leading" secondItem="Ykn-Lg-7iH" secondAttribute="trailing" constant="4" id="Cga-be-VMi"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="PeA-FK-MpW" secondAttribute="bottom" constant="7" id="HNd-am-IlZ"/>
+                                        <constraint firstItem="tPr-mD-8Sk" firstAttribute="top" secondItem="10E-Iu-cv5" secondAttribute="top" constant="16" id="Jfx-ob-30a"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="Ykn-Lg-7iH" secondAttribute="bottom" constant="14" id="NOh-pF-M7A"/>
                                         <constraint firstItem="4Yt-WZ-bij" firstAttribute="top" secondItem="10E-Iu-cv5" secondAttribute="topMargin" constant="9" id="Pzc-fH-6OZ"/>
+                                        <constraint firstAttribute="bottom" secondItem="tPr-mD-8Sk" secondAttribute="bottom" constant="17.5" id="TCR-4e-G3F"/>
                                         <constraint firstItem="Ykn-Lg-7iH" firstAttribute="leading" secondItem="4Yt-WZ-bij" secondAttribute="trailing" constant="4" id="XZh-SI-Yuw"/>
                                         <constraint firstItem="PeA-FK-MpW" firstAttribute="top" secondItem="4Yt-WZ-bij" secondAttribute="bottom" constant="4" id="b9y-EZ-2eT"/>
                                         <constraint firstAttribute="leadingMargin" secondItem="edz-7z-PTx" secondAttribute="leading" id="cUM-C4-PuH"/>
+                                        <constraint firstAttribute="trailing" secondItem="tPr-mD-8Sk" secondAttribute="trailing" id="eKF-vD-4Oh"/>
                                         <constraint firstItem="4Yt-WZ-bij" firstAttribute="leading" secondItem="edz-7z-PTx" secondAttribute="trailing" constant="8" id="qgO-ss-C5N"/>
                                         <constraint firstItem="edz-7z-PTx" firstAttribute="top" secondItem="10E-Iu-cv5" secondAttribute="topMargin" constant="5" id="t37-vF-I6n"/>
                                         <constraint firstItem="Ykn-Lg-7iH" firstAttribute="leading" secondItem="PeA-FK-MpW" secondAttribute="trailing" constant="4" id="t5r-2J-r2S"/>
@@ -1124,10 +1156,11 @@ respuestas</string>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="firstName" destination="4Yt-WZ-bij" id="wa6-3z-fQM"/>
+                                    <outlet property="followButton" destination="tPr-mD-8Sk" id="hiD-n8-0NK"/>
                                     <outlet property="points" destination="rfc-up-Phm" id="Puw-nn-bu9"/>
                                     <outlet property="userImage" destination="edz-7z-PTx" id="WgK-R7-32q"/>
                                     <outlet property="username" destination="PeA-FK-MpW" id="W87-TB-HHP"/>
-                                    <segue destination="P1f-ga-tIW" kind="push" identifier="ShowUser" id="hHN-8g-vhI"/>
+                                    <segue destination="P1f-ga-tIW" kind="push" identifier="showUserFromFollowing" id="hHN-8g-vhI"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -1912,7 +1945,7 @@ respuestas</string>
                                                         <constraint firstAttribute="height" constant="25" id="OGB-73-RTy"/>
                                                         <constraint firstAttribute="width" constant="25" id="kJa-K8-DTP"/>
                                                     </constraints>
-                                                    <state key="normal" image="0041BAE3-A086-40E8-A96F-BE7D30D0F377"/>
+                                                    <state key="normal" image="B36BBF1E-42B0-4EDD-B3DD-95666BE7CA08"/>
                                                     <connections>
                                                         <action selector="likeTapped:" destination="CaK-UK-rsg" eventType="touchUpInside" id="put-UM-EtN"/>
                                                     </connections>
@@ -2507,7 +2540,7 @@ respuestas</string>
                                                         <constraint firstAttribute="height" constant="25" id="ToX-8a-wnb"/>
                                                         <constraint firstAttribute="width" constant="25" id="g12-h6-fKX"/>
                                                     </constraints>
-                                                    <state key="normal" image="B0A4F9E7-82AA-45D0-8FAC-02804850841D"/>
+                                                    <state key="normal" image="2D906728-FEF0-497A-A83D-CE30C4107675"/>
                                                     <connections>
                                                         <action selector="likeTapped:" destination="tC0-yS-h4f" eventType="touchUpInside" id="XPj-BF-gQX"/>
                                                     </connections>
@@ -3100,7 +3133,7 @@ respuestas</string>
         </scene>
     </scenes>
     <resources>
-        <image name="0041BAE3-A086-40E8-A96F-BE7D30D0F377" width="346" height="425">
+        <image name="2D906728-FEF0-497A-A83D-CE30C4107675" width="346" height="425">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOjtYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISgrLjQ3VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA
@@ -10481,7 +10514,7 @@ Br97AAa/fQAGv38ABr+EAAa/jAAGv48ABr+UAAa/nAAGv58ABr+xAAa/tAAGv7kAAAAAAAAEAQAAAAAA
 AAA+AAAAAAAAAAAAAAAAAAa/uw
 </mutableData>
         </image>
-        <image name="B0A4F9E7-82AA-45D0-8FAC-02804850841D" width="346" height="425">
+        <image name="B36BBF1E-42B0-4EDD-B3DD-95666BE7CA08" width="346" height="425">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOjtYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISgrLjQ3VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA
@@ -17886,10 +17919,10 @@ AAA+AAAAAAAAAAAAAAAAAAa/uw
         <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="0NM-dT-M9P"/>
+        <segue reference="gHa-zJ-APc"/>
+        <segue reference="hHN-8g-vhI"/>
         <segue reference="sxA-kU-Ln3"/>
         <segue reference="0aV-NV-8ad"/>
-        <segue reference="wGV-1N-1fO"/>
         <segue reference="3Zx-LN-FOH"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="1" green="0.8582333835" blue="0.31945037459999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

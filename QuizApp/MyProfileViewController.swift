@@ -103,11 +103,11 @@ class MyProfileViewController: UIViewController {
         
         if segue.identifier == "showFollowingTVC" {
             let showFollowingTVC = segue.destination as! ShowFollowingTableViewController
-            showFollowingTVC.user = self.currentUser! as FIRUser
+            showFollowingTVC.currentUser = self.currentUser! as FIRUser
             
         } else if segue.identifier == "showFollowersTVC" {
             let showFollowersTVC = segue.destination as! ShowFollowersTableViewController
-            showFollowersTVC.user = self.currentUser! as FIRUser
+            showFollowersTVC.currentUser = self.currentUser! as FIRUser
         }
     }
 }
