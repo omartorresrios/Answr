@@ -79,7 +79,7 @@ struct AuthenticationService {
                 DispatchQueue.main.async(execute: {
                     let alertView =  SCLAlertView()
                     
-                    alertView.showSuccess("Cambiar contraseña", subTitle: "Te hemos enviado un correo a \(email) para que puedas cambiar tu contraseña. ✌️")
+                    alertView.showSuccess("👌", subTitle: "Te hemos enviado un correo a \(email) para que puedas cambiar tu contraseña.")
                 })
                 
             } else {

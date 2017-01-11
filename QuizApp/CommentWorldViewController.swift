@@ -46,7 +46,7 @@ class CommentWorldViewController: UIViewController, UIGestureRecognizerDelegate 
     var counter: Int = 0
     var conditionalCounter: Int = 0
     var maxNumberComments: Int = 0
-    let anonymous: String = "Anonymous" // Anonymous users name
+    let anonymous: String = "Anónimo" // Anonymous users name
     var anonymousImage: UIImageView! // Anonymous users image
     
     var storageRef2: FIRStorage!{
@@ -64,7 +64,7 @@ class CommentWorldViewController: UIViewController, UIGestureRecognizerDelegate 
         navigationController?.isToolbarHidden = true
         
         // Set the anonymous image to bgImage
-        let image: UIImage = UIImage(named: "anonymous.jpg")!
+        let image: UIImage = UIImage(named: "Anonymous Mask")!
         anonymousImage = UIImageView(image: image)
         
         if selectedQuestion1.questionImageURL.isEmpty {
@@ -237,7 +237,7 @@ class CommentWorldViewController: UIViewController, UIGestureRecognizerDelegate 
             })
             
             let messageLabel = UILabel()
-            messageLabel.text = "No se permiten más respuestas 😟"
+            messageLabel.text = "No se permiten más respuestas 🐥"
             messageLabel.font = UIFont(name: "AvenirNext-Medium", size: 15)
             messageLabel.textColor = UIColor.white
             messageLabel.translatesAutoresizingMaskIntoConstraints = false

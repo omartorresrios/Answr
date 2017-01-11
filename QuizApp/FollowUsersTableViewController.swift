@@ -54,14 +54,15 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
         
         // DGElasticPullToRefresh
         let loadingView = DGElasticPullToRefreshLoadingViewCircle()
-        loadingView.tintColor = UIColor(red: 78/255.0, green: 221/255.0, blue: 200/255.0, alpha: 1.0)
+        loadingView.tintColor = UIColor(colorLiteralRed: 218/255.0, green: 218/255.0, blue: 218/255.0, alpha: 1)
         tableView.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
             // Add logic here
+            self?.tableView.reloadData()
             // Do not forget to call dg_stopLoading() at the end
             self?.tableView.dg_stopLoading()
             }, loadingView: loadingView)
         
-        tableView.dg_setPullToRefreshFillColor(UIColor(red: 57/255.0, green: 67/255.0, blue: 89/255.0, alpha: 1.0))
+        tableView.dg_setPullToRefreshFillColor(UIColor.white)
         tableView.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
         
     }
@@ -176,9 +177,9 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
         databaseRef.child("following").child(self.currentUser!.uid).child(user?["uid"] as! String).observe(.value, with: { (snapshot) in
             
             if(snapshot.exists()) {
-                cell.followButton.setTitle("Unfollow", for: .normal)
+                cell.followButton.setTitle("Dejar de seguir", for: .normal)
             } else {
-                cell.followButton.setTitle("Follow", for: .normal)
+                cell.followButton.setTitle("Seguir", for: .normal)
             }
             
         }) { (error) in
@@ -193,7 +194,7 @@ class FollowUsersTableViewController: UITableViewController, UISearchResultsUpda
             // Reference for the following list
             let followingRef = "following/" + (self.currentUserData?["uid"] as! String) + "/" + (user?["uid"] as! String)
             
-            if butCell?.titleLabel?.text == "Follow" {
+            if butCell?.titleLabel?.text == "Seguir" {
                 
                 let followersData = ["uid": self.currentUserData?["uid"] as! String,
                                      "firstName": self.currentUserData?["firstName"] as! String,

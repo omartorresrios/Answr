@@ -19,11 +19,12 @@ class MyProfileViewController: UIViewController {
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var numberFollowers: UIButton!
     @IBOutlet weak var numberFollowing: UIButton!
-    
+    @IBOutlet weak var points: UILabel!
     @IBOutlet weak var toolbar: UIToolbar!
     var user: User!
     var currentUser: FIRUser?
     var databaseRef = FIRDatabase.database().reference()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,18 +60,9 @@ class MyProfileViewController: UIViewController {
             self.nameLabel.text = snapshot["firstName"] as? String
             self.usernameLabel.text = snapshot["username"] as? String
             
-            if let user = self.currentUser {
-                if user.photoURL != nil {
-                    let databasePhotoURL = snapshot["photoURL"] as! String
-                    DispatchQueue.main.async {
-                        if let data = try? Data(contentsOf: URL(string: databasePhotoURL)!) {
-                            self.userImageView!.image = UIImage.init(data: data)
-                        }
-                    }
-                } else {
-                    //No user is signed in
-                }
-            }
+            let databasePhotoURL = snapshot["photoURL"] as! String
+           
+            self.userImageView.loadImageUsingCacheWithUrlString(urlString: databasePhotoURL)
             
             if(snapshot["followersCount"] !== nil) {
                 self.numberFollowers.setTitle("\(snapshot["followersCount"]!)", for: .normal)
@@ -79,6 +71,8 @@ class MyProfileViewController: UIViewController {
             if(snapshot["followingCount"] !== nil){
                 self.numberFollowing.setTitle("\(snapshot["followingCount"]!)", for: .normal)
             }
+            
+            self.points.text = "\(snapshot["points"] as! Int)"
         })
     }
     

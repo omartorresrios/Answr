@@ -105,9 +105,9 @@ class ShowFollowingTableViewController: UITableViewController {
         databaseRef.child("following").child(self.currentUser!.uid).child(user?["uid"] as! String).observe(.value, with: { (snapshot) in
             
             if(snapshot.exists()) {
-                cell.followButton.setTitle("Unfollow", for: .normal)
+                cell.followButton.setTitle("Dejar de seguir", for: .normal)
             } else {
-                cell.followButton.setTitle("Follow", for: .normal)
+                cell.followButton.setTitle("Seguir", for: .normal)
             }
             
         }) { (error) in
@@ -122,7 +122,7 @@ class ShowFollowingTableViewController: UITableViewController {
             // Reference for the following list
             let followingRef = "following/" + (self.currentUserData?["uid"] as! String) + "/" + (user?["uid"] as! String)
             
-            if butCell?.titleLabel?.text == "Follow" {
+            if butCell?.titleLabel?.text == "Seguir" {
                 
                 let followersData = ["uid": self.currentUserData?["uid"] as! String,
                                      "firstName": self.currentUserData?["firstName"] as! String,

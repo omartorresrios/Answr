@@ -38,7 +38,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     var currentUser: User!
     var otherUser: NSDictionary?
     var counter = 0
-    let anonymous: String = "Anonymous" // Anonymous users name
+    let anonymous: String = "Anónimo" // Anonymous users name
     var anonymousImage: UIImageView! // Anonymous users image
     let camera = UIImage(named: "Camera.png")
     
@@ -53,10 +53,13 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
         
         questionTextView.becomeFirstResponder()
         
+        // UI for loader (activity indicator)
+
         self.loader.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+        self.loader.center = CGPoint(x: CGFloat(view.frame.size.width / 2), y: CGFloat(view.frame.size.height / 2))
         
         // Set the anonymous image to bgImage
-        let image: UIImage = UIImage(named: "anonymous.jpg")!
+        let image: UIImage = UIImage(named: "Anonymous Mask")!
         anonymousImage = UIImageView(image: image)
         
         self.numberOfComments.layer.cornerRadius = 5

@@ -46,7 +46,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     var counter: Int = 0
     var conditionalCounter: Int = 0
     var maxNumberComments: Int = 0
-    let anonymous: String = "Anonymous" // Anonymous users name
+    let anonymous: String = "Anónimo" // Anonymous users name
     var anonymousImage: UIImageView! // Anonymous users image
     
     var storageRef2: FIRStorage!{
@@ -64,7 +64,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         navigationController?.isToolbarHidden = true
         
         // Set the anonymous image to bgImage
-        let image: UIImage = UIImage(named: "anonymous.jpg")!
+        let image: UIImage = UIImage(named: "Anonymous Mask")!
         anonymousImage = UIImageView(image: image)
         
         if selectedQuestion.questionImageURL.isEmpty {
@@ -74,6 +74,9 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             self.tableviewComment.estimatedRowHeight = 323
             self.tableviewComment.rowHeight = UITableViewAutomaticDimension
         }
+        
+        // Call fetchQuestion function
+        fetchQuestion()
         
         // Movements for the limit of answers per question
         counter = selectedQuestion.counterComments!
@@ -99,8 +102,8 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        // Retrieving the question
-        self.fetchQuestion()
+//        // Retrieving the question
+//        self.fetchQuestion()
         
         // Disabled sendCommentBtn
         SendCommentBtn.isUserInteractionEnabled = false
@@ -181,10 +184,10 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
                 
             }
             self.questionArray = newQuestionsArray
-            DispatchQueue.main.async {
-                self.tableviewComment.reloadData()
-            }
-            
+//            DispatchQueue.main.async {
+//                self.tableviewComment.reloadData()
+//            }
+            self.tableviewComment.reloadData()
             
         }) { (error) in
             print(error.localizedDescription)
@@ -233,7 +236,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
             })
             
             let messageLabel = UILabel()
-            messageLabel.text = "No se permiten más respuestas 😟"
+            messageLabel.text = "No se permiten más respuestas 🐥"
             messageLabel.font = UIFont(name: "AvenirNext-Medium", size: 15)
             messageLabel.textColor = UIColor.white
             messageLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -492,8 +495,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
 extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return questionArray.count + commentsArray.count 
+        return questionArray.count + commentsArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -22,6 +22,7 @@ class TextQuestionTableViewCell: UITableViewCell {
     @IBOutlet weak var numberOfComments: UILabel!
     @IBOutlet weak var timestamp: UILabel!    
     @IBOutlet weak var likes: UILabel!
+    @IBOutlet weak var chickenIcon: UIImageView!
     
     var databaseRef: FIRDatabaseReference! {
         return FIRDatabase.database().reference()
@@ -112,8 +113,10 @@ class TextQuestionTableViewCell: UITableViewCell {
         // Hiding the likes label
         if question.likes == 0 {
             self.likes.isHidden = true
+            self.chickenIcon.isHidden = true
         } else {
             self.likes.isHidden = false
+            self.chickenIcon.isHidden = false
         }
     }
     

@@ -43,6 +43,19 @@ class ShowFollowersTableViewController: UITableViewController {
             }) { (error) in
                 print(error.localizedDescription)
         }
+        
+        // DGElasticPullToRefresh
+        let loadingView = DGElasticPullToRefreshLoadingViewCircle()
+        loadingView.tintColor = UIColor.white
+        tableView.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
+            // Add logic here
+            self?.tableView.reloadData()
+            // Do not forget to call dg_stopLoading() at the end
+            self?.tableView.dg_stopLoading()
+            }, loadingView: loadingView)
+        
+        tableView.dg_setPullToRefreshFillColor(UIColor.white)
+        tableView.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
     }
 
     override func didReceiveMemoryWarning() {
@@ -105,9 +118,9 @@ class ShowFollowersTableViewController: UITableViewController {
         databaseRef.child("following").child(self.currentUser!.uid).child(user?["uid"] as! String).observe(.value, with: { (snapshot) in
             
             if(snapshot.exists()) {
-                cell.followButton.setTitle("Unfollow", for: .normal)
+                cell.followButton.setTitle("Dejar de seguir", for: .normal)
             } else {
-                cell.followButton.setTitle("Follow", for: .normal)
+                cell.followButton.setTitle("Seguir", for: .normal)
             }
             
         }) { (error) in
@@ -122,7 +135,7 @@ class ShowFollowersTableViewController: UITableViewController {
             // Reference for the following list
             let followingRef = "following/" + (self.currentUserData?["uid"] as! String) + "/" + (user?["uid"] as! String)
             
-            if butCell?.titleLabel?.text == "Follow" {
+            if butCell?.titleLabel?.text == "Seguir" {
                 
                 let followersData = ["uid": self.currentUserData?["uid"] as! String,
                                      "firstName": self.currentUserData?["firstName"] as! String,

@@ -134,7 +134,7 @@ class FeedQuestionsTableViewController: UITableViewController {
         // Retrieve data
         self.databaseRef.child("Questions").observe(.value, with: { (questionsSnap) in
             var newQuestionsFeedArray = [Question]()
-                
+            
             for question in questionsSnap.children {
                 let newQuestion = Question(snapshot: question as! FIRDataSnapshot)
                     
