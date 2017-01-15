@@ -1712,6 +1712,7 @@ respuestas</string>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Añade amigos" id="Lvv-uo-62i">
                         <barButtonItem key="rightBarButtonItem" image="ForwardRight" id="L9h-BZ-TlA">
+                            <inset key="imageInsets" minX="0.0" minY="0.0" maxX="5" maxY="0.0"/>
                             <color key="tintColor" red="0.08235294118" green="0.84705882349999995" blue="0.63137254899999995" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="comeBackAction:" destination="a7G-Gs-KOo" id="RMQ-fp-vNX"/>
@@ -1980,7 +1981,7 @@ respuestas</string>
                                                         <constraint firstAttribute="height" constant="25" id="OGB-73-RTy"/>
                                                         <constraint firstAttribute="width" constant="25" id="kJa-K8-DTP"/>
                                                     </constraints>
-                                                    <state key="normal" image="C5CE71F4-C5C2-46E5-94F0-A36F40F46BF3"/>
+                                                    <state key="normal" image="79AB7E18-0136-43B9-8DEB-7E8D6A5A4F10"/>
                                                     <connections>
                                                         <action selector="likeTapped:" destination="CaK-UK-rsg" eventType="touchUpInside" id="put-UM-EtN"/>
                                                     </connections>
@@ -2578,7 +2579,7 @@ respuestas</string>
                                                         <constraint firstAttribute="height" constant="25" id="ToX-8a-wnb"/>
                                                         <constraint firstAttribute="width" constant="25" id="g12-h6-fKX"/>
                                                     </constraints>
-                                                    <state key="normal" image="74C98430-6107-4B60-BAE0-CD6A72E8EEA8"/>
+                                                    <state key="normal" image="F76D9922-B067-4C05-879C-7063D904E2A6"/>
                                                     <connections>
                                                         <action selector="likeTapped:" destination="tC0-yS-h4f" eventType="touchUpInside" id="XPj-BF-gQX"/>
                                                     </connections>
@@ -3173,7 +3174,7 @@ respuestas</string>
         </scene>
     </scenes>
     <resources>
-        <image name="74C98430-6107-4B60-BAE0-CD6A72E8EEA8" width="346" height="425">
+        <image name="79AB7E18-0136-43B9-8DEB-7E8D6A5A4F10" width="346" height="425">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOjtYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISgrLjQ3VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA
@@ -10555,7 +10556,10 @@ AAA+AAAAAAAAAAAAAAAAAAa/uw
 </mutableData>
         </image>
         <image name="Back" width="24" height="24"/>
-        <image name="C5CE71F4-C5C2-46E5-94F0-A36F40F46BF3" width="346" height="425">
+        <image name="Camera" width="60" height="60"/>
+        <image name="Checkmark" width="32" height="32"/>
+        <image name="Expand Arrow" width="25" height="25"/>
+        <image name="F76D9922-B067-4C05-879C-7063D904E2A6" width="346" height="425">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOjtYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBEW
 GxwgISgrLjQ3VSRudWxs1AkKCwwNDg8QViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBzV05TQ29sb3KA
@@ -17936,9 +17940,6 @@ Br97AAa/fQAGv38ABr+EAAa/jAAGv48ABr+UAAa/nAAGv58ABr+xAAa/tAAGv7kAAAAAAAAEAQAAAAAA
 AAA+AAAAAAAAAAAAAAAAAAa/uw
 </mutableData>
         </image>
-        <image name="Camera" width="60" height="60"/>
-        <image name="Checkmark" width="32" height="32"/>
-        <image name="Expand Arrow" width="25" height="25"/>
         <image name="Forward" width="32" height="32"/>
         <image name="ForwardRight" width="24" height="24"/>
         <image name="SentDis" width="37" height="37"/>

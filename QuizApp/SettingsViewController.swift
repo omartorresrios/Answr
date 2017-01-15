@@ -304,8 +304,10 @@ class SettingsViewController: UIViewController, UIImagePickerControllerDelegate,
                 }
             }
         }
-        
-        alertView.showNotice("Salir", subTitle: "¿Seguro que quieres salir?", circleIconImage: alertViewIcon)
+        alertView.showInfo("✋", subTitle: "¿Quieres salir?", circleIconImage: alertViewIcon)
+        //alertView.showError("Salir", subTitle: "¿Seguro que quieres salir?", circleIconImage: alertViewIcon)
+        //alertView.showWarning("Salir", subTitle: "¿Seguro que quieres salir?", circleIconImage: alertViewIcon)
+        //alertView.showNotice("Salir", subTitle: "¿Seguro que quieres salir?", circleIconImage: alertViewIcon)
     }
     
     @IBAction func comeBackAction(_ sender: AnyObject) {

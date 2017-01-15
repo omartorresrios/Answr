@@ -279,7 +279,7 @@ class FeedQuestionsTableViewController: UITableViewController {
                     
                 self.loader.isHidden = true
                     
-                JDStatusBarNotification.show(withStatus: "Pregunta eliminada!", dismissAfter: 2.0, styleName: JDStatusBarStyleDark)
+                JDStatusBarNotification.show(withStatus: "¡Pregunta eliminada!", dismissAfter: 2.0, styleName: JDStatusBarStyleDark)
             })
         }
         

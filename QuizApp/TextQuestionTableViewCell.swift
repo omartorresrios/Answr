@@ -39,7 +39,7 @@ class TextQuestionTableViewCell: UITableViewCell {
         newNumberOfComments = newNumberOfComments.replacingOccurrences(of: "/", with: "")
         
         //Showing message with number of comments and counter at the top of the view
-        let message = commentsCounter.text! + " de " + newNumberOfComments + " respuestas!"
+        let message = "¡" + commentsCounter.text! + " de " + newNumberOfComments + " respuestas!"
         JDStatusBarNotification.show(withStatus: message, dismissAfter: 3.0, styleName: JDStatusBarStyleDark)
     }
     
