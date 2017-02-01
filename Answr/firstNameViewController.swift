@@ -16,6 +16,8 @@ class firstNameViewController: UIViewController, UITextFieldDelegate {
             button.layer.cornerRadius = 15
         }
     }
+
+    @IBOutlet var message: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +30,25 @@ class firstNameViewController: UIViewController, UITextFieldDelegate {
         navigationController?.navigationBar.backgroundColor = UIColor.white
         navigationController?.navigationBar.topItem?.title = ""
         
+        
+        
+        let terms: String = "Si continúas, aceptas nuestros Términos de Servicio"
+        
+        let attString = NSMutableAttributedString(string: terms)
+        
+        let range: NSRange = (terms as NSString).range(of: "Términos de Servicio")
+        attString.addAttribute(NSForegroundColorAttributeName, value: UIColor(red: CGFloat((63 / 255.0)), green: CGFloat((163 / 255.0)), blue: CGFloat((158 / 255.0)), alpha: CGFloat(1.0)), range: range)
+        
+        self.message.attributedText = attString
+        
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(firstNameViewController.tapLabel(gesture:)))
+        tap.numberOfTapsRequired = 1
+        message.isUserInteractionEnabled = true
+        message.addGestureRecognizer(tap)
+        
+        
+
         if firstNameV1.text!.characters.count > 0 {
             button.isUserInteractionEnabled = true
             button.backgroundColor = UIColor(colorLiteralRed: 21/255.0, green: 216/255.0, blue: 161/255.0, alpha: 1)
@@ -48,6 +69,10 @@ class firstNameViewController: UIViewController, UITextFieldDelegate {
         
         button.setBackgroundImage(self.image(color: UIColor(colorLiteralRed: 21/255.0, green: 190/255.0, blue: 161/255.0, alpha: 1)), for: .highlighted)
         button.clipsToBounds = true
+    }
+    
+    func tapLabel(gesture: UITapGestureRecognizer) {
+        self.performSegue(withIdentifier: "goToTermsOfService", sender: self)
     }
     
     func image(color: UIColor) -> UIImage {
