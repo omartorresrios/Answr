@@ -12,8 +12,9 @@ import FirebaseDatabase
 import FirebaseStorage
 import FirebaseAuth
 import JDStatusBarNotification
+import MessageUI
 
-class ImageQuestionTableViewCell: UITableViewCell {
+class ImageQuestionTableViewCell: UITableViewCell, MFMailComposeViewControllerDelegate {
 
     @IBOutlet weak var questionImageView: UIImageView! {
         didSet {
@@ -220,6 +221,25 @@ class ImageQuestionTableViewCell: UITableViewCell {
         }
         
     }
+    
+    @IBAction func reportQuestion(_ sender: AnyObject) {
+        let appearance = SCLAlertView.SCLAppearance(
+            showCloseButton: false
+        )
+        let alertView = SCLAlertView(appearance: appearance)
+        alertView.showSuccess("🤔", subTitle: "Investigaremos esto. Gracias!", duration: 3)
+        
+        if MFMailComposeViewController.canSendMail() {
+            let mail = MFMailComposeViewController()
+            mail.mailComposeDelegate = self
+            mail.setToRecipients(["torresomar44@gmail.com"])
+            mail.setMessageBody("<p>Esta pregunta no me gusta!</p>", isHTML: true)
+            
+        } else {
+            // show failure alert
+        }
+    }
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()

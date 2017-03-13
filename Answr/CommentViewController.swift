@@ -46,7 +46,7 @@ class CommentViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     var counter: Int = 0
     var conditionalCounter: Int = 0
     var maxNumberComments: Int = 0
-    let anonymous: String = "Anónimo" // Anonymous users name
+    let anonymous: String = "I'm human" // Anonymous users name
     var anonymousImage: UIImageView! // Anonymous users image
     
     var storageRef2: FIRStorage!{

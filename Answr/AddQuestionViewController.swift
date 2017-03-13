@@ -38,7 +38,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
     var currentUser: User!
     var otherUser: NSDictionary?
     var counter = 0
-    let anonymous: String = "Anónimo" // Anonymous users name
+    let anonymous: String = "I'm human" // Anonymous users name
     var anonymousImage: UIImageView! // Anonymous users image
     let camera = UIImage(named: "Camera.png")
     

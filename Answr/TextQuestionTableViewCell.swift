@@ -11,9 +11,11 @@ import Firebase
 import FirebaseDatabase
 import FirebaseStorage
 import FirebaseAuth
+import XLActionController
 import JDStatusBarNotification
+import MessageUI
 
-class TextQuestionTableViewCell: UITableViewCell {
+class TextQuestionTableViewCell: UITableViewCell, MFMailComposeViewControllerDelegate {
 
     @IBOutlet weak var questionTextLabel: UILabel!
     @IBOutlet weak var firstNameLabel: UILabel!
@@ -119,6 +121,29 @@ class TextQuestionTableViewCell: UITableViewCell {
             self.chickenIcon.isHidden = false
         }
     }
+    
+    @IBAction func reportQuestion(_ sender: AnyObject) {
+        let appearance = SCLAlertView.SCLAppearance(
+            showCloseButton: false
+        )
+        let alertView = SCLAlertView(appearance: appearance)
+        alertView.showSuccess("🤔", subTitle: "Investigaremos esto. Gracias!", duration: 3)
+        
+        if MFMailComposeViewController.canSendMail() {
+            let mail = MFMailComposeViewController()
+            mail.mailComposeDelegate = self
+            mail.setToRecipients(["torresomar44@gmail.com"])
+            mail.setMessageBody("<p>Esta pregunta no me gusta!</p>", isHTML: true)
+
+        } else {
+            // show failure alert
+        }
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true)
+    }
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
