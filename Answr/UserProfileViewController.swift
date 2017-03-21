@@ -8,8 +8,9 @@
 
 import UIKit
 import Firebase
+import MessageUI
 
-class UserProfileViewController: UIViewController {
+class UserProfileViewController: UIViewController, MFMailComposeViewControllerDelegate {
 
     @IBOutlet weak var userImage: UIImageView!
     @IBOutlet weak var userName: UILabel!
@@ -235,5 +236,24 @@ class UserProfileViewController: UIViewController {
     @IBAction func comeBackAction(_ sender: AnyObject) {
         self.navigationController?.popViewController(animated: true)
     }
+    
+    @IBAction func blockUser(_ sender: AnyObject) {
+        let appearance = SCLAlertView.SCLAppearance(
+            showCloseButton: false
+        )
+        let alertView = SCLAlertView(appearance: appearance)
+        alertView.showSuccess("👏", subTitle: "Bloqueaste a \(userName.text!)!", duration: 3)
+        
+        if MFMailComposeViewController.canSendMail() {
+            let mail = MFMailComposeViewController()
+            mail.mailComposeDelegate = self
+            mail.setToRecipients(["torresomar44@gmail.com"])
+            mail.setMessageBody("<p>Esta pregunta no me gusta!</p>", isHTML: true)
+            
+        } else {
+            // show failure alert
+        }
+    }
+    
     
 }
