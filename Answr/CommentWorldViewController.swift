@@ -12,8 +12,9 @@ import FirebaseDatabase
 import FirebaseStorage
 import Firebase
 import JDStatusBarNotification
+import MessageUI
 
-class CommentWorldViewController: UIViewController, UIGestureRecognizerDelegate {
+class CommentWorldViewController: UIViewController, UIGestureRecognizerDelegate, MFMailComposeViewControllerDelegate {
 
     @IBOutlet weak var tableviewComment: UITableView!
     @IBOutlet weak var commentContent: UITextView!
@@ -484,6 +485,25 @@ class CommentWorldViewController: UIViewController, UIGestureRecognizerDelegate 
         self.navigationController!.tabBarController?.tabBar.isHidden = false
         self.navigationController?.popToRootViewController(animated: true)
     }
+    
+    @IBAction func reportContent(_ sender: AnyObject) {
+        let appearance = SCLAlertView.SCLAppearance(
+            showCloseButton: false
+        )
+        let alertView = SCLAlertView(appearance: appearance)
+        alertView.showSuccess("🤔", subTitle: "Investigaremos esto. Gracias!", duration: 3)
+        
+        if MFMailComposeViewController.canSendMail() {
+            let mail = MFMailComposeViewController()
+            mail.mailComposeDelegate = self
+            mail.setToRecipients(["torresomar44@gmail.com"])
+            mail.setMessageBody("<p>Esta pregunta no me gusta!</p>", isHTML: true)
+            
+        } else {
+            // show failure alert
+        }
+    }
+    
     
 }
 

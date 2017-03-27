@@ -84,28 +84,25 @@ class passwordViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func goToEmailView(_ sender: AnyObject) {
             
-        if passwordV3.text!.characters.count > 8 {
-            let stricterFilterString = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&]{8,}"
-            let passwordTest = NSPredicate(format: "SELF MATCHES %@", stricterFilterString)
+        if passwordV3.text!.characters.count > 8 { // Valid email
             
-            if passwordTest.evaluate(with: passwordV3.text!) == true { // Valid email
-                // Passing data to the next view (emailVC)
-                let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let emailViewcontroller = storyboard.instantiateViewController(withIdentifier: "EmailVC") as! emailViewController
-                emailViewcontroller.firstNameV4 = self.firstNameV3
-                emailViewcontroller.usernameV4 = self.usernameV3
-                emailViewcontroller.passwordV4 = self.passwordV3
-                self.navigationController!.pushViewController(emailViewcontroller, animated: true)
+            // Passing data to the next view (emailVC)
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let emailViewcontroller = storyboard.instantiateViewController(withIdentifier: "EmailVC") as! emailViewController
+            emailViewcontroller.firstNameV4 = self.firstNameV3
+            emailViewcontroller.usernameV4 = self.usernameV3
+            emailViewcontroller.passwordV4 = self.passwordV3
+            self.navigationController!.pushViewController(emailViewcontroller, animated: true)
                 
-            } else { // Invalid email
+        } else { // Invalid email
                 
-                self.messageLabel.text = "Muy simple. Debe tener por lo menos 1 mayúscula y 1 número."
-                self.messageLabel.textColor = UIColor.red
-                button.isUserInteractionEnabled = false
-                button.backgroundColor = UIColor(colorLiteralRed: 160/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1)
+            self.messageLabel.text = "Muy simple. Mínimo 8 caracteres!"
+            self.messageLabel.textColor = UIColor.red
+            button.isUserInteractionEnabled = false
+            button.backgroundColor = UIColor(colorLiteralRed: 160/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1)
                 
-            }
         }
+        
     }
     
     @IBAction func showHidePassword(_ sender: AnyObject) {

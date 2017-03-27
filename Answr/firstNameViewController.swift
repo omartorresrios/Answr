@@ -50,19 +50,13 @@ class firstNameViewController: UIViewController, UITextFieldDelegate {
         
         
 
-        if firstNameV1.text!.characters.count > 0 && acceptTermsBtn.image! == UIImage(named: "checked") {
+        if firstNameV1.text!.characters.count > 0 {
             button.isUserInteractionEnabled = true
             button.backgroundColor = UIColor(colorLiteralRed: 21/255.0, green: 216/255.0, blue: 161/255.0, alpha: 1)
         } else {
             button.isUserInteractionEnabled = false
             button.backgroundColor = UIColor(colorLiteralRed: 160/255.0, green: 160/255.0, blue: 160/255.0, alpha: 1)
         }
-        
-        
-        let acceptBtnGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(firstNameViewController.acceptBtnTapped(gesture:)))
-        acceptTermsBtn.isUserInteractionEnabled = true
-        acceptTermsBtn.addGestureRecognizer(acceptBtnGestureRecognizer)
-        
         
         // Creating Tap Gesture to dismiss Keyboard
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.dismissKeyboard(gesture:)))
@@ -76,16 +70,6 @@ class firstNameViewController: UIViewController, UITextFieldDelegate {
         
         button.setBackgroundImage(self.image(color: UIColor(colorLiteralRed: 21/255.0, green: 190/255.0, blue: 161/255.0, alpha: 1)), for: .highlighted)
         button.clipsToBounds = true
-    }
-    
-    func acceptBtnTapped(gesture: UITapGestureRecognizer) {
-        
-        if acceptTermsBtn.image! == UIImage(named: "checked") {
-            acceptTermsBtn.image = UIImage(named: "unchecked")
-        } else {
-            acceptTermsBtn.image = UIImage(named: "checked")
-        }
-        
     }
     
     func tapLabel(gesture: UITapGestureRecognizer) {
@@ -104,7 +88,7 @@ class firstNameViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func handleButton(_ sender: AnyObject) {
-        if (sender as! UITextField).text!.characters.count > 0 && acceptTermsBtn.image! == UIImage(named: "checked") {
+        if firstNameV1.text!.characters.count > 0 {
             button.isUserInteractionEnabled = true
             button.backgroundColor = UIColor(colorLiteralRed: 21/255.0, green: 216/255.0, blue: 161/255.0, alpha: 1)
         } else {
