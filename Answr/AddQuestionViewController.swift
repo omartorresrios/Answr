@@ -338,7 +338,7 @@ class AddQuestionViewController: UIViewController, UITextViewDelegate, UIImagePi
             
         }
         
-        alertView.showSuccess("✋", subTitle: "Pregunta como", circleIconImage: alertViewIcon)
+        alertView.showSuccess("✋", subTitle: "", circleIconImage: alertViewIcon)
         
         // Hide keyboard
         dismissKeyboard()
